@@ -69,11 +69,21 @@ class BaseDev:
                 translation = await response.json()
                 return "".join([item[0] for item in translation[0]])
 
-    def _prepare_request(self, endpoint: str, api_key: str = None, headers_extra: dict = None):
+    def _prepare_request(
+        self,
+        endpoint: str,
+        api_key: str = None,
+        headers_extra: dict = None,
+        reverse_url: str = None
+    ):
         """Prepare request URL and headers."""
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY")
-        url = f"{self.public_url}/{endpoint}"
+        if not api_key:
+            api_key = os.environ.get("AKENOX_KEY_PREMIUM")
+        if reverse_url:
+            url = f"{reverse_url}/{endpoint}"
+        url =  f"{self.public_url}/{endpoint}"
         headers = {
             "x-api-key": api_key,
             "Authorization": f"Bearer {api_key}"
@@ -96,7 +106,8 @@ class BaseDev:
         url, headers = self._prepare_request(
             endpoint,
             params.pop("api_key", None),
-            params.pop("headers_extra", None)
+            params.pop("headers_extra", None),
+            params.pop("reverse_url", None),
         )
         try:
             async with aiohttp.ClientSession() as session:
