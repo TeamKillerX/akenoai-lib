@@ -74,15 +74,12 @@ class BaseDev:
         endpoint: str,
         api_key: str = None,
         headers_extra: dict = None,
-        reverse_url: str = None
     ):
         """Prepare request URL and headers."""
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY")
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY_PREMIUM")
-        if reverse_url:
-            url = f"{reverse_url}/{endpoint}"
         url =  f"{self.public_url}/{endpoint}"
         headers = {
             "x-api-key": api_key,
@@ -107,7 +104,6 @@ class BaseDev:
             endpoint,
             params.pop("api_key", None),
             params.pop("headers_extra", None),
-            params.pop("reverse_url", None),
         )
         try:
             async with aiohttp.ClientSession() as session:
