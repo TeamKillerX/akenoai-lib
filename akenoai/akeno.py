@@ -271,6 +271,15 @@ class AkenoXJs:
         self.flags = {"itzpire": is_itzpire, "err": is_err}
 
     def connect(self):
+        try:
+            response_ = requests.get("https://dev-js.randydev.my.id/api/status").json()
+            if response_["status"] != "ok":
+                return None
+            await fast.info("Successfully connected to server")
+        except Exception:
+            await fast.info("failed to connect to server")
+            return None
+
         if self.flags["itzpire"]:
             return self.endpoints["itzpire"]
         if self.flags["err"]:
