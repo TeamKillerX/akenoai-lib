@@ -276,7 +276,7 @@ class AkenoXJs:
             if response_["status"] != "ok":
                 return None
             await fast.info("Successfully connected to server")
-        except Exception:
+        except (Exception, requests.exceptions.RequestException):
             await fast.info("failed to connect to server")
             return None
 
