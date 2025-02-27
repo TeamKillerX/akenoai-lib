@@ -89,6 +89,25 @@ class BaseDev:
             headers.update(headers_extra)
         return url, headers
 
+    def _make_request_with_scraper(
+        self,
+        api_key: str = None,
+        url: str = None,
+        is_text: bool = False,
+        is_data: bool = False,
+        **data
+    ):
+        api_url = "https://api.scraperapi.com"
+        params = {
+            "api_key": api_key,
+            "url": url
+        }
+        if is_data:
+            return requests.post(api_url, params=params, data=data)
+        if is_text:
+            return requests.post(api_url, params=params, json=data).text
+        return requests.post(api_url, params=params, json=data)
+
     async def _make_request(self, method: str, endpoint: str, image_read=False, remove_author=False, **params):
         """Handles async API requests.
 
@@ -212,6 +231,7 @@ class RandyDev(BaseDev):
         self.user = self.User(self)
         self.translate = self.Translate(self)
         self.story_in_tg = self.LinkExtraWithStory(self)
+        self.proxy = self.Proxy(self)
 
     class User:
         def __init__(self, parent: BaseDev):
@@ -228,6 +248,13 @@ class RandyDev(BaseDev):
         async def api_key_info(self, is_obj=False, **kwargs):
             """Handle User info API key requests."""
             return await self.parent.user.create("api-key-info", is_obj=is_obj, **kwargs)
+
+    class Proxy:
+        def __init__(self, parent: BaseDev):
+            self.parent = parent
+
+        async def scraper(self, **kwargs):
+            return self.parent._make_request_with_scraper(**kwargs)
 
     class Translate:
         def __init__(self, parent: BaseDev):
@@ -271,15 +298,6 @@ class AkenoXJs:
         self.flags = {"itzpire": is_itzpire, "err": is_err}
 
     def connect(self):
-        try:
-            response_ = requests.get("https://dev-js.randydev.my.id/api/status").json()
-            if response_["status"] != "ok":
-                return None
-            await fast.info("Successfully connected to server")
-        except (Exception, requests.exceptions.RequestException):
-            await fast.info("failed to connect to server")
-            return None
-
         if self.flags["itzpire"]:
             return self.endpoints["itzpire"]
         if self.flags["err"]:
