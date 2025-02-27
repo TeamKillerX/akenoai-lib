@@ -98,15 +98,10 @@ class BaseDev:
         **data
     ):
         api_url = "https://api.scraperapi.com"
-        params = {
-            "api_key": api_key,
-            "url": url
-        }
-        if is_data:
-            return requests.post(api_url, params=params, data=data)
-        if is_text:
-            return requests.post(api_url, params=params, json=data).text
-        return requests.post(api_url, params=params, json=data)
+        params = {"api_key": api_key, "url": url}
+        request_kwargs = {"json": data} if not is_data else {"data": data}
+        response = requests.post(api_url, params=params, **request_kwargs)
+        return response.text if is_text and not is_data else response
 
     async def _make_request(self, method: str, endpoint: str, image_read=False, remove_author=False, **params):
         """Handles async API requests.
