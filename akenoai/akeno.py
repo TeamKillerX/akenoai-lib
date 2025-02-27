@@ -99,7 +99,7 @@ class BaseDev:
     ):
         api_url = "https://api.scraperapi.com"
         params = {"api_key": api_key, "url": url}
-        request_kwargs = {"json": data} if not is_data else {"data": data}
+        request_kwargs = {"data": data} if is_data else {"json": data}
         response = requests.post(api_url, params=params, **request_kwargs)
         return response.text if is_text and not is_data else response
 
