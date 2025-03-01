@@ -1,8 +1,8 @@
 import logging
 import os
 
-import uvicorn
-from fastapi import Depends, HTTPException
+import uvicorn # type: ignore
+from fastapi import Depends, HTTPException # type: ignore
 
 from akenoai import OldAkenoXToJs
 
@@ -22,12 +22,12 @@ async def read_root():
 async def example_json():
     async with js.fasthttp().ClientSession() as session:
         async with session.get("https://jsonplaceholder.typicode.com/todos/1") as response:
-            title = _ran_dev.dict_to_obj(await response.json()).title
+            title = js.dict_to_obj(await response.json()).title
     return {"message": title}
 
 @app.get("/api/openai/gpt-old")
 async def get_openai(query: str):
-    return await _ran_dev.randydev(
+    return await js.randydev(
         "ai/openai/gpt-old",
         custom_dev_fast=True,
         query=query

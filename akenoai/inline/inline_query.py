@@ -1,17 +1,17 @@
 # created class by @xtdevs
 
-from pyrogram.enums import ParseMode
-from pyrogram.types import *
+from pyrogram.enums import ParseMode # type: ignore
+from pyrogram.types import * # type: ignore
 
 
 class BuilderInline:
     @classmethod
     def send_text_inline(cls, inline_text, **args):
         answers = [
-            InlineQueryResultArticle(
+            InlineQueryResultArticle( # type: ignore
                 title="Inline text!",
                 thumb_url="https://telegra.ph//file/586a3867c3e16ca6bb4fa.jpg",
-                input_message_content=InputTextMessageContent(
+                input_message_content=InputTextMessageContent( # type: ignore
                     message_text=inline_text,
                     parse_mode=ParseMode.DEFAULT,
                     disable_web_page_preview=True
@@ -24,7 +24,7 @@ class BuilderInline:
     @classmethod
     def send_photo_inline(cls, photo_url, **args):
         answers = [
-            InlineQueryResultPhoto(
+            InlineQueryResultPhoto( # type: ignore
                 photo_url=photo_url,
                 title="Photo inline!",
                 thumb_url="https://telegra.ph//file/586a3867c3e16ca6bb4fa.jpg",
@@ -36,7 +36,7 @@ class BuilderInline:
     @classmethod
     def send_video_inline(cls, video_url, **args):
         answers = [
-            InlineQueryResultVideo(
+            InlineQueryResultVideo( # type: ignore
                 video_url=video_url,
                 title="Video inline!",
                 thumb_url="https://telegra.ph//file/586a3867c3e16ca6bb4fa.jpg",
@@ -48,7 +48,7 @@ class BuilderInline:
     @classmethod
     def send_audio_inline(cls, audio_url, **args):
         answers = [
-            InlineQueryResultAudio(
+            InlineQueryResultAudio( # type: ignore
                 audio_url=audio_url,
                 title="Audio Inline!",
                 thumb_url="https://telegra.ph//file/586a3867c3e16ca6bb4fa.jpg",
