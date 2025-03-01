@@ -4,7 +4,7 @@ from akenoai import AkenoXToJs
 
 js = AkenoXToJs().connect()
 
-async def main():
+async def test_main():
     response = await js.chat.create(
         "openai/gpt-old",
         api_key="demo",
@@ -13,4 +13,4 @@ async def main():
     print(response)
 
 
-asyncio.run(main())
+asyncio.run(test_main())
