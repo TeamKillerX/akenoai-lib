@@ -25,10 +25,10 @@ import subprocess
 import time
 from datetime import datetime
 
-import requests # type: ignore
+import requests  # type: ignore
 import streamlit
-from box import Box # type: ignore
-from streamlit_option_menu import option_menu # type: ignore
+from box import Box  # type: ignore
+from streamlit_option_menu import option_menu  # type: ignore
 
 import akenoai.logger as fast
 

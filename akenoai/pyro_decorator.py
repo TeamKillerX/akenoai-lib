@@ -26,10 +26,10 @@ SOFTWARE.
 
 from functools import wraps
 
-from pyrogram import Client, filters # type: ignore
-from pyrogram.enums import ChatMemberStatus, ChatType # type: ignore
-from pyrogram.errors import * # type: ignore
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message # type: ignore
+from pyrogram import Client, filters  # type: ignore
+from pyrogram.enums import ChatMemberStatus, ChatType  # type: ignore
+from pyrogram.errors import *  # type: ignore
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message  # type: ignore
 
 import akenoai.logger as akeno
 

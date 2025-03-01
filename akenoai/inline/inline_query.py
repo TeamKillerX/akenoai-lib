@@ -1,7 +1,7 @@
 # created class by @xtdevs
 
-from pyrogram.enums import ParseMode # type: ignore
-from pyrogram.types import * # type: ignore
+from pyrogram.enums import ParseMode  # type: ignore
+from pyrogram.types import *  # type: ignore
 
 
 class BuilderInline:

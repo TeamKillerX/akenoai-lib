@@ -1,8 +1,8 @@
 import logging
 import os
 
-import uvicorn # type: ignore
-from fastapi import Depends, HTTPException # type: ignore
+import uvicorn  # type: ignore
+from fastapi import Depends, HTTPException  # type: ignore
 
 from akenoai import OldAkenoXToJs
 

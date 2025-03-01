@@ -25,16 +25,16 @@ import subprocess
 from base64 import b64decode as m
 from datetime import datetime
 
-import aiohttp # type: ignore
-import httpx # type: ignore
-import requests # type: ignore
-import uvloop # type: ignore
-import wget # type: ignore
-from box import Box # type: ignore
-from fastapi import FastAPI, HTTPException, Request # type: ignore
-from fastapi.middleware.cors import CORSMiddleware # type: ignore
-from fastapi.openapi.utils import get_openapi # type: ignore
-from starlette.middleware.sessions import SessionMiddleware # type: ignore
+import aiohttp  # type: ignore
+import httpx  # type: ignore
+import requests  # type: ignore
+import uvloop  # type: ignore
+import wget  # type: ignore
+from box import Box  # type: ignore
+from fastapi import FastAPI, HTTPException, Request  # type: ignore
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore
+from fastapi.openapi.utils import get_openapi  # type: ignore
+from starlette.middleware.sessions import SessionMiddleware  # type: ignore
 
 import akenoai.logger as fast
 

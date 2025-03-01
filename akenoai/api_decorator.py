@@ -1,6 +1,6 @@
 from functools import wraps
 
-import aiohttp # type: ignore
+import aiohttp  # type: ignore
 
 
 class DictToObj:

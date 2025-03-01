@@ -1,6 +1,6 @@
 from base64 import b64decode as m
 
-import wget # type: ignore
+import wget  # type: ignore
 
 from akenoai.reqs import async_search
 

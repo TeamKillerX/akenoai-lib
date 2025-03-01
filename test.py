@@ -1,11 +1,12 @@
-from akenoai import AkenoXToJs
 import asyncio
+
+from akenoai import AkenoXToJs
 
 js = AkenoXToJs().connect()
 
 async def main():
     response = await js.chat.create(
-        "openai/gpt-old", 
+        "openai/gpt-old",
         api_key="demo",
         query="test"
     )

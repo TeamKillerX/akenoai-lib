@@ -26,12 +26,12 @@ import subprocess
 from base64 import b64decode as m
 from datetime import datetime
 
-import aiohttp # type: ignore
-import httpx # type: ignore
-import requests # type: ignore
-import uvloop # type: ignore
-import wget # type: ignore
-from box import Box # type: ignore
+import aiohttp  # type: ignore
+import httpx  # type: ignore
+import requests  # type: ignore
+import uvloop  # type: ignore
+import wget  # type: ignore
+from box import Box  # type: ignore
 
 import akenoai.logger as fast
 

@@ -1,1 +1,1 @@
-from pydantic import BaseModel as BaseModel # type: ignore
+from pydantic import BaseModel as BaseModel  # type: ignore
