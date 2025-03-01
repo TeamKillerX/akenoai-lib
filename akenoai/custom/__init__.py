@@ -25,16 +25,16 @@ import subprocess
 from base64 import b64decode as m
 from datetime import datetime
 
-import aiohttp
-import httpx
-import requests
-import uvloop
-import wget
-from box import Box
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.openapi.utils import get_openapi
-from starlette.middleware.sessions import SessionMiddleware
+import aiohttp  # type: ignore
+import httpx  # type: ignore
+import requests  # type: ignore
+import uvloop  # type: ignore
+import wget  # type: ignore
+from box import Box  # type: ignore
+from fastapi import FastAPI, HTTPException, Request  # type: ignore
+from fastapi.middleware.cors import CORSMiddleware  # type: ignore
+from fastapi.openapi.utils import get_openapi  # type: ignore
+from starlette.middleware.sessions import SessionMiddleware  # type: ignore
 
 import akenoai.logger as fast
 
@@ -612,7 +612,7 @@ PLEASE DON'T USE THIS AkenoPlus DANGEROUS
                 return await response.json()
 
     async def capcut(self, link=None):
-        self.api_akenoai("akeno/capcut-v1")
+        url = self.api_akenoai("akeno/capcut-v1")
         params = {"link": link}
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=params, headers=self.headers) as response:

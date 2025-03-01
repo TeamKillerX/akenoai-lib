@@ -26,10 +26,10 @@ SOFTWARE.
 
 from functools import wraps
 
-from pyrogram import Client, filters
-from pyrogram.enums import ChatMemberStatus, ChatType
-from pyrogram.errors import *
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram import Client, filters  # type: ignore
+from pyrogram.enums import ChatMemberStatus, ChatType  # type: ignore
+from pyrogram.errors import *  # type: ignore
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message  # type: ignore
 
 import akenoai.logger as akeno
 
@@ -59,7 +59,7 @@ def ForceSubscribe(where_from=None, owner_id=None):
                     reply_markup=create_channel_button(where_from)
                 )
                 await message.stop_propagation()
-            except ChatAdminRequired as e:
+            except ChatAdminRequired as e: # type: ignore
                 await akeno.warning(str(e))
             return await func(client, message)
         return wrapper
@@ -85,7 +85,7 @@ async def check_membership(channel_id, owner, bot, msg):
         if user.status == ChatMemberStatus.BANNED:
             return await handle_banned_user(owner, mention_user, bot, msg)
         return True
-    except UserNotParticipant:
+    except UserNotParticipant: # type: ignore
         return False
 
 def with_premium(func):

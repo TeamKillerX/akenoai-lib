@@ -26,12 +26,12 @@ import subprocess
 from base64 import b64decode as m
 from datetime import datetime
 
-import aiohttp
-import httpx
-import requests
-import uvloop
-import wget
-from box import Box
+import aiohttp  # type: ignore
+import httpx  # type: ignore
+import requests  # type: ignore
+import uvloop  # type: ignore
+import wget  # type: ignore
+from box import Box  # type: ignore
 
 import akenoai.logger as fast
 
@@ -219,6 +219,18 @@ class ErAPI(BaseDevWithEndpoints):
 
 class RandyDev(BaseDev):
     def __init__(self, public_url: str = "https://randydev-ryu-js.hf.space/api/v1"):
+        """
+        Parameters:
+            .chat (any): for Chat AI
+            .downloader (any): for all downloader
+            .image (any): for image generate AI
+            .user (any): for user telegram API
+            .translate (any): for translate google API
+            .story_in_tg (any): for story DL telegram
+            .proxy (any): for scaper proxy API
+        code-block:
+
+        """
         super().__init__(public_url)
         self.chat = GenericEndpoint(self, "ai", super_fast=True)
         self.downloader = GenericEndpoint(self, "dl", super_fast=True)
@@ -285,6 +297,12 @@ class RandyDev(BaseDev):
 
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False):
+        """
+        Parameters:
+            is_err (bool): for ErAPI
+            is_itzpire (bool): for itzpire API
+            default (bool): If False, default using AkenoX API
+        """
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),

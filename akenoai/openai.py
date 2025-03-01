@@ -3,7 +3,7 @@ import base64
 import logging
 import time
 
-import aiohttp
+import aiohttp  # type: ignore
 
 import akenoai.logger as akeno
 

@@ -1,4 +1,4 @@
-import aiohttp
+import aiohttp  # type: ignore
 
 
 class AsyicXSearcher:
@@ -61,7 +61,7 @@ class AsyicXSearcher:
                         return response
                     return await response.text()
         else:
-            raise DependencyMissingError("Install 'aiohttp' to use this.")
+            raise DependencyMissingError("Install 'aiohttp' to use this.") # type: ignore
 
 async def async_search(
     url: str,
@@ -92,4 +92,4 @@ async def async_search(
                     return response
                 return await response.text()
     else:
-        raise DependencyMissingError("Install 'aiohttp' to use this.")
+        raise DependencyMissingError("Install 'aiohttp' to use this.") # type: ignore
