@@ -74,6 +74,28 @@ from akenoai.runner import run_fast
 
 run_fast()
 ```
+### ✨ New AI Models
+1. `akenox/moderator`
+2. `akenox/mia-khalifah`
+3. `akenox/nocodefou`
+4. `akenox/al-sholawat`
+5. `akenox/lirik-end`
+6. `akenox/quotes-sad`
+7. `akenox/quotes-lucu`
+8. `akenox/lu-sunda`
+9. `akenox/lu-melayu`
+10. `akenox/curl-command-code`
+- Why is your API key expired?  
+
+Your API key may have expired due to reaching its validity period. But don't worry, you can get a new one!  
+
+💰 <b>Pricing:</b>
+- API Key V2: <b>25K/month</b>
+- Promo: 85K ( ~125K~ ) for 1 year (AI access included)  
+- API Key V1: <b>Free & unlimited (for downloader only)</b>
+
+📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem! 🚀
+
 ### Code examples
 > [!TIP]
 > Trip PRO Usage Example:
@@ -85,7 +107,7 @@ from akenoai import AkenoXToJs
 js = AkenoXToJs().connect()
 
 response = await js.chat.create(
-    model="qwen/qwen1.5-1.8b-chat",
+    "qwen/qwen1.5-1.8b-chat",
     api_key="<your-api-key-premium>",
     is_obj=True,
     query="Hello, how are you?"
@@ -100,7 +122,7 @@ from akenoai import AkenoXToJs
 js = AkenoXToJs().connect()
 
 download_response = await js.downloader.create(
-    model="instagram-v4",
+    "instagram-v4",
     api_key="<your-api-key-free>",
     is_obj=False,
     url="https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ=="
