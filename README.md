@@ -87,16 +87,16 @@ run_fast()
 10. `akenox/curl-command-code`
 11. `akenox/python-to-js-api`
 12. `akenox/js-to-python-api`
-- Why is your API key expired?  
+- Why is your API key expired?
 
-Your API key may have expired due to reaching its validity period. But don't worry, you can get a new one!  
+Your API key may have expired due to reaching its validity period. But don't worry, you can get a new one!
 
 💰 <b>Pricing:</b>
 - API Key V2: <b>25K/month</b>
-- Promo: 85K ( ~125K~ ) for 1 year (AI access included)  
+- Promo: 85K ( ~125K~ ) for 1 year (AI access included)
 - API Key V1: <b>Free & unlimited (for downloader only)</b>
 
-💭 Can a new account get a free API Key V2?  
+💭 Can a new account get a free API Key V2?
 
 Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserbot) on telegram, you can create a new account and get <b>API Key V2 free for 1 month.</b> 🚀
 
