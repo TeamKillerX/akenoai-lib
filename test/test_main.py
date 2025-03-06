@@ -1,5 +1,6 @@
 import asyncio
-import uvloop # type: ignore
+
+import uvloop  # type: ignore
 
 from akenoai import AkenoXToJs
 

@@ -252,22 +252,22 @@ class RandyDev(BaseDev):
                 raise ValueError("User name is required for Telegram")
             response = await self.parent._make_request("get", f"user/{model}", **kwargs) or {}
             return self.parent.obj(response) if is_obj else response
-        
+
         class Key:
             def __init__(self, parent: BaseDev):
                 self.parent = parent
-            
+
             async def create(self, model: str = None, is_obj=False, **kwargs):
                 """Handle User API key requests."""
                 if not model:
                     raise ValueError("User name is required for API key")
                 response = await self.parent._make_request("get", f"key/{model}", **kwargs) or {}
                 return self.parent.obj(response) if is_obj else response
-            
+
             async def generate_key(self, is_obj=False, **kwargs):
                 """Create API key."""
                 return await self.create("generate-key", is_obj=is_obj, **kwargs)
-            
+
             async def ban_api_key(self, is_obj=False, **kwargs):
                 """Ban API key."""
                 return await self.create("api-key-ban", is_obj=is_obj, **kwargs)
