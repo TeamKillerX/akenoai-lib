@@ -228,8 +228,7 @@ class RandyDev(BaseDev):
             .translate (any): for translate google API
             .story_in_tg (any): for story DL telegram
             .proxy (any): for scaper proxy API
-        code-block:
-
+            .super_fast (bool): for fast response
         """
         super().__init__(public_url)
         self.chat = GenericEndpoint(self, "ai", super_fast=True)
@@ -245,16 +244,32 @@ class RandyDev(BaseDev):
             self.parent = parent
 
         @fast.log_performance
-        async def create(self, model: str = None, is_obj=False, **kwargs):
+        async def create(self, action: str = None, is_obj=False, **kwargs):
             """Handle User API requests."""
-            if not model:
-                raise ValueError("User name is required for Telegram")
-            response = await self.parent._make_request("get", f"user/{model}", **kwargs) or {}
+            ops = {
+                "info": "api-key-info",
+                "status_ban": "status/ban",
+                "check_admin": "author/admin",
+                "raw_chat": "raw/getchat",
+                "info": "info",
+                "date": "creation-date",
+                "ban": "ban-user",
+                "check_ban": "check-ban",
+            }
+            if action not in ops:
+                raise ValueError(f"Invalid User action: {action}")
+            response = await self.parent._make_request("get", f"user/{ops[action]}", **kwargs) or {}
             return self.parent.obj(response) if is_obj else response
 
-        async def api_key_info(self, is_obj=False, **kwargs):
-            """Handle User info API key requests."""
-            return await self.parent.user.create("api-key-info", is_obj=is_obj, **kwargs)
+        async def api_key_operation(self, action: str, is_obj=False, **kwargs):
+            ops = {
+                "generate": "generate-key",
+                "ban": "api-key-ban"
+            }
+            if action not in ops:
+                raise ValueError(f"Invalid API key action: {action}")
+            response = await self.parent._make_request("get", f"key/{ops[action]}", **kwargs) or {}
+            return self.parent.obj(response) if is_obj else response
 
     class Proxy:
         def __init__(self, parent: BaseDev):
