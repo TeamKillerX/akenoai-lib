@@ -260,7 +260,7 @@ class RandyDev(BaseDev):
                 raise ValueError(f"Invalid User action: {action}")
             response = await self.parent._make_request("get", f"user/{ops[action]}", **kwargs) or {}
             return self.parent.obj(response) if is_obj else response
-        
+
         async def api_key_operation(self, action: str, is_obj=False, **kwargs):
             ops = {
                 "generate": "generate-key",
