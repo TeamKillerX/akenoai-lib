@@ -229,7 +229,6 @@ class RandyDev(BaseDev):
             .story_in_tg (any): for story DL telegram
             .proxy (any): for scaper proxy API
             .super_fast (bool): for fast response
-            .key (str): for API key
         """
         super().__init__(public_url)
         self.chat = GenericEndpoint(self, "ai", super_fast=True)
@@ -239,42 +238,38 @@ class RandyDev(BaseDev):
         self.translate = self.Translate(self)
         self.story_in_tg = self.LinkExtraWithStory(self)
         self.proxy = self.Proxy(self)
-        self.key = self.Key(self)
 
     class User:
         def __init__(self, parent: BaseDev):
             self.parent = parent
 
         @fast.log_performance
-        async def create(self, model: str = None, is_obj=False, **kwargs):
+        async def create(self, action: str = None, is_obj=False, **kwargs):
             """Handle User API requests."""
-            if not model:
-                raise ValueError("User name is required for Telegram")
-            response = await self.parent._make_request("get", f"user/{model}", **kwargs) or {}
+            ops = {
+                "info": "api-key-info",
+                "status_ban": "status/ban",
+                "check_admin": "author/admin",
+                "raw_chat": "raw/getchat",
+                "info": "info",
+                "date": "creation-date",
+                "ban": "ban-user",
+                "check_ban": "check-ban",
+            }
+            if action not in ops:
+                raise ValueError(f"Invalid User action: {action}")
+            response = await self.parent._make_request("get", f"user/{ops[action]}", **kwargs) or {}
             return self.parent.obj(response) if is_obj else response
-
-        class Key:
-            def __init__(self, parent: BaseDev):
-                self.parent = parent
-
-            async def create(self, model: str = None, is_obj=False, **kwargs):
-                """Handle User API key requests."""
-                if not model:
-                    raise ValueError("User name is required for API key")
-                response = await self.parent._make_request("get", f"key/{model}", **kwargs) or {}
-                return self.parent.obj(response) if is_obj else response
-
-            async def generate_key(self, is_obj=False, **kwargs):
-                """Create API key."""
-                return await self.create("generate-key", is_obj=is_obj, **kwargs)
-
-            async def ban_api_key(self, is_obj=False, **kwargs):
-                """Ban API key."""
-                return await self.create("api-key-ban", is_obj=is_obj, **kwargs)
-
-            async def api_key_info(self, is_obj=False, **kwargs):
-                """Handle User info API key requests."""
-                return await self.parent.user.create("api-key-info", is_obj=is_obj, **kwargs)
+        
+        async def api_key_operation(self, action: str, is_obj=False, **kwargs):
+            ops = {
+                "generate": "generate-key",
+                "ban": "api-key-ban"
+            }
+            if action not in ops:
+                raise ValueError(f"Invalid API key action: {action}")
+            response = await self.parent._make_request("get", f"key/{ops[action]}", **kwargs) or {}
+            return self.parent.obj(response) if is_obj else response
 
     class Proxy:
         def __init__(self, parent: BaseDev):
