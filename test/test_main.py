@@ -1,19 +1,16 @@
 import asyncio
 
-import uvloop  # type: ignore
+from akenoai import AkenoXJs
 
-from akenoai import AkenoXToJs
-
-js = AkenoXToJs().connect()
+js = AkenoXJs(is_akenox_fast=True).connect()
 
 async def test_main():
-    response = await js.chat.create(
-        "mistral/mistral-7b-instruct-v0.1",
-        api_key="....",
-        query="is the api on the python ram server as slow as regular windows on ubuntu, different from the high VPS?",
+    response = js.fast.create(
+        model="lu-sunda",
+        query="hello",
         is_obj=True
     )
-    print(response.results)
+    print(response)
 
 
-uvloop.run(test_main())
+asyncio.run(test_main())

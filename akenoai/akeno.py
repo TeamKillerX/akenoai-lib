@@ -27,10 +27,7 @@ from base64 import b64decode as m
 from datetime import datetime
 
 import aiohttp  # type: ignore
-import httpx  # type: ignore
 import requests  # type: ignore
-import uvloop  # type: ignore
-import wget  # type: ignore
 from box import Box  # type: ignore
 
 import akenoai.logger as fast
@@ -47,8 +44,13 @@ class BaseDev:
         random_id = int(target_link[-1].split("/")[-1]) if len(target_link) > 1 else None
         desired_username = target_link[3] if len(target_link) > 3 else None
         username = (
-            "@" + desired_username if desired_username else "-100" + target_link[1].split("/")[0]
-            if len(target_link) > 1 else None
+            f"@{desired_username}"
+            if desired_username
+            else (
+                "-100" + target_link[1].split("/")[0]
+                if len(target_link) > 1
+                else None
+            )
         )
         return username, random_id
 
@@ -80,6 +82,8 @@ class BaseDev:
             api_key = os.environ.get("AKENOX_KEY")
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY_PREMIUM")
+        if not api_key:
+            api_key = "demo"
         url =  f"{self.public_url}/{endpoint}"
         headers = {
             "x-api-key": api_key,
@@ -130,10 +134,10 @@ class BaseDev:
                         del response["author"]
                         return response
                     return await response.json()
-        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError):
-            raise Exception("GET OR POST INVALID: check problem, invalid JSON")
-        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError):
-            raise Exception("Cannot connect to host")
+        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError) as e:
+            raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
+        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
+            raise Exception("Cannot connect to host") from e
         except Exception:
             return None
 
@@ -179,6 +183,13 @@ class BaseDevWithEndpoints(BaseDev):
         super().__init__(public_url)
         for attr, endpoint in endpoints.items():
             setattr(self, attr, GenericEndpoint(self, endpoint, super_fast=True))
+
+class AkenoXDevFaster(BaseDevWithEndpoints):
+    def __init__(self, public_url: str = "https://faster.maiysacollection.com/v2"):
+        endpoints = {
+            "fast": "super-custom"
+        }
+        super().__init__(public_url, endpoints)
 
 class ItzPire(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://itzpire.com"):
@@ -247,7 +258,6 @@ class RandyDev(BaseDev):
         async def create(self, action: str = None, is_obj=False, **kwargs):
             """Handle User API requests."""
             ops = {
-                "info": "api-key-info",
                 "status_ban": "status/ban",
                 "check_admin": "author/admin",
                 "raw_chat": "raw/getchat",
@@ -311,25 +321,31 @@ class RandyDev(BaseDev):
             return filename
 
 class AkenoXJs:
-    def __init__(self, is_err: bool = False, is_itzpire: bool = False):
+    def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
         """
         Parameters:
             is_err (bool): for ErAPI
             is_itzpire (bool): for itzpire API
+            is_akenox_fast (bool): For AkenoX Hono APi Faster
             default (bool): If False, default using AkenoX API
         """
         self.endpoints = {
             "itzpire": ItzPire(),
+            "akenox_fast": AkenoXDevFaster(),
             "err": ErAPI(),
             "default": RandyDev()
         }
-        self.flags = {"itzpire": is_itzpire, "err": is_err}
+        self.flags = {
+            "itzpire": is_itzpire,
+            "akeno_fast": is_akenox_fast,
+            "err": is_err
+        }
 
     def connect(self):
         if self.flags["itzpire"]:
             return self.endpoints["itzpire"]
         if self.flags["err"]:
             return self.endpoints["err"]
+        if self.flags["akenox_fast"]:
+            return self.endpoints["akenox_fast"]
         return self.endpoints["default"]
-
-AkenoXToJs = AkenoXJs
