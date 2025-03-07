@@ -261,7 +261,6 @@ class RandyDev(BaseDev):
                 "status_ban": "status/ban",
                 "check_admin": "author/admin",
                 "raw_chat": "raw/getchat",
-                "info": "info",
                 "date": "creation-date",
                 "ban": "ban-user",
                 "check_ban": "check-ban",
@@ -322,13 +321,6 @@ class RandyDev(BaseDev):
 
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
-        """
-        Parameters:
-            is_err (bool): for ErAPI
-            is_itzpire (bool): for itzpire API
-            is_akenox_fast (bool): For AkenoX Hono APi Faster
-            default (bool): If False, default using AkenoX API
-        """
         self.endpoints = {
             "itzpire": ItzPire(),
             "akenox_fast": AkenoXDevFaster(),
@@ -337,15 +329,16 @@ class AkenoXJs:
         }
         self.flags = {
             "itzpire": is_itzpire,
-            "akeno_fast": is_akenox_fast,
+            "akenox_fast": is_akenox_fast,
             "err": is_err
         }
-
     def connect(self):
-        if self.flags["itzpire"]:
-            return self.endpoints["itzpire"]
-        if self.flags["err"]:
-            return self.endpoints["err"]
-        if self.flags["akenox_fast"]:
-            return self.endpoints["akenox_fast"]
-        return self.endpoints["default"]
+        priority_flags = ["itzpire", "err", "akenox_fast"]
+        return next(
+            (
+                self.endpoints[flag]
+                for flag in priority_flags
+                if self.flags.get(flag)
+            ),
+            self.endpoints["default"],
+        )
