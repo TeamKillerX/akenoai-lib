@@ -258,7 +258,6 @@ class RandyDev(BaseDev):
         async def create(self, action: str = None, is_obj=False, **kwargs):
             """Handle User API requests."""
             ops = {
-                "info": "api-key-info",
                 "status_ban": "status/ban",
                 "check_admin": "author/admin",
                 "raw_chat": "raw/getchat",
