@@ -134,10 +134,10 @@ class BaseDev:
                         del response["author"]
                         return response
                     return await response.json()
-        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError):
-            raise Exception("GET OR POST INVALID: check problem, invalid JSON")
-        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError):
-            raise Exception("Cannot connect to host")
+        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError) as e:
+            raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
+        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
+            raise Exception("Cannot connect to host") from e
         except Exception:
             return None
 
