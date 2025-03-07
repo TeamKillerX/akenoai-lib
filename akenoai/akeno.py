@@ -334,7 +334,11 @@ class AkenoXJs:
         }
     def connect(self):
         priority_flags = ["itzpire", "err", "akenox_fast"]
-        for flag in priority_flags:
-            if self.flags.get(flag):
-                return self.endpoints[flag]
-        return self.endpoints["default"]
+        return next(
+            (
+                self.endpoints[flag]
+                for flag in priority_flags
+                if self.flags.get(flag)
+            ),
+            self.endpoints["default"],
+        )
