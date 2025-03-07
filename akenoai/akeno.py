@@ -187,7 +187,7 @@ class BaseDevWithEndpoints(BaseDev):
 class AkenoXDevFaster(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://faster.maiysacollection.com/v2"):
         endpoints = {
-            "fast": "super-custom"
+            "fast": "fast"
         }
         super().__init__(public_url, endpoints)
 
