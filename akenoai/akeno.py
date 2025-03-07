@@ -44,8 +44,13 @@ class BaseDev:
         random_id = int(target_link[-1].split("/")[-1]) if len(target_link) > 1 else None
         desired_username = target_link[3] if len(target_link) > 3 else None
         username = (
-            "@" + desired_username if desired_username else "-100" + target_link[1].split("/")[0]
-            if len(target_link) > 1 else None
+            f"@{desired_username}"
+            if desired_username
+            else (
+                "-100" + target_link[1].split("/")[0]
+                if len(target_link) > 1
+                else None
+            )
         )
         return username, random_id
 
