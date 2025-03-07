@@ -44,8 +44,13 @@ class BaseDev:
         random_id = int(target_link[-1].split("/")[-1]) if len(target_link) > 1 else None
         desired_username = target_link[3] if len(target_link) > 3 else None
         username = (
-            "@" + desired_username if desired_username else "-100" + target_link[1].split("/")[0]
-            if len(target_link) > 1 else None
+            f"@{desired_username}"
+            if desired_username
+            else (
+                "-100" + target_link[1].split("/")[0]
+                if len(target_link) > 1
+                else None
+            )
         )
         return username, random_id
 
@@ -129,10 +134,10 @@ class BaseDev:
                         del response["author"]
                         return response
                     return await response.json()
-        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError):
-            raise Exception("GET OR POST INVALID: check problem, invalid JSON")
-        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError):
-            raise Exception("Cannot connect to host")
+        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError) as e:
+            raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
+        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
+            raise Exception("Cannot connect to host") from e
         except Exception:
             return None
 
@@ -253,7 +258,6 @@ class RandyDev(BaseDev):
         async def create(self, action: str = None, is_obj=False, **kwargs):
             """Handle User API requests."""
             ops = {
-                "info": "api-key-info",
                 "status_ban": "status/ban",
                 "check_admin": "author/admin",
                 "raw_chat": "raw/getchat",

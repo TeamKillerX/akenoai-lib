@@ -103,8 +103,8 @@ Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserb
 📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem! 🚀
 
 ### Code examples
-> [!TIP]
-> Trip PRO Usage Example:
+-> [!TIP]
+-> Tip Usage Example:
 
 - Use Access API key V2 Premium
 ```py
