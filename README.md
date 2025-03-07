@@ -54,7 +54,7 @@ dl/{model}
 user/{model}
 ai/{model}
 ```
-You can use `AkenoXToJs()` passing
+You can use `AkenoXJs()` passing
 ```py
 js = AkenoXToJs(is_your_name=True).connect()
 js.chat.create(...)
@@ -108,9 +108,9 @@ Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserb
 
 - Use Access API key V2 Premium
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
-js = AkenoXToJs().connect()
+js = AkenoXJs().connect()
 
 response = await js.chat.create(
     "qwen/qwen1.5-1.8b-chat",
@@ -125,7 +125,7 @@ print(response)
 ```py
 from akenoai import AkenoXToJs
 
-js = AkenoXToJs().connect()
+js = AkenoXJs().connect()
 
 download_response = await js.downloader.create(
     "instagram-v4",
@@ -225,7 +225,7 @@ js.hide_streamlit_watermark(unsafe_allow_html=True)
 > To better separate Streamlit integration from the core API, the import path has been updated:
 
 > ❌ <b>Deprecated:</b>
-> `from akenoai import AkenoXToJs`
+> `from akenoai import AkenoXJs`
 >
 > ✅ Use this <b>instead:</b>
 > `from akenoai.streamlit import StreamlitToJs`

@@ -27,10 +27,7 @@ from base64 import b64decode as m
 from datetime import datetime
 
 import aiohttp  # type: ignore
-import httpx  # type: ignore
 import requests  # type: ignore
-import uvloop  # type: ignore
-import wget  # type: ignore
 from box import Box  # type: ignore
 
 import akenoai.logger as fast
@@ -80,6 +77,8 @@ class BaseDev:
             api_key = os.environ.get("AKENOX_KEY")
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY_PREMIUM")
+        if not api_key:
+            api_key = "demo"
         url =  f"{self.public_url}/{endpoint}"
         headers = {
             "x-api-key": api_key,
@@ -179,6 +178,13 @@ class BaseDevWithEndpoints(BaseDev):
         super().__init__(public_url)
         for attr, endpoint in endpoints.items():
             setattr(self, attr, GenericEndpoint(self, endpoint, super_fast=True))
+
+class AkenoXDevFaster(BaseDevWithEndpoints):
+    def __init__(self, public_url: str = "https://faster.maiysacollection.com/v2"):
+        endpoints = {
+            "fast": "super-custom"
+        }
+        super().__init__(public_url, endpoints)
 
 class ItzPire(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://itzpire.com"):
@@ -311,25 +317,31 @@ class RandyDev(BaseDev):
             return filename
 
 class AkenoXJs:
-    def __init__(self, is_err: bool = False, is_itzpire: bool = False):
+    def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
         """
         Parameters:
             is_err (bool): for ErAPI
             is_itzpire (bool): for itzpire API
+            is_akenox_fast (bool): For AkenoX Hono APi Faster
             default (bool): If False, default using AkenoX API
         """
         self.endpoints = {
             "itzpire": ItzPire(),
+            "akenox_fast": AkenoXDevFaster(),
             "err": ErAPI(),
             "default": RandyDev()
         }
-        self.flags = {"itzpire": is_itzpire, "err": is_err}
+        self.flags = {
+            "itzpire": is_itzpire,
+            "akeno_fast": is_akenox_fast,
+            "err": is_err
+        }
 
     def connect(self):
         if self.flags["itzpire"]:
             return self.endpoints["itzpire"]
         if self.flags["err"]:
             return self.endpoints["err"]
+        if self.flags["akenox_fast"]:
+            return self.endpoints["akenox_fast"]
         return self.endpoints["default"]
-
-AkenoXToJs = AkenoXJs
