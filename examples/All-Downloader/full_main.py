@@ -4,12 +4,12 @@
 import asyncio
 import os
 
-from akenoai import AkenoXToJs
+from akenoai import OldAkenoXToJs
 
 api_key = os.environ.get("AKENOX_KEY")
 
 async def TiktokDownloader(url: str):
-    response = await AkenoXToJs.randydev(
+    response = await OldAkenoXToJs.randydev(
         "dl/tiktok",
         api_key=api_key,
         custom_dev_fast=True,
@@ -18,7 +18,7 @@ async def TiktokDownloader(url: str):
     return response
 
 async def FbDownloader(url: str):
-    response = await AkenoXToJs.randydev(
+    response = await OldAkenoXToJs.randydev(
         "dl/fb",
         api_key=api_key,
         custom_dev_fast=True,
@@ -26,9 +26,9 @@ async def FbDownloader(url: str):
     )
     return response
 
-# 100 max request per hour
+# 1000 max request per hour
 async def TeraboxDownloader(url: str):
-    response = await AkenoXToJs.randydev(
+    response = await OldAkenoXToJs.randydev(
         "dl/terabox",
         api_key=api_key,
         custom_dev_fast=True,
@@ -48,4 +48,4 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 
-# You can use "dl/*" check output JSON
+# You can use "dl/name" check output JSON
