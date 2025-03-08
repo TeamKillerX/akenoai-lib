@@ -23,7 +23,6 @@ import base64
 import json
 import os
 import subprocess
-import requests
 from base64 import b64decode as m
 from datetime import datetime
 
