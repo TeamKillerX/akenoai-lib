@@ -5,34 +5,22 @@ from akenoai import AkenoXJs
 
 js = AkenoXJs().connect()
 
-async def InstagramDL(url):
+async def download(service, url, api_key="<your-api-key-free>"):
     return await js.downloader.create(
-        "instagram-v4",
-        api_key="<your-api-key-free>",
+        service,
+        api_key=api_key,
         is_obj=False,
         url=url
     )
+
+async def InstagramDL(url):
+    return await download("instagram-v4", url)
 
 async def TeraboxDL(url):
-    return await js.downloader.create(
-        "terabox-v3",
-        api_key="<your-api-key-free>",
-        is_obj=False,
-        url=url
-    )
+    return await download("terabox-v3", url)
 
 async def FacebookDL(url):
-    return await js.downloader.create(
-        "fb",
-        api_key="<your-api-key-free>",
-        is_obj=False,
-        url=url
-    )
+    return await download("fb", url)
 
 async def TikTokDL(url):
-    return await js.downloader.create(
-        "tiktok",
-        api_key="<your-api-key-free>",
-        is_obj=False,
-        url=url
-    )
+    return await download("tiktok", url)
