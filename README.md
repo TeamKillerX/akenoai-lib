@@ -56,10 +56,10 @@ ai/{model}
 ```
 You can use `AkenoXJs()` passing
 ```py
-js = AkenoXToJs(is_your_name=True).connect()
+js = AkenoXJs(is_your_name=True).connect()
 js.chat.create(...)
 ```
-AkenoXToJs automatically configures the connection, so there's no need to manually initialize it using OldAkenoXToJs and its randydev method.
+AkenoXJs automatically configures the connection, so there's no need to manually initialize it using OldAkenoXToJs and its randydev method.
 ```py
 js = OldAkenoXToJs(public_url="https://your-api-endpoint/api/v1")
 js.randydev("api/endpoint", api_key="", custom_dev_fast=True)
@@ -123,7 +123,7 @@ print(response)
 ```
 - 📥 Example Downloader:
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
 js = AkenoXJs().connect()
 
