@@ -1,9 +1,9 @@
-from akenoai import AkenoXToJs
+from akenoai import OldAkenoXToJs
 
 
 async def generic_downloader(url: str, service: str):
     endpoint = f"dl/{service}"
-    response = await AkenoXToJs.randydev(
+    response = await OldAkenoXToJs.randydev(
         endpoint,
         api_key=api_key,
         custom_dev_fast=True,
