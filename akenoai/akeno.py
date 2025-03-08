@@ -337,7 +337,7 @@ class AkenoXJs:
         self.flags = {
             "itzpire": is_itzpire,
             "err": is_err,
-            "akenox_fast", is_akenox_fast
+            "akenox_fast": is_akenox_fast
         }
 
     def connect(self):
