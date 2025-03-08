@@ -348,3 +348,68 @@ class AkenoXJs:
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
         return self.endpoints["default"]
+
+class AkenoXDev:
+    BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
+
+    def __init__(self):
+        self.api_key = None
+        self.user_id = None
+        self.storage = {}
+        self.connected = False
+
+    @classmethod
+    def fast(cls):
+        return cls()
+
+    def connect(self, api_key: str = None, user_id: int = None):
+        if not api_key:
+            api_key = os.environ.get("AKENOX_KEY")
+        if not api_key or not isinstance(user_id, int):
+            raise ValueError("Invalid API key or user ID")
+
+        self.api_key = api_key
+        self.user_id = user_id
+
+        try:
+            response = requests.post(
+                f"{self.BASE_URL}/debug/connect",
+                params={"user_id": self.user_id, "api_key": self.api_key}
+            ).json()
+
+            if response.get("is_connect"):
+                self.storage["results"] = response
+                self.connected = True
+                print(f"✅ Connected with API key: {self.api_key} and user ID: {self.user_id}")
+            else:
+                self.connected = False
+                return {"status": "Connection failed. Check API key or user ID."}
+        except requests.RequestException as e:
+            self.connected = False
+            print(f"❌ API Request Failed: {e}")
+
+    def status(self):
+        if not self.connected or "results" not in self.storage:
+            return {"status": "disconnected"}
+
+        status = self.storage["results"]
+        return {
+            "status": "connected",
+            "api_key": status.get("key", "unknown"),
+            "user_id": status.get("owner", "unknown"),
+            "is_banned": status.get("is_banned", False)
+        }
+
+    def openai_prompt(self, prompt: str):
+        if not self.connected or "results" not in self.storage:
+            return {"status": "disconnected"}
+        status = self.storage["results"]
+        try:
+            return requests.get(
+                f"{self.BASE_URL}/ai/openai/gpt-4o",
+                params={"query": prompt},
+                headers={"x-api-key": status["key"]}
+            ).json()
+        except requests.RequestException as e:
+            self.connected = False
+            print(f"❌ API Request Failed: {e}")
