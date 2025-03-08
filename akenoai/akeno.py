@@ -392,6 +392,11 @@ class AkenoXDev:
             LOGS.error(f"❌ API Request Failed: {e}")
             return {"status": "error", "message": f"API Request Failed: {e}"}
 
+    def disconnect(self):
+        self.storage.pop("results", None)
+        self.connected = False
+        return {"status": "Successfully disconnected"}
+
     def status(self):
         if not self.connected or "results" not in self.storage:
             return {"status": "disconnected"}
