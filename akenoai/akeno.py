@@ -21,6 +21,7 @@
 import asyncio
 import base64
 import json
+import logging
 import os
 import subprocess
 from base64 import b64decode as m
@@ -32,6 +33,7 @@ from box import Box  # type: ignore
 
 import akenoai.logger as fast
 
+LOGS = logging.getLogger(__name__)
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -380,13 +382,14 @@ class AkenoXDev:
             if response.get("is_connect"):
                 self.storage["results"] = response
                 self.connected = True
-                print(f"✅ Connected with API key: {self.api_key} and user ID: {self.user_id}")
+                LOGS.info(f"✅ Connected with API key: {self.api_key} and user ID: {self.user_id}")
+                return {"status": "Successfully connected."}
             else:
                 self.connected = False
                 return {"status": "Connection failed. Check API key or user ID."}
         except requests.RequestException as e:
             self.connected = False
-            print(f"❌ API Request Failed: {e}")
+            LOGS.error(f"❌ API Request Failed: {e}")
 
     def status(self):
         if not self.connected or "results" not in self.storage:
@@ -400,16 +403,24 @@ class AkenoXDev:
             "is_banned": status.get("is_banned", False)
         }
 
-    def openai_prompt(self, prompt: str):
+    def anime_hentai(self, view_url=False):
         if not self.connected or "results" not in self.storage:
             return {"status": "disconnected"}
         status = self.storage["results"]
         try:
+            if view_url:
+                url_list = []
+                response = requests.get(
+                    f"{self.BASE_URL}/anime/hentai",
+                    headers={"x-api-key": status["key"]}
+                ).json()
+                for urls in response["result"]:
+                    url_list.append(urls["video_1"])
+                return url_list
             return requests.get(
-                f"{self.BASE_URL}/ai/openai/gpt-4o",
-                params={"query": prompt},
+                f"{self.BASE_URL}/anime/hentai",
                 headers={"x-api-key": status["key"]}
             ).json()
         except requests.RequestException as e:
             self.connected = False
-            print(f"❌ API Request Failed: {e}")
+            LOGS.error(f"❌ API Request Failed: {e}")
