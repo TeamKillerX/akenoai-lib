@@ -393,7 +393,7 @@ class AkenoXDev:
             return {"status": "error", "message": f"API Request Failed: {e}"}
 
     def disconnect(self):
-        del self.storage["results"]
+        self.storage.pop("results", None)
         self.connected = False
         return {"status": "Successfully disconnected"}
 
