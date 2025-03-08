@@ -187,7 +187,7 @@ class BaseDevWithEndpoints(BaseDev):
 class AkenoXDevFaster(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://faster.maiysacollection.com/v2"):
         endpoints = {
-            "fast": "super-custom"
+            "fast": "fast"
         }
         super().__init__(public_url, endpoints)
 
@@ -321,24 +321,30 @@ class RandyDev(BaseDev):
 
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
+        """
+        Parameters:
+            is_err (bool): for ErAPI
+            is_itzpire (bool): for itzpire API
+            is_akenox_fast (bool): for AkenoX hono API Faster
+            default (bool): If False, default using AkenoX API
+        """
         self.endpoints = {
             "itzpire": ItzPire(),
-            "akenox_fast": AkenoXDevFaster(),
             "err": ErAPI(),
+            "akenox_fast": AkenoXDevFaster(),
             "default": RandyDev()
         }
         self.flags = {
             "itzpire": is_itzpire,
-            "akenox_fast": is_akenox_fast,
-            "err": is_err
+            "err": is_err,
+            "akenox_fast": is_akenox_fast
         }
+
     def connect(self):
-        priority_flags = ["itzpire", "err", "akenox_fast"]
-        return next(
-            (
-                self.endpoints[flag]
-                for flag in priority_flags
-                if self.flags.get(flag)
-            ),
-            self.endpoints["default"],
-        )
+        if self.flags["itzpire"]:
+            return self.endpoints["itzpire"]
+        if self.flags["err"]:
+            return self.endpoints["err"]
+        if self.flags["akenox_fast"]:
+            return self.endpoints["akenox_fast"]
+        return self.endpoints["default"]

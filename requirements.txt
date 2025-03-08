@@ -3,3 +3,4 @@ wget
 requests
 httpx[http2]
 python-box
+git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]
