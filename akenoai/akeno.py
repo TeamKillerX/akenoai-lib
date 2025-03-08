@@ -390,6 +390,7 @@ class AkenoXDev:
         except requests.RequestException as e:
             self.connected = False
             LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
 
     def status(self):
         if not self.connected or "results" not in self.storage:
@@ -409,14 +410,11 @@ class AkenoXDev:
         status = self.storage["results"]
         try:
             if view_url:
-                url_list = []
                 response = requests.get(
                     f"{self.BASE_URL}/anime/hentai",
                     headers={"x-api-key": status["key"]}
                 ).json()
-                for urls in response["result"]:
-                    url_list.append(urls["video_1"])
-                return url_list
+                return [urls["video_1"] for urls in response["result"]]
             return requests.get(
                 f"{self.BASE_URL}/anime/hentai",
                 headers={"x-api-key": status["key"]}
@@ -424,3 +422,4 @@ class AkenoXDev:
         except requests.RequestException as e:
             self.connected = False
             LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
