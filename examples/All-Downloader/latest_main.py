@@ -5,7 +5,7 @@ from akenoai import AkenoXJs
 
 js = AkenoXJs().connect()
 
-async def download(service, url, api_key="<your-api-key-free>"):
+async def download(service, url, *, api_key="<your-api-key-free>"):
     return await js.downloader.create(
         service,
         api_key=api_key,
