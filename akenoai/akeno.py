@@ -459,4 +459,4 @@ class AkenoXDev:
         if view_url:
             response = self._perform_request(url, params=None, return_json=True)
             return [urls["video_1"] for urls in response["result"]]
-        return response = self._perform_request(url, params=None, return_json=True)
+        return self._perform_request(url, params=None, return_json=True)
