@@ -365,6 +365,20 @@ class AkenoXDev:
     def fast(cls):
         return cls()
 
+    def _check_connection(self):
+        if not self.connected or "results" not in self.storage:
+            return False, {"status": "disconnected"}
+        return True, self.storage["results"]
+    
+    def _perform_request(self, url, params, return_json=True):
+        try:
+            response = requests.get(url, params=params, headers={"x-api-key": self.storage["results"]["key"]})
+            return response.json() if return_json else response.content
+        except requests.RequestException as e:
+            self.connected = False
+            LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
+        
     def connect(self, api_key: str = None, user_id: int = None):
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY")
@@ -411,65 +425,38 @@ class AkenoXDev:
         }
 
     def instagram(self, link: str = None, version: str = "v3"):
-        if not self.connected or "results" not in self.storage:
-            return {"status": "disconnected"}
+        ok, status_or_response = self._check_connection()
+        if not ok:
+            return status_or_response
         if not link:
             return {"error": "required link"}
-        try:
-            return requests.get(
-                f"{self.BASE_DEV_URL}/dl/ig/custom",
-                params={"link": link, "version": version},
-                headers={"x-api-key": status["key"]}
-            ).json()
-        except requests.RequestException as e:
-            self.connected = False
-            LOGS.error(f"❌ API Request Failed: {e}")
-            return {"status": "error", "message": f"API Request Failed: {e}"}
+        url = f"{self.BASE_DEV_URL}/dl/ig/custom"
+        params = {"link": link, "version": version}
+        return self._perform_request(url, params, return_json=True)
 
     def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_contet: bool = False):
-        if not self.connected or "results" not in self.storage:
-            return {"status": "disconnected"}
+        ok, status_or_response = self._check_connection()
+        if not ok:
+            return status_or_response
         if not prompt:
             return {"error": "required prompt"}
+        url = f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell"
+        params = {"query": prompt}
+        if image_contet:
+            return self._perform_request(url, params, return_json=False)
 
-        status = self.storage["results"]
-        try:
-            if image_contet:
-                return requests.get(
-                    f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
-                    params={"query": prompt},
-                    headers={"x-api-key": status["key"]}
-                ).content
-            responses_contet = requests.get(
-                f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
-                params={"query": prompt},
-                headers={"x-api-key": status["key"]}
-            ).content
-            with open(filename, "wb") as f:
-                f.write(responses_contet)
-            LOGS.info(f"Successfully save check: {filename}")
-            return responses_contet
-        except requests.RequestException as e:
-            self.connected = False
-            LOGS.error(f"❌ API Request Failed: {e}")
-            return {"status": "error", "message": f"API Request Failed: {e}"}
+        responses_contet = self._perform_request(url, params, return_json=False)
+        with open(filename, "wb") as f:
+            f.write(responses_contet)
+        LOGS.info(f"Successfully save check: {filename}")
+        return responses_contet
 
     def anime_hentai(self, view_url=False):
-        if not self.connected or "results" not in self.storage:
-            return {"status": "disconnected"}
-        status = self.storage["results"]
-        try:
-            if view_url:
-                response = requests.get(
-                    f"{self.BASE_URL}/anime/hentai",
-                    headers={"x-api-key": status["key"]}
-                ).json()
-                return [urls["video_1"] for urls in response["result"]]
-            return requests.get(
-                f"{self.BASE_URL}/anime/hentai",
-                headers={"x-api-key": status["key"]}
-            ).json()
-        except requests.RequestException as e:
-            self.connected = False
-            LOGS.error(f"❌ API Request Failed: {e}")
-            return {"status": "error", "message": f"API Request Failed: {e}"}
+        ok, status_or_response = self._check_connection()
+        if not ok:
+            return status_or_response
+        url = f"{self.BASE_URL}/anime/hentai"
+        if view_url:
+            response = self._perform_request(url, params=None, return_json=True)
+            return [urls["video_1"] for urls in response["result"]]
+        return response = self._perform_request(url, params=None, return_json=True)
