@@ -434,7 +434,7 @@ class AkenoXDev:
         params = {"link": link, "version": version}
         return self._perform_request(url, params, return_json=True)
 
-    def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_contet: bool = False):
+    def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_content: bool = False):
         ok, status_or_response = self._check_connection()
         if not ok:
             return status_or_response
@@ -442,7 +442,7 @@ class AkenoXDev:
             return {"error": "required prompt"}
         url = f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell"
         params = {"query": prompt}
-        if image_contet:
+        if image_content:
             return self._perform_request(url, params, return_json=False)
 
         responses_contet = self._perform_request(url, params, return_json=False)
