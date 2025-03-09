@@ -369,7 +369,7 @@ class AkenoXDev:
         if not self.connected or "results" not in self.storage:
             return False, {"status": "disconnected"}
         return True, self.storage["results"]
-    
+
     def _perform_request(self, url, params, return_json=True):
         try:
             response = requests.get(url, params=params, headers={"x-api-key": self.storage["results"]["key"]})
@@ -378,7 +378,7 @@ class AkenoXDev:
             self.connected = False
             LOGS.error(f"❌ API Request Failed: {e}")
             return {"status": "error", "message": f"API Request Failed: {e}"}
-        
+
     def connect(self, api_key: str = None, user_id: int = None):
         if not api_key:
             api_key = os.environ.get("AKENOX_KEY")
