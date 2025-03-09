@@ -425,7 +425,7 @@ class AkenoXDev:
             self.connected = False
             LOGS.error(f"❌ API Request Failed: {e}")
             return {"status": "error", "message": f"API Request Failed: {e}"}
- 
+
     def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_contet: bool = False):
         if not self.connected or "results" not in self.storage:
             return {"status": "disconnected"}
