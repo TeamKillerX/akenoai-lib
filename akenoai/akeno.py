@@ -409,6 +409,34 @@ class AkenoXDev:
             "is_banned": status.get("is_banned", False)
         }
 
+    def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_contet: bool = False):
+        if not self.connected or "results" not in self.storage:
+            return {"status": "disconnected"}
+        if not prompt:
+            return {"error": "required prompt"}
+
+        status = self.storage["results"]
+        try:
+            if image_contet:
+                return requests.get(
+                    f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
+                    params={"query": prompt},
+                    headers={"x-api-key": status["key"]}
+                ).content
+            responses_contet = requests.get(
+                f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
+                params={"query": prompt},
+                headers={"x-api-key": status["key"]}
+            ).content
+            with open(filename, "wb") as f:
+                f.write(responses_contet)
+            LOGS.info(f"Successfully save check: {filename}")
+            return responses_contet
+        except requests.RequestException as e:
+            self.connected = False
+            LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
+
     def anime_hentai(self, view_url=False):
         if not self.connected or "results" not in self.storage:
             return {"status": "disconnected"}
