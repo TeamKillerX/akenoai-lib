@@ -445,11 +445,11 @@ class AkenoXDev:
         if image_content:
             return self._perform_request(url, params, return_json=False)
 
-        responses_contet = self._perform_request(url, params, return_json=False)
+        responses_content = self._perform_request(url, params, return_json=False)
         with open(filename, "wb") as f:
-            f.write(responses_contet)
+            f.write(responses_content)
         LOGS.info(f"Successfully save check: {filename}")
-        return responses_contet
+        return filename
 
     def anime_hentai(self, view_url=False):
         ok, status_or_response = self._check_connection()
