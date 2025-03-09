@@ -413,9 +413,9 @@ class AkenoXDev:
         return {"status": "Successfully disconnected"}
 
     def status(self):
-        if not self.connected or "results" not in self.storage:
-            return {"status": "disconnected"}
-
+        ok, status_or_response = self._check_connection()
+        if not ok:
+            return status_or_response
         status = self.storage["results"]
         return {
             "status": "connected",
