@@ -353,6 +353,7 @@ class AkenoXJs:
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
+    BASE_DEV_URL = "https://learn.maiysacollection.com/api/v1"
 
     def __init__(self):
         self.api_key = None
@@ -408,6 +409,50 @@ class AkenoXDev:
             "user_id": status.get("owner", "unknown"),
             "is_banned": status.get("is_banned", False)
         }
+
+    def instagram(self, link: str = None, version: str = "v3"):
+        if not self.connected or "results" not in self.storage:
+            return {"status": "disconnected"}
+        if not link:
+            return {"error": "required link"}
+        try:
+            return requests.get(
+                f"{self.BASE_DEV_URL}/dl/ig/custom",
+                params={"link": link, "version": version},
+                headers={"x-api-key": status["key"]}
+            ).json()
+        except requests.RequestException as e:
+            self.connected = False
+            LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
+
+    def flux_schnell(self, prompt: str = None, filename: str = "randydev.jpg", image_contet: bool = False):
+        if not self.connected or "results" not in self.storage:
+            return {"status": "disconnected"}
+        if not prompt:
+            return {"error": "required prompt"}
+
+        status = self.storage["results"]
+        try:
+            if image_contet:
+                return requests.get(
+                    f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
+                    params={"query": prompt},
+                    headers={"x-api-key": status["key"]}
+                ).content
+            responses_contet = requests.get(
+                f"{self.BASE_URL}/flux/black-forest-labs/flux-1-schnell",
+                params={"query": prompt},
+                headers={"x-api-key": status["key"]}
+            ).content
+            with open(filename, "wb") as f:
+                f.write(responses_contet)
+            LOGS.info(f"Successfully save check: {filename}")
+            return responses_contet
+        except requests.RequestException as e:
+            self.connected = False
+            LOGS.error(f"❌ API Request Failed: {e}")
+            return {"status": "error", "message": f"API Request Failed: {e}"}
 
     def anime_hentai(self, view_url=False):
         if not self.connected or "results" not in self.storage:
