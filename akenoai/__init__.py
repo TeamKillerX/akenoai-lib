@@ -14,7 +14,7 @@ PrivateToJsurl = m("aHR0cHM6Ly9yYW5keWRldi1yeXUtanMuaGYuc3BhY2U=").decode("utf-8
 
 __all__ = [
     "__version__",
-    "async_search",
+    "request_params",
     "AkenoXJs",
     "fetch",
     "OldAkenoXToJs",
