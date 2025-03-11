@@ -461,6 +461,9 @@ class AkenoXDev:
             return [urls["video_1"] for urls in response["result"]]
         return self._perform_request(url, params=None, return_json=True)
 
+def request_params(**params):
+    return {**params}
+
 async def _process_response(response, evaluate=None, return_json=False, return_json_and_obj=False, return_content=False, head=False, object_flag=False):
     if evaluate:
         return await evaluate(response)
