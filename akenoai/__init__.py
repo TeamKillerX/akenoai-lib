@@ -16,6 +16,7 @@ __all__ = [
     "__version__",
     "async_search",
     "AkenoXJs",
+    "fetch",
     "OldAkenoXToJs",
     "AsyicXSearcher",
     "OpenAI",
