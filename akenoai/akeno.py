@@ -470,9 +470,7 @@ async def _process_response(response, evaluate=None, return_json=False, return_j
         return Box(await response.json() or {})
     if return_content:
         return await response.read()
-    if head or object_flag:
-        return response
-    return await response.text()
+    return response if head or object_flag else await response.text()
 
 async def fetch(
     url: str,
