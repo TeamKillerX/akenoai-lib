@@ -485,7 +485,7 @@ async def fetch(
                 if return_json:
                     return await response.json()
                 if return_json_and_obj:
-                    return Box(await response.json() or {}) 
+                    return Box(await response.json() or {})
                 if return_content:
                     return await response.read()
                 if head or object:
