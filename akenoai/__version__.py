@@ -1,5 +1,5 @@
-__version__ = "1.7.8"
-__author__ = "Akeno Team"
+__version__ = "1.7.9"
+__author__ = "AkenoX Team"
 __license__ = "MIT"
 __title__ = "akenoai"
 __description__ = "AkenoAI Python API Wrapper"
