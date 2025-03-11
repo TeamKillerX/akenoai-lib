@@ -460,3 +460,36 @@ class AkenoXDev:
             response = self._perform_request(url, params=None, return_json=True)
             return [urls["video_1"] for urls in response["result"]]
         return self._perform_request(url, params=None, return_json=True)
+
+async def fetch(
+    url: str,
+    post: bool = False,
+    head: bool = False,
+    headers: dict = None,
+    evaluate=None,
+    object: bool = False,
+    return_json: bool = False,
+    return_content: bool = False,
+    return_json_and_obj: bool = False,
+    *args,
+    **kwargs,
+):
+    if aiohttp:
+        async with aiohttp.ClientSession(headers=headers) as session:
+            method = (
+                session.head if head else (session.post if post else session.get)
+                )
+            async with method(url, *args, **kwargs) as response:
+                if evaluate:
+                    return await evaluate(response)
+                if return_json:
+                    return await response.json()
+                if return_json_and_obj:
+                    return Box(await response.json() or {}) 
+                if return_content:
+                    return await response.read()
+                if head or object:
+                    return response
+                return await response.text()
+    else:
+        raise DependencyMissingError("Install 'aiohttp' required")
