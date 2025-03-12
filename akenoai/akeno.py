@@ -463,6 +463,13 @@ class AkenoXDev:
 
 def request_params(**params):
     return {**params}
+    
+def to_buffer(response=None, filename="randydev.jpg"):
+    if not filename.startswith(".jpg"):
+        return None
+    with open(filename, "wb") as f:
+        f.write(response)
+    return filename
 
 async def _process_response(response, evaluate=None, return_json=False, return_json_and_obj=False, return_content=False, head=False, object_flag=False):
     if evaluate:
