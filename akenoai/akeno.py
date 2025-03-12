@@ -463,7 +463,7 @@ class AkenoXDev:
 
 def request_params(**params):
     return {**params}
-    
+
 def to_buffer(response=None, filename="randydev.jpg"):
     if not filename.startswith(".jpg"):
         return None
