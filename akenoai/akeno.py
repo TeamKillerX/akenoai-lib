@@ -476,6 +476,7 @@ async def fetch_and_extract_urls(url: str, return_unsafe_href=False):
       html_content = response
       return extract_urls(html_content, return_unsafe_href=return_unsafe_href)
     except Exception as e:
+      logging.exception("Exception in fetch_and_extract_urls for url: %s", url)
       return []
 
 def to_buffer(response=None, filename="randydev.jpg", return_image_base64=False):
