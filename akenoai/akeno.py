@@ -465,7 +465,7 @@ def request_params(**params):
     return {**params}
 
 def to_buffer(response=None, filename="randydev.jpg"):
-    if not filename.startswith(".jpg"):
+    if not filename.endswith(".jpg"):
         return None
     with open(filename, "wb") as f:
         f.write(response)
