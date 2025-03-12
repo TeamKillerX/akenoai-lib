@@ -470,11 +470,11 @@ def extract_urls(html_content, *, href_url=r"https://scontent", return_unsafe_hr
     soup = BeautifulSoup(html_content, "html.parser")
     return [link.get("href") for link in soup.find_all("a", href=re.compile(href_url))] if return_unsafe_href else []
 
-async def fetch_and_extract_urls(url: str, return_unsafe_href=False):
+async def fetch_and_extract_urls(url: str, **kwargs):
     try:
       response = await fetch(url, return_json=False)
       html_content = response
-      return extract_urls(html_content, return_unsafe_href=return_unsafe_href)
+      return extract_urls(html_content, **kwargs)
     except Exception as e:
       logging.exception("Exception in fetch_and_extract_urls for url: %s", url)
       return []
