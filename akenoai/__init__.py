@@ -21,4 +21,6 @@ __all__ = [
     "OldAkenoXToJs",
     "AsyicXSearcher",
     "OpenAI",
+    "extract_urls",
+    "fetch_and_extract_urls",
 ]

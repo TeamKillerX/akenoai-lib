@@ -23,6 +23,7 @@ import base64
 import json
 import logging
 import os
+import re
 import subprocess
 from base64 import b64decode as m
 from datetime import datetime
@@ -30,6 +31,7 @@ from datetime import datetime
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
+from bs4 import BeautifulSoup
 
 import akenoai.logger as fast
 
@@ -463,6 +465,18 @@ class AkenoXDev:
 
 def request_params(**params):
     return {**params}
+
+def extract_urls(html_content, *, href_url=r"https://scontent", return_unsafe_href=False):
+    soup = BeautifulSoup(html_content, "html.parser")
+    return [link.get("href") for link in soup.find_all("a", href=re.compile(href_url))] if return_unsafe_href else []
+
+async def fetch_and_extract_urls(url: str, return_unsafe_href=False):
+    try:
+      response = await fetch(url, return_json=False)
+      html_content = response
+      return extract_urls(html_content, return_unsafe_href=return_unsafe_href)
+    except Exception as e:
+      return []
 
 def to_buffer(response=None, filename="randydev.jpg", return_image_base64=False):
     if not filename.endswith(".jpg"):
