@@ -17,6 +17,7 @@ __all__ = [
     "request_params",
     "AkenoXJs",
     "fetch",
+    "to_buffer",
     "OldAkenoXToJs",
     "AsyicXSearcher",
     "OpenAI",
