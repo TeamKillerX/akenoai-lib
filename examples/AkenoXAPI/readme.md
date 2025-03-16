@@ -1,8 +1,8 @@
 ### FLUX-1SHELL
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
-js = AkenoXToJs()
+js = AkenoXJs().connect()
 
 prompt = """
 Lukisan airbrush abstrak setengah badan seorang pria Korea dengan rambut hitam berantakan,
@@ -11,7 +11,7 @@ Jaket baseball merah dan putih bertuliskan 'MONYET' terlihat jelas. Gaya kontemp
 detail kode Python terukir di topeng
 """
 
-response = await js.randydev.image.create(
+response = await js.image.create(
     "black-forest-labs/flux-1-schnell",
     api_key="here", # @aknuserbot get api key
     image_read=True,
@@ -26,12 +26,12 @@ await message.reply_photo(file_path)
 ![Image](https://github.com/user-attachments/assets/78f22515-865f-4ea2-894c-c17cdd85364f)
 ### Story TG Downloader
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
-js = AkenoXToJs()
+js = AkenoXJs().connect()
 
 await message.reply_video(
-    await js.randydev.story_in_tg.download_story(
+    await js.story_in_tg.download_story(
         api_key="your-api-key",
         link="https://t.me/KurimuzonAkuma/s/251"
     )
@@ -44,11 +44,11 @@ await message.reply_video(
 - [x] XN*
 - [x] all
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
-js = AkenoXToJs()
+js = AkenoXJs().connect()
 
-download_response = await js.randydev.downloader.create(
+download_response = await js.downloader.create(
     model="instagram-v4",
     api_key="<your-api-key-free>",
     is_obj=False,
@@ -60,11 +60,11 @@ return download_response
 ### AI & Models Premium
 - [X] System Prompt
 ```py
-from akenoai import AkenoXToJs
+from akenoai import AkenoXJs
 
-js = AkenoXToJs()
+js = AkenoXToJs().connect()
 
-response = await js.randydev.chat.create(
+response = await js.chat.create(
     model="qwen/qwen1.5-1.8b-chat",
     api_key="<your-api-key-premium>",
     is_obj=True,
