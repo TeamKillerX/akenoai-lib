@@ -15,7 +15,7 @@ url = f"{API_BASE}/json/all"
 
 requests.get(url, headers=headers).json()
 ```
-You can docs find [`requests.readthedocs.io/en/latest/`](https://requests.readthedocs.io/en/latest/)
+You can find docs [`requests.readthedocs.io/en/latest/`](https://requests.readthedocs.io/en/latest/)
 
 ### FLUX-1SHELL
 ```py
