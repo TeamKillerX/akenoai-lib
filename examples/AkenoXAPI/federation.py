@@ -1,9 +1,10 @@
 import akenoai as js
 
+
 class Federation:
     API_BASE = "https://randydev-ryu-js.hf.space/api/v2"
     API_KEYS = "your_api_key"
-    
+
     def __init__(self):
         pass
 
