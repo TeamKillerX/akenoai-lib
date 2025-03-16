@@ -49,6 +49,7 @@ async def example_incoming(c, m):
 # if you are using requests (without akenoai)
 import requests
 
+
 class SangMata:
     API_BASE = "https://randydev-ryu-js.hf.space/api/v2"
     API_KEYS = "your_api_key"
@@ -66,7 +67,7 @@ class SangMata:
             json=json,
             headers={"x-api-key": self.API_KEYS}
         )
-    
+
     def sangmata_tracker(self, **data):
         url = f"{self.API_BASE}/sangmata/tracker"
         return self._make_requests(url, post=True, json=data).json()
