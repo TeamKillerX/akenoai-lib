@@ -26,6 +26,6 @@ class Federation:
         )
 
     async def federation_ban(self, **data):
-        pass
+        raise NotImplementedError("federation_ban is not implemented")
 
 # check out: https://t.me/RendyProjects/2537
