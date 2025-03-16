@@ -1,3 +1,22 @@
+### Without AkenoAI-LIB
+- Use `requests`
+- install first: `pip3 install requests`
+
+Example Usage:
+```py
+import requests
+
+API_BASE = "https://randydev-ryu-js.hf.space/api/v1"
+API_KEYS = "your_api_key"
+
+headers={"x-api-key": API_KEYS}
+
+url = f"{API_BASE}/json/all"
+
+requests.get(url, headers=headers).json()
+```
+You can docs find [`requests.readthedocs.io/en/latest/`](https://requests.readthedocs.io/en/latest/)
+
 ### FLUX-1SHELL
 ```py
 from akenoai import AkenoXJs
