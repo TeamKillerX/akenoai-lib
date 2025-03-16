@@ -17,7 +17,7 @@ requests.get(url, headers=headers).json()
 ```
 You can find docs [`requests.readthedocs.io`](https://requests.readthedocs.io/en/latest/)
 
-- [`AkenoAI Docs`](docs.maiysacollection.com)
+- [`AkenoAI Docs`](https://docs.maiysacollection.com)
 
 ### FLUX-1SHELL
 ```py
