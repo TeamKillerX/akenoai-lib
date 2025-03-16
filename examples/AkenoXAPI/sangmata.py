@@ -57,12 +57,15 @@ class SangMata:
     def __init__(self):
         pass
 
-    def _make_requests(url: str, json=None, post=False):
+    def _post_request(self, url: str, json=None):
         return requests.post(
             url,
             json=json,
             headers={"x-api-key": self.API_KEYS}
-        ) if post else requests.get(
+        )
+
+    def _get_request(self, url: str, json=None):
+        return requests.get(
             url,
             json=json,
             headers={"x-api-key": self.API_KEYS}
@@ -70,11 +73,11 @@ class SangMata:
 
     def sangmata_tracker(self, **data):
         url = f"{self.API_BASE}/sangmata/tracker"
-        return self._make_requests(url, post=True, json=data).json()
+        return self._post_request(url, json=data).json()
 
     def sangmata_tracker_check(self, user_id: int):
         url = f"{self.API_BASE}/sangmata/tracker/{user_id}"
-        return self._make_requests(url, post=False).json()
+        return self._get_request(url).json()
 
 sg = SangMata()
 
