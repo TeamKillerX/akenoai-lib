@@ -2,6 +2,7 @@
 
 import akenoai as js
 
+
 class SangMata:
     API_BASE = "https://randydev-ryu-js.hf.space/api/v2"
     API_KEYS = "your_api_key"
