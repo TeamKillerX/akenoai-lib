@@ -140,6 +140,7 @@ class BaseDev:
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, method)
+                form_data = None
                 if add_field:
                     form_data = await self._make_upload_file_this(upload_file=upload_file, is_upload=is_upload)
                 async with request(url, headers=headers, params=params, data=form_data) as response:
