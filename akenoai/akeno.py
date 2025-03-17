@@ -111,7 +111,17 @@ class BaseDev:
         response = requests.post(api_url, params=params, **request_kwargs)
         return response.text if is_text and not is_data else response
 
-    async def _make_request(self, method: str, endpoint: str, image_read=False, remove_author=False, **params):
+    async def _make_upload_file_this(self, upload_file=None, is_upload=False):
+        form_data = aiohttp.FormData()
+        form_data.add_field(
+            'file',
+            open(upload_file, 'rb'),
+            filename=os.path.basename(upload_file),
+            content_type='application/octet-stream'
+        )
+        return form_data if is_upload else None
+
+    async def _make_request(self, method: str, endpoint: str, upload_file=None, image_read=False, remove_author=False, add_field=False, is_upload=False, **params):
         """Handles async API requests.
 
         Parameters:
@@ -130,7 +140,9 @@ class BaseDev:
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, method)
-                async with request(url, headers=headers, params=params) as response:
+                if add_field:
+                    form_data = await self._make_upload_file_this(upload_file=upload_file, is_upload=is_upload)
+                async with request(url, headers=headers, params=params, data=form_data) as response:
                     if image_read:
                         return await response.read()
                     if remove_author:
