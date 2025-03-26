@@ -259,7 +259,7 @@ class RandyDev(BaseDev):
             .super_fast (bool): for fast response
         """
         self.is_bypass_control = False
-        self.public_url = "https://faster.maiysacollection.com/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
+        self.update_public_url()
         super().__init__(self.public_url)
         self.chat = GenericEndpoint(self, "ai", super_fast=True)
         self.downloader = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "dl", super_fast=True)
@@ -268,6 +268,13 @@ class RandyDev(BaseDev):
         self.translate = self.Translate(self)
         self.story_in_tg = self.LinkExtraWithStory(self)
         self.proxy = self.Proxy(self)
+
+    def update_public_url(self):
+        self.public_url = "https://faster.maiysacollection.com/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
+
+    def set_bypass_control(self, value: bool):
+        self.is_bypass_control = value
+        self.update_public_url()
 
     class User:
         def __init__(self, parent: BaseDev):
@@ -340,8 +347,8 @@ class RandyDev(BaseDev):
 
 class ControlDev(RandyDev):
     def __init__(self):
-        self.is_bypass_control = True
         super().__init__()
+        self.set_bypass_control(True)
 
 class AkenoXJsDev:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
