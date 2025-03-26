@@ -338,10 +338,6 @@ class RandyDev(BaseDev):
                 f.write(base64.b64decode(response.download))
             return filename
 
-class ClientControl(RandyDev):
-    def __init__(self):
-        pass
-
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
         """
