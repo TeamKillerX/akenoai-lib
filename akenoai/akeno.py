@@ -338,6 +338,11 @@ class RandyDev(BaseDev):
                 f.write(base64.b64decode(response.download))
             return filename
 
+class ControlDev(RandyDev):
+    def __init__(self):
+        self.is_bypass_control = True
+        super().__init__()
+
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
         """
@@ -351,7 +356,7 @@ class AkenoXJs:
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev()
+            "default": ControlDev()
         }
         self.flags = {
             "itzpire": is_itzpire,
