@@ -343,7 +343,7 @@ class ControlDev(RandyDev):
         self.is_bypass_control = True
         super().__init__()
 
-class AkenoXJs:
+class AkenoXJsDev:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
         """
         Parameters:
@@ -372,6 +372,20 @@ class AkenoXJs:
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
         return self.endpoints["default"]
+
+class AkenoXJs(AkenoXJsDev):
+    def __init__(self):
+        self.endpoints = {
+            "itzpire": ItzPire(),
+            "err": ErAPI(),
+            "akenox_fast": AkenoXDevFaster(),
+            "default": CustomRandyDev()
+        }
+        self.flags = {
+            "itzpire": False,
+            "err": False,
+            "akenox_fast": False
+        }
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
