@@ -246,7 +246,7 @@ class ErAPI(BaseDevWithEndpoints):
         super().__init__(public_url, endpoints)
 
 class RandyDev(BaseDev):
-    def __init__(self, public_url: str = "https://randydev-ryu-js.hf.space/api/v1"):
+    def __init__(self, is_bypass_control: bool = False):
         """
         Parameters:
             .chat (any): for Chat AI
@@ -258,9 +258,11 @@ class RandyDev(BaseDev):
             .proxy (any): for scaper proxy API
             .super_fast (bool): for fast response
         """
-        super().__init__(public_url)
+        self.is_bypass_control = is_bypass_control
+        self.public_url = "https://faster.maiysacollection.com/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
+        super().__init__(self.public_url)
         self.chat = GenericEndpoint(self, "ai", super_fast=True)
-        self.downloader = GenericEndpoint(self, "dl", super_fast=True)
+        self.downloader = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "dl", super_fast=True)
         self.image = GenImageEndpoint(self, "flux", super_fast=True)
         self.user = self.User(self)
         self.translate = self.Translate(self)
