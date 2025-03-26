@@ -345,7 +345,7 @@ class RandyDev(BaseDev):
                 f.write(base64.b64decode(response.download))
             return filename
 
-class AkenoXJs(RandyDev):
+class AkenoXJs:
     def __init__(
         self,
         is_err: bool = False,
@@ -353,7 +353,6 @@ class AkenoXJs(RandyDev):
         is_akenox_fast: bool = False,
         is_bypass_control: bool = False
     ):
-        super().__init__(is_bypass_control)
         """
         Parameters:
             is_err (bool): for ErAPI
