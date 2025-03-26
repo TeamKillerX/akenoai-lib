@@ -16,6 +16,7 @@ __all__ = [
     "__version__",
     "request_params",
     "AkenoXJs",
+    "ClientControl",
     "fetch",
     "to_buffer",
     "OldAkenoXToJs",
