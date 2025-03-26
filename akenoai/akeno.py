@@ -375,17 +375,7 @@ class AkenoXJsDev:
 
 class AkenoXJs(AkenoXJsDev):
     def __init__(self):
-        self.endpoints = {
-            "itzpire": ItzPire(),
-            "err": ErAPI(),
-            "akenox_fast": AkenoXDevFaster(),
-            "default": CustomRandyDev()
-        }
-        self.flags = {
-            "itzpire": False,
-            "err": False,
-            "akenox_fast": False
-        }
+        super().__init__()
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
