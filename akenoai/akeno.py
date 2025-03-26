@@ -340,6 +340,7 @@ class RandyDev(BaseDev):
 
 class ClientControl(RandyDev):
     def __init__(self):
+        pass
 
 class AkenoXJs:
     def __init__(self, is_err: bool = False, is_itzpire: bool = False, is_akenox_fast: bool = False):
