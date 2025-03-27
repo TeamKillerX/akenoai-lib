@@ -167,7 +167,7 @@ class BaseDev:
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
             raise Exception("Cannot connect to host") from e
         except Exception as e:
-            LOGS.error(f"Error: {e}")
+            LOGS.exception("An error occurred")
             return None
 
 class GenImageEndpoint:
