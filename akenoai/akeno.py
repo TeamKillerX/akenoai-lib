@@ -261,7 +261,7 @@ class RandyDev(BaseDev):
         self.is_bypass_control = is_bypass_control
         self.update_public_url()
         super().__init__(self.public_url)
-        self.chat = GenericEndpoint(self, "ai", super_fast=True)
+        self.chat = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "ai", super_fast=True)
         self.downloader = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "dl", super_fast=True)
         self.image = GenImageEndpoint(self, "flux", super_fast=True)
         self.user = self.User(self)
@@ -360,11 +360,12 @@ class AkenoXJs:
             is_akenox_fast (bool): for AkenoX hono API Faster
             default (bool): If False, default using AkenoX API
         """
+
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(is_bypass_control)
+            "default": RandyDev(is_bypass_control) if is_bypass_control else None
         }
         self.flags = {
             "itzpire": is_itzpire,
@@ -379,6 +380,10 @@ class AkenoXJs:
             return self.endpoints["err"]
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
+        if self.endpoints["default"] is None:
+            return LOGS.warn(
+                "Warning: disabled MSIE and Chrome friendly error pages, it may cause problems with some downloader services. use is_bypass_control True instead of old or manual API"
+            )
         return self.endpoints["default"]
 
 class AkenoXDev:
