@@ -381,9 +381,10 @@ class AkenoXJs:
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
         if self.endpoints["default"] is None:
-            return LOGS.warn(
+            LOGS.warn(
                 "Warning: disabled MSIE and Chrome friendly error pages, it may cause problems with some downloader services. use is_bypass_control True instead of old or manual API"
             )
+            return None
         return self.endpoints["default"]
 
 class AkenoXDev:
