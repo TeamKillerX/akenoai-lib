@@ -166,7 +166,8 @@ class BaseDev:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
             raise Exception("Cannot connect to host") from e
-        except Exception:
+        except Exception as e:
+            LOGS.error(f"Error: {e}")
             return None
 
 class GenImageEndpoint:
