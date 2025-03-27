@@ -166,7 +166,8 @@ class BaseDev:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
             raise Exception("Cannot connect to host") from e
-        except Exception:
+        except Exception as e:
+            LOGS.exception("An error occurred")
             return None
 
 class GenImageEndpoint:
@@ -274,7 +275,7 @@ class RandyDev(BaseDev):
         self.is_bypass_control = is_bypass_control
         self.update_public_url()
         super().__init__(self.public_url)
-        self.chat = GenericEndpoint(self, "fast", post=True, super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "ai", super_fast=True)
+        self.chat = GenericEndpoint(self, "fast", is_post=True, super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "ai", super_fast=True)
         self.downloader = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "dl", super_fast=True)
         self.image = GenImageEndpoint(self, "flux", super_fast=True)
         self.user = self.User(self)
