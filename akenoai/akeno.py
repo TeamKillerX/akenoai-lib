@@ -121,7 +121,17 @@ class BaseDev:
         )
         return form_data if is_upload else None
 
-    async def _make_request(self, method: str, endpoint: str, upload_file=None, image_read=False, remove_author=False, add_field=False, is_upload=False, **params):
+    async def _make_request(
+        self,
+        method: str,
+        endpoint: str,
+        upload_file=None,
+        image_read=False,
+        remove_author=False,
+        add_field=False,
+        is_upload=False,
+        **params
+    ):
         """Handles async API requests.
 
         Parameters:
@@ -137,13 +147,14 @@ class BaseDev:
             params.pop("api_key", None),
             params.pop("headers_extra", None),
         )
+        json = params.pop("body_data", None)
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, method)
                 form_data = None
                 if add_field:
                     form_data = await self._make_upload_file_this(upload_file=upload_file, is_upload=is_upload)
-                async with request(url, headers=headers, params=params, data=form_data) as response:
+                async with request(url, headers=headers, params=params, json=json, data=form_data) as response:
                     if image_read:
                         return await response.read()
                     if remove_author:
@@ -365,7 +376,7 @@ class AkenoXJs:
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(is_bypass_control) if is_bypass_control else None
+            "default": RandyDev(is_bypass_control)
         }
         self.flags = {
             "itzpire": is_itzpire,
@@ -380,12 +391,8 @@ class AkenoXJs:
             return self.endpoints["err"]
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
-        if self.endpoints["default"] is None:
-            LOGS.warn(
-                "Warning: disabled MSIE and Chrome friendly error pages, it may cause problems with some downloader services. use is_bypass_control True instead of old or manual API"
-            )
-            return None
-        return self.endpoints["default"]
+        if self.endpoints["default"]:
+            return self.endpoints["default"]
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
