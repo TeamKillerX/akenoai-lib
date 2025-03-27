@@ -360,11 +360,12 @@ class AkenoXJs:
             is_akenox_fast (bool): for AkenoX hono API Faster
             default (bool): If False, default using AkenoX API
         """
+        
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(is_bypass_control)
+            "default": RandyDev(is_bypass_control) if is_bypass_control else None
         }
         self.flags = {
             "itzpire": is_itzpire,
@@ -379,7 +380,11 @@ class AkenoXJs:
             return self.endpoints["err"]
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
-        return self.endpoints["default"]
+        if self.endpoints["default"] is None:
+            return LOGS.warn(
+                "Warning: disabled MSIE and Chrome friendly error pages, it may cause problems with some downloader services. use is_bypass_control True instead of old or manual API"
+            )
+        return self.endpoints["default"] 
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
