@@ -40,9 +40,9 @@ from bs4 import BeautifulSoup
 
 scp_two = ScraperProxy(
     url=""
-    api_url="https://api.scraperapi.com"
-    api_key = "<api-key-here>" # or set SCRAPER_KEY as an environment variable (default)
-    is_data=False
+    api_url="https://api.scraperapi.com",
+    api_key="<api-key-here>", # or set SCRAPER_KEY as an environment variable (default)
+    is_data=False,
     response_mode="default"
 )
 
