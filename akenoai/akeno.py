@@ -555,7 +555,7 @@ class MakeFetch(BaseModel):
     post: Optional[bool] = False
     head: Optional[bool] = False
     headers: Optional[dict] = None
-    evaluate: Optional[str, None] = None
+    evaluate: Optional[str] = None
     object_flag: Optional[bool] = False
     return_json: Optional[bool] = False
     return_content: Optional[bool] = False
