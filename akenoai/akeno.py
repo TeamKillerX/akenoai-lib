@@ -75,7 +75,7 @@ class ScraperProxy(BaseModel):
 
 @dataclass
 class BaseDev:
-    public_url: str
+    public_url: str = field(default="")
     obj: Box = field(default_factory=Box)
 
     def _get_random_from_channel(self, link: str = None):
@@ -252,6 +252,7 @@ class GenericEndpoint:
 @dataclass
 class BaseDevWithEndpoints(BaseDev):
     endpoints: dict
+    public_url: str = field(default="")
 
     def __post_init__(self):
         super().__init__(public_url=self.public_url)
