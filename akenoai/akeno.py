@@ -148,7 +148,7 @@ class BaseDev:
                 return response.text
         if x.extract_all_hrefs:
             soup = BeautifulSoup(response.text, "html.parser")
-            return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else None
+            return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
         return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
