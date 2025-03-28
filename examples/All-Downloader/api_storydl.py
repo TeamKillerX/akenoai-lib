@@ -38,8 +38,7 @@ def check_job_status(job_id):
                 return data
         time.sleep(5)
 
-job_id = story_task_now_call("https://t.me/username/s/1")
-if job_id:
+if job_id := story_task_now_call("https://t.me/username/s/1"):
     print(f"Job started with ID: {job_id}")
     response = check_job_status(job_id)
     if response["status"] == "completed":
