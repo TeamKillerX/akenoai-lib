@@ -69,7 +69,7 @@ class ScraperProxy(BaseModel):
     api_url: str = "https://api.scraperapi.com"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     is_data: Optional[bool] = False
-    is_href_all: Optional[bool] = False
+    extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
 class BaseDev:
@@ -146,9 +146,9 @@ class BaseDev:
             except ValueError as e:
                 logging.debug("Failed to parse JSON response: %s", e)
                 return response.text
-        if x.is_href_all:
+        if x.extract_all_hrefs:
             soup = BeautifulSoup(response.text, "html.parser")
-            return [a['href'] for a in soup.find_all('a', href=True)]
+            return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
         return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
