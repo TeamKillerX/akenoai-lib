@@ -42,7 +42,7 @@ LOGS = logging.getLogger(__name__)
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    upload_file: str = None
+    upload_file: Optional[str] = None
     image_read: Optional[bool] = False
     remove_author: Optional[bool] = False
     add_field: Optional[bool] = False
