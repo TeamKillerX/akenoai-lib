@@ -32,10 +32,20 @@ import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup
+from pydantic import BaseModel
 
 import akenoai.logger as fast
 
 LOGS = logging.getLogger(__name__)
+
+class MakeRequest(BaseModel):
+    method: str
+    endpoint: str
+    upload_file: str = None
+    image_read: bool = False
+    remove_author: bool = False
+    add_field: bool = False
+    is_upload: bool = False
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -121,19 +131,8 @@ class BaseDev:
         )
         return form_data if is_upload else None
 
-    async def _make_request(
-        self,
-        method: str,
-        endpoint: str,
-        upload_file=None,
-        image_read=False,
-        remove_author=False,
-        add_field=False,
-        is_upload=False,
-        **params
-    ):
-        """Handles async API requests.
-
+    async def _make_request(self, u: MakeRequest, **params):
+        """
         Parameters:
             method (str): HTTP method to use.
             endpoint (str): API endpoint.
@@ -143,21 +142,21 @@ class BaseDev:
             **params: Additional parameters to be sent with the request.
         """
         url, headers = self._prepare_request(
-            endpoint,
+            u.endpoint,
             params.pop("api_key", None),
             params.pop("headers_extra", None),
         )
         json = params.pop("body_data", None)
         try:
             async with aiohttp.ClientSession() as session:
-                request = getattr(session, method)
+                request = getattr(session, u.method)
                 form_data = None
-                if add_field:
-                    form_data = await self._make_upload_file_this(upload_file=upload_file, is_upload=is_upload)
+                if u.add_field:
+                    form_data = await self._make_upload_file_this(upload_file=u.upload_file, is_upload=u.is_upload)
                 async with request(url, headers=headers, params=params, json=json, data=form_data) as response:
-                    if image_read:
+                    if u.image_read:
                         return await response.read()
-                    if remove_author:
+                    if u.remove_author:
                         response = await response.json()
                         del response["author"]
                         return response
