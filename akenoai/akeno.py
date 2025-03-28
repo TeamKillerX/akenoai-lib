@@ -362,7 +362,7 @@ class AkenoXJs:
     is_err: Optional[bool] = field(default=False)
     is_itzpire: Optional[bool] = field(default=False)
     is_akenox_fast: Optional[bool] = field(default=False)
-    is_bypass_control: bool = False
+    is_bypass_control: bool = False # todo
     """
     Parameters:
         is_err (bool): for ErAPI
