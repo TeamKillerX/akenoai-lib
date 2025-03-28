@@ -73,10 +73,10 @@ class ScraperProxy(BaseModel):
     extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
-@dataclass
 class BaseDev:
-    public_url: str
-    obj: Box = field(default_factory=Box)
+    def __init__(self, public_url: str):
+        self.public_url = public_url
+        self.obj = Box
 
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
@@ -249,14 +249,10 @@ class GenericEndpoint:
         _response_parent = self.parent.obj(response) if is_obj else response
         return _response_parent if self.super_fast else None
 
-@dataclass
 class BaseDevWithEndpoints(BaseDev):
-    endpoints: dict
-    public_url: str = field(default="")
-
-    def __post_init__(self):
-        super().__init__(public_url=self.public_url)
-        for attr, endpoint in self.endpoints.items():
+    def __init__(self, public_url: str, endpoints: dict, **kwargs):
+        super().__init__(public_url)
+        for attr, endpoint in endpoints.items():
             setattr(self, attr, GenericEndpoint(self, endpoint, super_fast=True))
 
 class AkenoXDevFaster(BaseDevWithEndpoints):
@@ -264,7 +260,7 @@ class AkenoXDevFaster(BaseDevWithEndpoints):
         endpoints = {
             "fast": "fast"
         }
-        super().__init__(endpoints=endpoints, public_url=public_url)
+        super().__init__(public_url, endpoints)
 
 class ItzPire(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://itzpire.com"):
@@ -282,7 +278,7 @@ class ItzPire(BaseDevWithEndpoints):
             "stalk": "stalk",
             "tools": "tools",
         }
-        super().__init__(endpoints=endpoints, public_url=public_url)
+        super().__init__(public_url, endpoints)
 
 class ErAPI(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://er-api.biz.id"):
@@ -301,7 +297,7 @@ class ErAPI(BaseDevWithEndpoints):
             "get": "get",
             "downloader": "dl",
         }
-        super().__init__(endpoints=endpoints, public_url=public_url)
+        super().__init__(public_url, endpoints)
 
 class RandyDev(BaseDev):
     def __init__(self, is_bypass_control: bool = False):
