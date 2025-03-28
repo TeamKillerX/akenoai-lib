@@ -47,6 +47,25 @@ class MakeRequest(BaseModel):
     is_dumps: Optional[bool] = False
     json_indent: Optional[int] = 4
 
+class MakeFetch(BaseModel):
+    url: str
+    post: Optional[bool] = False
+    head: Optional[bool] = False
+    headers: Optional[dict] = None
+    evaluate: Optional[str] = None
+    object_flag: Optional[bool] = False
+    return_json: Optional[bool] = False
+    return_content: Optional[bool] = False
+    return_json_and_obj: Optional[bool] = False
+
+class ScraperProxy(BaseModel):
+    url: str
+    api_url: str = "https://api.scraperapi.com"
+    api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
+    is_text: Optional[bool] = False
+    is_data: Optional[bool] = False
+
+
 class BaseDev:
     def __init__(self, public_url: str):
         self.public_url = public_url
@@ -107,19 +126,13 @@ class BaseDev:
             headers.update(headers_extra)
         return url, headers
 
-    def _make_request_with_scraper(
-        self,
-        api_key: str = None,
-        url: str = None,
-        is_text: bool = False,
-        is_data: bool = False,
-        **data
-    ):
-        api_url = "https://api.scraperapi.com"
-        params = {"api_key": api_key, "url": url}
-        request_kwargs = {"data": data} if is_data else {"json": data}
-        response = requests.post(api_url, params=params, **request_kwargs)
-        return response.text if is_text and not is_data else response
+    def _make_request_with_scraper(self, x: ScraperProxy, **data):
+        if not x.api_key:
+            return "Required api key"
+        params = {"api_key": x.api_key, "url": x.url}
+        request_kwargs = {"data": data} if x.is_data else {"json": data}
+        response = requests.post(x.api_url, params=params, **request_kwargs)
+        return response.text if x.is_text and not x.is_data else response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
         form_data = aiohttp.FormData()
@@ -285,10 +298,8 @@ class RandyDev(BaseDev):
             .chat (any): for Chat AI
             .downloader (any): for all downloader
             .image (any): for image generate AI
-            .user (any): for user telegram API
             .translate (any): for translate google API
             .story_in_tg (any): for story DL telegram
-            .proxy (any): for scaper proxy API
             .super_fast (bool): for fast response
         """
         self.is_bypass_control = is_bypass_control
@@ -297,10 +308,8 @@ class RandyDev(BaseDev):
         self.chat = GenericEndpoint(self, "fast", is_post=True, super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "ai", super_fast=True)
         self.downloader = GenericEndpoint(self, "fast", super_fast=True) if self.is_bypass_control else GenericEndpoint(self, "dl", super_fast=True)
         self.image = GenImageEndpoint(self, "flux", super_fast=True)
-        self.user = self.User(self)
         self.translate = self.Translate(self)
         self.story_in_tg = self.LinkExtraWithStory(self)
-        self.proxy = self.Proxy(self)
 
     def update_public_url(self):
         self.public_url = "https://faster.maiysacollection.com/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
@@ -308,43 +317,6 @@ class RandyDev(BaseDev):
     def set_bypass_control(self, value: bool):
         self.is_bypass_control = value
         self.update_public_url()
-
-    class User:
-        def __init__(self, parent: BaseDev):
-            self.parent = parent
-
-        @fast.log_performance
-        async def create(self, action: str = None, is_obj=False, **kwargs):
-            """Handle User API requests."""
-            ops = {
-                "status_ban": "status/ban",
-                "check_admin": "author/admin",
-                "raw_chat": "raw/getchat",
-                "date": "creation-date",
-                "ban": "ban-user",
-                "check_ban": "check-ban",
-            }
-            if action not in ops:
-                raise ValueError(f"Invalid User action: {action}")
-            response = await self.parent._make_request("get", f"user/{ops[action]}", **kwargs) or {}
-            return self.parent.obj(response) if is_obj else response
-
-        async def api_key_operation(self, action: str, is_obj=False, **kwargs):
-            ops = {
-                "generate": "generate-key",
-                "ban": "api-key-ban"
-            }
-            if action not in ops:
-                raise ValueError(f"Invalid API key action: {action}")
-            response = await self.parent._make_request("get", f"key/{ops[action]}", **kwargs) or {}
-            return self.parent.obj(response) if is_obj else response
-
-    class Proxy:
-        def __init__(self, parent: BaseDev):
-            self.parent = parent
-
-        async def scraper(self, **kwargs):
-            return self.parent._make_request_with_scraper(**kwargs)
 
     class Translate:
         def __init__(self, parent: BaseDev):
@@ -366,17 +338,6 @@ class RandyDev(BaseDev):
             if not link:
                 raise ValueError("link name is required for Link Story Random.")
             return self.parent._get_random_from_channel(link)
-
-        async def download_story(self, filename: str = "downloaded_story.mp4", **kwargs):
-            """Handle Story Downloader in Telegram."""
-            if not filename:
-                raise ValueError("filename name is required for Story Downloader.")
-            response = await self.parent.user.create("story-dl", is_obj=True, **kwargs)
-            if not hasattr(response, "download") or not response.download:
-                raise ValueError("Invalid response: No downloadable content found.")
-            with open(filename, "wb") as f:
-                f.write(base64.b64decode(response.download))
-            return filename
 
 class AkenoXJs:
     def __init__(
@@ -568,17 +529,6 @@ async def _process_response(response, evaluate=None, return_json=False, return_j
     if return_content:
         return await response.read()
     return response if head or object_flag else await response.text()
-
-class MakeFetch(BaseModel):
-    url: str
-    post: Optional[bool] = False
-    head: Optional[bool] = False
-    headers: Optional[dict] = None
-    evaluate: Optional[str] = None
-    object_flag: Optional[bool] = False
-    return_json: Optional[bool] = False
-    return_content: Optional[bool] = False
-    return_json_and_obj: Optional[bool] = False
 
 async def fetch(fetch_params: MakeFetch, *args, **kwargs):
     return await simple_fetch(fetch_params, *args, **kwargs)

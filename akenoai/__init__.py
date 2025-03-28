@@ -10,8 +10,6 @@ from .openai import *
 from .reqs import *
 from .xnxx import *
 
-PrivateToJsurl = m("aHR0cHM6Ly9yYW5keWRldi1yeXUtanMuaGYuc3BhY2U=").decode("utf-8")
-
 __all__ = [
     "__version__",
     "request_params",
@@ -19,6 +17,7 @@ __all__ = [
     "AkenoXDev",
     "MakeRequest",
     "MakeFetch",
+    "ScraperProxy",
     "BaseDev",
     "fetch",
     "to_buffer",
