@@ -252,6 +252,7 @@ class GenericEndpoint:
 @dataclass
 class BaseDevWithEndpoints(BaseDev):
     endpoints: dict
+    public_url: str = field(default="")
 
     def __post_init__(self):
         super().__init__(public_url=self.public_url)
