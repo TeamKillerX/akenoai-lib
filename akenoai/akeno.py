@@ -157,7 +157,7 @@ class BaseDev:
                         return await response.read()
                     if u.remove_author:
                         response = await response.json()
-                        del response[params.pop("author_name", "")]
+                        del response[params.pop("del_author_name", "")]
                         return response
                     if u.is_dumps:
                         return rjson.dumps(await response.json(), indent=u.json_indent)
