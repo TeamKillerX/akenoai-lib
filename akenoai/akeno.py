@@ -585,7 +585,7 @@ async def fetch(
         return_content=return_content,
         return_json_and_obj=return_json_and_obj,
     )
-    return await fetch(fetch_params, *args, **kwargs)
+    return await simple_fetch(fetch_params, *args, **kwargs)
 
 async def simple_fetch(fetch: MakeFetch, *args, **kwargs):
     if aiohttp:
