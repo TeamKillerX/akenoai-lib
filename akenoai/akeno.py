@@ -205,7 +205,12 @@ class GenericEndpoint:
     async def create(self, ctx: str = None, is_obj: bool = False, **kwargs):
         if not ctx:
             raise ValueError("ctx name is required.")
-        response = await self.parent._make_request("post", f"{self.endpoint}/{ctx}", **kwargs) or {} if self.is_post else await self.parent._make_request("get", f"{self.endpoint}/{ctx}", **kwargs) or {}
+        _check_method = "post" if self.is_post else "get"
+        request_params = MakeRequest(
+            method=_check_method,
+            endpoint=f"{self.endpoint}/{ctx}"
+        )
+        response = await self.parent._make_request(request_params, **kwargs) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
         return _response_parent if self.super_fast else None
 
