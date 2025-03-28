@@ -264,7 +264,7 @@ class AkenoXDevFaster(BaseDevWithEndpoints):
         endpoints = {
             "fast": "fast"
         }
-        super().__init__(public_url=public_url, endpoints=endpoints)
+        super().__init__(endpoints=endpoints, public_url=public_url)
 
 class ItzPire(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://itzpire.com"):
@@ -282,7 +282,7 @@ class ItzPire(BaseDevWithEndpoints):
             "stalk": "stalk",
             "tools": "tools",
         }
-        super().__init__(public_url=public_url, endpoints=endpoints)
+        super().__init__(endpoints=endpoints, public_url=public_url)
 
 class ErAPI(BaseDevWithEndpoints):
     def __init__(self, public_url: str = "https://er-api.biz.id"):
@@ -301,7 +301,7 @@ class ErAPI(BaseDevWithEndpoints):
             "get": "get",
             "downloader": "dl",
         }
-        super().__init__(public_url=public_url, endpoints=endpoints)
+        super().__init__(endpoints=endpoints, public_url=public_url)
 
 class RandyDev(BaseDev):
     def __init__(self, is_bypass_control: bool = False):
