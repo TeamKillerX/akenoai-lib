@@ -77,7 +77,7 @@ class ScraperProxy(BaseModel):
 class BaseDev:
     public_url: str
     obj: Box
-    
+
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
         target_link = clean_link.split("/c/") if "/c/" in clean_link else clean_link.split("/")
