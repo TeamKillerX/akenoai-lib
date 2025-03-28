@@ -24,9 +24,7 @@ def story_task_now_call(story_url):
     params = {"story_url": story_url}
 
     response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        return response.json().get("job_id")
-    return None
+    return response.json().get("job_id") if response.status_code == 200 else None
 
 def check_job_status(job_id):
     url = f"{API_BASE_URL}/user/story/task/{job_id}"
