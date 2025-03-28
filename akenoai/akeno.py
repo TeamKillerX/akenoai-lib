@@ -18,22 +18,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import asyncio
 import base64
-import json
+import json as rjson
 import logging
 import os
 import re
-import subprocess
 from base64 import b64decode as m
-from datetime import datetime
 from typing import Optional
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
-from bs4 import BeautifulSoup
-from pydantic import BaseModel
+from bs4 import BeautifulSoup  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
 import akenoai.logger as fast
 
@@ -47,6 +44,8 @@ class MakeRequest(BaseModel):
     remove_author: Optional[bool] = False
     add_field: Optional[bool] = False
     is_upload: Optional[bool] = False
+    is_dumps: Optional[bool] = False
+    json_indent: Optional[int] = 4
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -147,22 +146,23 @@ class BaseDev:
             params.pop("api_key", None),
             params.pop("headers_extra", None),
         )
-        json = params.pop("body_data", None)
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, u.method)
                 form_data = None
                 if u.add_field:
                     form_data = await self._make_upload_file_this(upload_file=u.upload_file, is_upload=u.is_upload)
-                async with request(url, headers=headers, params=params, json=json, data=form_data) as response:
+                async with request(url, headers=headers, params=params, json=params.pop("body_data", None), data=form_data) as response:
                     if u.image_read:
                         return await response.read()
                     if u.remove_author:
                         response = await response.json()
-                        del response["author"]
+                        del response[params.pop("author_name", "")]
                         return response
+                    if u.is_dumps:
+                        return rjson.dumps(await response.json(), indent=u.json_indent)
                     return await response.json()
-        except (aiohttp.client_exceptions.ContentTypeError, json.decoder.JSONDecodeError) as e:
+        except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
             raise Exception("Cannot connect to host") from e
@@ -598,4 +598,4 @@ async def simple_fetch(fetch: MakeFetch, *args, **kwargs):
                     object_flag=fetch.object_flag,
                 )
     else:
-        raise DependencyMissingError("Install 'aiohttp' required")
+        raise DependencyMissingError("Install 'aiohttp' required") # type: ignore

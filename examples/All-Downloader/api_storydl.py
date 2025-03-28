@@ -24,9 +24,7 @@ def story_task_now_call(story_url):
     params = {"story_url": story_url}
 
     response = requests.get(url, headers=headers, params=params)
-    if response.status_code == 200:
-        return response.json().get("job_id")
-    return None
+    return response.json().get("job_id") if response.status_code == 200 else None
 
 def check_job_status(job_id):
     url = f"{API_BASE_URL}/user/story/task/{job_id}"
@@ -40,8 +38,7 @@ def check_job_status(job_id):
                 return data
         time.sleep(5)
 
-job_id = story_task_now_call("https://t.me/username/s/1")
-if job_id:
+if job_id := story_task_now_call("https://t.me/username/s/1"):
     print(f"Job started with ID: {job_id}")
     response = check_job_status(job_id)
     if response["status"] == "completed":

@@ -83,7 +83,7 @@ return download_response
 ```py
 from akenoai import AkenoXJs
 
-js = AkenoXToJs().connect()
+js = AkenoXJs().connect()
 
 response = await js.chat.create(
     model="qwen/qwen1.5-1.8b-chat",
