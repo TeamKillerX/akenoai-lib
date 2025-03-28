@@ -73,10 +73,10 @@ class ScraperProxy(BaseModel):
     extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
+@dataclass
 class BaseDev:
-    def __init__(self, public_url: str):
-        self.public_url = public_url
-        self.obj = Box
+    public_url: str
+    obj: Box
 
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
@@ -249,10 +249,13 @@ class GenericEndpoint:
         _response_parent = self.parent.obj(response) if is_obj else response
         return _response_parent if self.super_fast else None
 
+@dataclass
 class BaseDevWithEndpoints(BaseDev):
-    def __init__(self, public_url: str, endpoints: dict, **kwargs):
-        super().__init__(public_url)
-        for attr, endpoint in endpoints.items():
+    endpoints: dict
+
+    def __post_init__(self):
+        super().__init__(public_url=self.public_url)
+        for attr, endpoint in self.endpoints.items():
             setattr(self, attr, GenericEndpoint(self, endpoint, super_fast=True))
 
 class AkenoXDevFaster(BaseDevWithEndpoints):
