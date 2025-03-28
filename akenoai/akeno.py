@@ -140,7 +140,10 @@ class BaseDev:
         if x.response_mode == ResponseMode.TEXT:
             return response.text
         elif x.response_mode == ResponseMode.JSON:
-            return response.json()
+            try:
+                return response.json()
+            except ValueError:
+                return response.text
         return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
