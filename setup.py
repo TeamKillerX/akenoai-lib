@@ -34,6 +34,7 @@ setuptools.setup(
         "typing",
         "aiohttp",
         "bs4",
+        "python-box",
     ],
     extras_require={
         "streamlit": [
