@@ -27,6 +27,7 @@ import re
 import subprocess
 from base64 import b64decode as m
 from datetime import datetime
+from typing import Optional
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
@@ -41,11 +42,11 @@ LOGS = logging.getLogger(__name__)
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    upload_file: str = None
-    image_read: bool = False
-    remove_author: bool = False
-    add_field: bool = False
-    is_upload: bool = False
+    upload_file: Optional[str] = None
+    image_read: Optional[bool] = False
+    remove_author: Optional[bool] = False
+    add_field: Optional[bool] = False
+    is_upload: Optional[bool] = False
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -549,31 +550,30 @@ async def _process_response(response, evaluate=None, return_json=False, return_j
         return await response.read()
     return response if head or object_flag else await response.text()
 
-async def fetch(
-    url: str,
-    post: bool = False,
-    head: bool = False,
-    headers: dict = None,
-    evaluate=None,
-    object_flag: bool = False,
-    return_json: bool = False,
-    return_content: bool = False,
-    return_json_and_obj: bool = False,
-    *args,
-    **kwargs,
-):
+class MakeFetch(BaseModel):
+    url: str
+    post: Optional[bool] = False
+    head: Optional[bool] = False
+    headers: Optional[dict] = None
+    evaluate: Optional[str] = None
+    object_flag: Optional[bool] = False
+    return_json: Optional[bool] = False
+    return_content: Optional[bool] = False
+    return_json_and_obj: Optional[bool] = False
+
+async def fetch(fetch: MakeFetch, *args, **kwargs):
     if aiohttp:
-        async with aiohttp.ClientSession(headers=headers) as session:
-            method = session.head if head else (session.post if post else session.get)
-            async with method(url, *args, **kwargs) as response:
+        async with aiohttp.ClientSession(headers=fetch.headers) as session:
+            method = session.head if head else (session.post if fetch.post else session.get)
+            async with method(fetch.url, *args, **kwargs) as response:
                 return await _process_response(
                     response,
-                    evaluate=evaluate,
-                    return_json=return_json,
-                    return_json_and_obj=return_json_and_obj,
-                    return_content=return_content,
-                    head=head,
-                    object_flag=object_flag,
+                    evaluate=fetch.evaluate,
+                    return_json=fetch.return_json,
+                    return_json_and_obj=fetch.return_json_and_obj,
+                    return_content=fetch.return_content,
+                    head=fetch.head,
+                    object_flag=fetch.object_flag,
                 )
     else:
         raise DependencyMissingError("Install 'aiohttp' required")
