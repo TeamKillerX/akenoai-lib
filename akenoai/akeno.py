@@ -24,6 +24,7 @@ import logging
 import os
 import re
 from base64 import b64decode as m
+from enum import Enum
 from typing import Optional
 
 import aiohttp  # type: ignore
@@ -58,13 +59,17 @@ class MakeFetch(BaseModel):
     return_content: Optional[bool] = False
     return_json_and_obj: Optional[bool] = False
 
+class ResponseMode(Enum):
+    DEFAULT = "default"
+    TEXT = "text"
+    JSON = "json"
+
 class ScraperProxy(BaseModel):
     url: str
     api_url: str = "https://api.scraperapi.com"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
-    is_text: Optional[bool] = False
     is_data: Optional[bool] = False
-
+    response_mode: ResponseMode = ResponseMode.DEFAULT
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -132,7 +137,11 @@ class BaseDev:
         params = {"api_key": x.api_key, "url": x.url}
         request_kwargs = {"data": data} if x.is_data else {"json": data}
         response = requests.post(x.api_url, params=params, **request_kwargs)
-        return response.text if x.is_text and not x.is_data else response
+        if x.response_mode == ResponseMode.TEXT:
+            return response.text
+        elif x.response_mode == ResponseMode.JSON:
+            return response.json()
+        return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
         form_data = aiohttp.FormData()
