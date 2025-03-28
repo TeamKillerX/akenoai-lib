@@ -27,13 +27,13 @@ import re
 import subprocess
 from base64 import b64decode as m
 from datetime import datetime
+from typing import Optional
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup
 from pydantic import BaseModel
-from typing import Optional
 
 import akenoai.logger as fast
 
