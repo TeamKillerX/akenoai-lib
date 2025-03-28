@@ -42,11 +42,11 @@ LOGS = logging.getLogger(__name__)
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    upload_file: Optional[str] = None
-    image_read: Optional[bool] = False
-    remove_author: Optional[bool] = False
-    add_field: Optional[bool] = False
-    is_upload: Optional[bool] = False
+    upload_file: str = ""
+    image_read: bool = False
+    remove_author: bool = False
+    add_field: bool = False
+    is_upload: bool = False
 
 class BaseDev:
     def __init__(self, public_url: str):
@@ -561,10 +561,36 @@ class MakeFetch(BaseModel):
     return_content: Optional[bool] = False
     return_json_and_obj: Optional[bool] = False
 
-async def fetch(fetch: MakeFetch, *args, **kwargs):
+async def fetch(
+    url: str,
+    post: bool = False,
+    head: bool = False,
+    headers: dict = None,
+    evaluate=None,
+    object_flag: bool = False,
+    return_json: bool = False,
+    return_content: bool = False,
+    return_json_and_obj: bool = False,
+    *args,
+    **kwargs
+):
+    fetch_params = MakeFetch(
+        url=url,
+        post=post,
+        head=head,
+        headers=headers,
+        evaluate=evaluate,
+        object_flag=object_flag,
+        return_json=return_json,
+        return_content=return_content,
+        return_json_and_obj=return_json_and_obj,
+    )
+    return await fetch(fetch_params, *args, **kwargs)
+
+async def simple_fetch(fetch: MakeFetch, *args, **kwargs):
     if aiohttp:
         async with aiohttp.ClientSession(headers=fetch.headers) as session:
-            method = session.head if head else (session.post if fetch.post else session.get)
+            method = session.head if fetch.head else (session.post if fetch.post else session.get)
             async with method(fetch.url, *args, **kwargs) as response:
                 return await _process_response(
                     response,
