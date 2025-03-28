@@ -142,7 +142,8 @@ class BaseDev:
         elif x.response_mode == ResponseMode.JSON:
             try:
                 return response.json()
-            except ValueError:
+            except ValueError as e:
+                logging.debug("Failed to parse JSON response: %s", e)
                 return response.text
         return response
 
