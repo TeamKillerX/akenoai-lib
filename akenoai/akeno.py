@@ -201,16 +201,12 @@ class BaseDev:
             LOGS.exception("An error occurred")
             return None
 
+@dataclass
 class GenImageEndpoint:
-    def __init__(
-        self,
-        parent: BaseDev,
-        endpoint: str,
-        super_fast: bool = False
-    ):
-        self.parent = parent
-        self.endpoint = endpoint
-        self.super_fast = super_fast
+    parent: BaseDev
+    endpoint: str
+    is_post: Optional[bool] = field(default=False)
+    super_fast: Optional[bool] = field(default=False)
 
     @fast.log_performance
     async def create(self, ctx: str = None, **kwargs):
@@ -228,18 +224,12 @@ class GenImageEndpoint:
         _response_image = await self.parent._make_request(request_params, **kwargs)
         return _response_image if self.super_fast else None
 
+@dataclass
 class GenericEndpoint:
-    def __init__(
-        self,
-        parent: BaseDev,
-        endpoint: str,
-        is_post: bool = False,
-        super_fast: bool = False
-    ):
-        self.parent = parent
-        self.is_post = is_post
-        self.endpoint = endpoint
-        self.super_fast = super_fast
+    parent: BaseDev
+    endpoint: str
+    is_post: Optional[bool] = field(default=False)
+    super_fast: Optional[bool] = field(default=False)
 
     @fast.log_performance
     async def create(self, ctx: str = None, is_obj: bool = False, **kwargs):
