@@ -24,6 +24,7 @@ import logging
 import os
 import re
 from base64 import b64decode as m
+from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
@@ -356,32 +357,30 @@ class RandyDev(BaseDev):
                 raise ValueError("link name is required for Link Story Random.")
             return self.parent._get_random_from_channel(link)
 
+@dataclass(unsafe_hash=True)
 class AkenoXJs:
-    def __init__(
-        self,
-        is_err: bool = False,
-        is_itzpire: bool = False,
-        is_akenox_fast: bool = False,
-        is_bypass_control: bool = False
-    ):
-        """
-        Parameters:
-            is_err (bool): for ErAPI
-            is_itzpire (bool): for itzpire API
-            is_akenox_fast (bool): for AkenoX hono API Faster
-            default (bool): If False, default using AkenoX API
-        """
-
+    is_err: Optional[bool] = False
+    is_itzpire: Optional[bool] = False
+    is_akenox_fast: Optional[bool] = False
+    is_bypass_control: bool = False
+    """
+    Parameters:
+        is_err (bool): for ErAPI
+        is_itzpire (bool): for itzpire API
+        is_akenox_fast (bool): for AkenoX hono API Faster
+        default (bool): If False, default using AkenoX API
+    """
+    def __post_init__(self):
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(is_bypass_control)
+            "default": RandyDev(self.is_bypass_control)
         }
         self.flags = {
-            "itzpire": is_itzpire,
-            "err": is_err,
-            "akenox_fast": is_akenox_fast
+            "itzpire": self.is_itzpire,
+            "err": self.is_err,
+            "akenox_fast": self.is_akenox_fast
         }
 
     def connect(self):
@@ -391,8 +390,7 @@ class AkenoXJs:
             return self.endpoints["err"]
         if self.flags["akenox_fast"]:
             return self.endpoints["akenox_fast"]
-        if self.endpoints["default"]:
-            return self.endpoints["default"]
+        return self.endpoints["default"]
 
 class AkenoXDev:
     BASE_URL = "https://randydev-ryu-js.hf.space/api/v1"
