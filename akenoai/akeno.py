@@ -24,7 +24,7 @@ import logging
 import os
 import re
 from base64 import b64decode as m
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
@@ -357,11 +357,11 @@ class RandyDev(BaseDev):
                 raise ValueError("link name is required for Link Story Random.")
             return self.parent._get_random_from_channel(link)
 
-@dataclass(unsafe_hash=True)
+@dataclass
 class AkenoXJs:
-    is_err: Optional[bool] = False
-    is_itzpire: Optional[bool] = False
-    is_akenox_fast: Optional[bool] = False
+    is_err: Optional[bool] = field(default=False)
+    is_itzpire: Optional[bool] = field(default=False)
+    is_akenox_fast: Optional[bool] = field(default=False)
     is_bypass_control: bool = False
     """
     Parameters:
