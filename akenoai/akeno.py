@@ -75,7 +75,7 @@ class ScraperProxy(BaseModel):
 
 @dataclass
 class BaseDev:
-    public_url: str = field(default="")
+    public_url: str
     obj: Box = field(default_factory=Box)
 
     def _get_random_from_channel(self, link: str = None):
