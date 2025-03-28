@@ -30,6 +30,10 @@ setuptools.setup(
     ],
     install_requires=[
         "requests",
+        "pydantic",
+        "typing",
+        "aiohttp",
+        "bs4",
     ],
     extras_require={
         "streamlit": [
