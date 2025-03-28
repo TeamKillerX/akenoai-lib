@@ -182,10 +182,19 @@ class GenImageEndpoint:
         self.super_fast = super_fast
 
     @fast.log_performance
-    async def create(self, ctx: str = None, is_obj: bool = False, **kwargs):
+    async def create(self, ctx: str = None, **kwargs):
         if not ctx:
             raise ValueError("ctx name is required.")
-        _response_image = await self.parent._make_request("get", f"{self.endpoint}/{ctx}", **kwargs)
+        request_params = MakeRequest(
+            method="get",
+            endpoint=f"{self.endpoint}/{ctx}",
+            upload_file=kwargs.pop("upload_file", None),
+            image_read=kwargs.pop("image_read", False),
+            remove_author=kwargs.pop("remove_author", False),
+            add_field=kwargs.pop("add_field", False),
+            is_upload=kwargs.pop("is_upload", False),
+        )
+        _response_image = await self.parent._make_request(request_params, **kwargs)
         return _response_image if self.super_fast else None
 
 class GenericEndpoint:
@@ -208,7 +217,12 @@ class GenericEndpoint:
         _check_method = "post" if self.is_post else "get"
         request_params = MakeRequest(
             method=_check_method,
-            endpoint=f"{self.endpoint}/{ctx}"
+            endpoint=f"{self.endpoint}/{ctx}",
+            upload_file=kwargs.pop("upload_file", None),
+            image_read=kwargs.pop("image_read", False),
+            remove_author=kwargs.pop("remove_author", False),
+            add_field=kwargs.pop("add_field", False),
+            is_upload=kwargs.pop("is_upload", False),
         )
         response = await self.parent._make_request(request_params, **kwargs) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
