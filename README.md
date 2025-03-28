@@ -33,6 +33,38 @@
 - Create a requirements.txt file in the project root containing the following dependency to ensure you can install the GitHub version:
 - `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
 
+### ScraperProxy
+```py
+from akenoai import ScraperProxy, BaseDev
+from bs4 import BeautifulSoup
+
+scp_two = ScraperProxy(
+    url=""
+    api_url="https://api.scraperapi.com",
+    api_key="<api-key-here>", # or set SCRAPER_KEY as an environment variable (default)
+    is_data=False,
+    response_mode="default"
+)
+
+scp = ScraperProxy(
+    url="https://ttsave.app/download",
+    api_key="your-api-key",
+    response_mode="default"
+)
+
+base = BaseDev(None)
+
+response = base._make_request_with_scraper(
+    scp,
+    query="https://www.tiktok.com/@penjasnipam/video/7473392499655068946?is_from_webapp=1&sender_device=pc&web_id=7476152122733725202",
+    language_id="2"
+)
+
+soup = BeautifulSoup(response.text, "html.parser")
+results = [a['href'] for a in soup.find_all('a', href=True)]
+
+print(results)
+```
 ### How to learn python
 - Collaborative learning
 - Usage Examples:
