@@ -362,20 +362,20 @@ class AkenoXJs:
     is_err: Optional[bool] = field(default=False)
     is_itzpire: Optional[bool] = field(default=False)
     is_akenox_fast: Optional[bool] = field(default=False)
-    is_bypass_control: bool = False # todo
+    is_masya: bool = False
     """
     Parameters:
         is_err (bool): for ErAPI
         is_itzpire (bool): for itzpire API
         is_akenox_fast (bool): for AkenoX hono API Faster
-        default (bool): If False, default using AkenoX API
+        default (bool): If False, default using AkenoX API or Masya API (is_masya=True)
     """
     def __post_init__(self):
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(self.is_bypass_control)
+            "default": RandyDev(self.is_masya)
         }
         self.flags = {
             "itzpire": self.is_itzpire,
