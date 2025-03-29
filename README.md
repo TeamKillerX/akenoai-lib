@@ -33,8 +33,23 @@
 - Create a requirements.txt file in the project root containing the following dependency to ensure you can install the GitHub version:
 - `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
 
-## ScraperProxy
-### Additional Parameters Documentation
+# ScraperProxy
+
+## Additional Parameters Documentation
+
+### api_url
+Specifies the base API URL for the scraper to send requests.
+Possible values:
+- A valid URL string pointing to the scraper API.
+Default: None (must be provided explicitly).
+
+### extract_data
+Defines whether the scraper should extract structured data from the response.
+Possible values:
+- True: Extracts structured data (JSON or relevant parsed output).
+- False: Returns the raw HTML content.
+Default: False.
+
 ### use_post
 Specifies whether the scraper should use HTTP POST for making requests instead of GET.
 Possible values:
@@ -49,7 +64,8 @@ Possible values:
 - False: Extracts only the primary data defined.
 Default: False.
 
-**Example Usage:**
+## Example Usage
+
 ```py
 from akenoai import ScraperProxy, BaseDev
 
@@ -73,7 +89,6 @@ response = base._make_request_with_scraper(
 
 print(response)
 ```
-
 ### How to learn Python
 - Collaborative learning
 - Usage Examples:
