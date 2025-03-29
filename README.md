@@ -43,6 +43,8 @@ Possible values:
 - A valid URL string pointing to the scraper API.
 Default: None (must be provided explicitly).
 
+Note: If no api_url is provided, the scraper will raise an exception (e.g., ValueError) during initialization.
+
 ### extract_data
 Defines whether the scraper should extract structured data from the response.
 Possible values:
