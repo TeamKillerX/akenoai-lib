@@ -72,6 +72,7 @@ class ScraperProxy(BaseModel):
     port: Optional[int] = 8001
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
+    ca_cert: Optional[bool] = True
     extract_data: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
@@ -160,9 +161,9 @@ class BaseDev:
             frspon = requests.get(
                 x.url,
                 proxies=proxies,
-                verify=False
+                verify=x.ca_cert
             )
-            if data.pop("extract_all_hrefs_only_proxy", False):
+            if x.extract_all_hrefs:
                 soup = BeautifulSoup(frspon.text, "html.parser")
                 return [a['href'] for a in soup.find_all('a', href=True)]
             return frspon
