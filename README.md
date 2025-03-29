@@ -42,15 +42,17 @@ scp_two = ScraperProxy(
     url=""
     api_url="https://api.scraperapi.com",
     api_key="<api-key-here>", # or set SCRAPER_KEY as an environment variable (default)
-    extract_data=False
-    extract_all_hrefs=False
+    extract_data=False,
+    use_post=False,
+    extract_all_hrefs=False,
     response_mode="default"
 )
 
 scp = ScraperProxy(
     url="https://ttsave.app/download",
     api_key="your-api-key",
-    extract_all_hrefs=True
+    use_post=True,
+    extract_all_hrefs=True,
     response_mode="default"
 )
 
