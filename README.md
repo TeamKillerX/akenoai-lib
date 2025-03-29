@@ -41,6 +41,7 @@ Possible values:
 - True: Sends a POST request when contacting the target URL.
 - False: Sends a GET request.
 Default: False (will use GET by default).
+
 ### extract_all_hrefs
 Determines if the scraper should extract all `href` attributes from the target web page.
 Possible values:
@@ -54,7 +55,9 @@ from akenoai import ScraperProxy, BaseDev
 
 scp = ScraperProxy(
     url="https://ttsave.app/download",
+    api_url="https://api.scraperapi.com",
     api_key="your-api-key",
+    extract_data=False,
     use_post=True,
     extract_all_hrefs=True,
     response_mode="default"
