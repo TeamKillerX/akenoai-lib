@@ -69,8 +69,10 @@ class ScraperProxy(BaseModel):
     url: str
     api_url: str = "https://api.scraperapi.com"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
-    extract_data: Optional[bool] = False
+    port: Optional[int] = 8001
+    use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
+    extract_data: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
@@ -151,6 +153,15 @@ class BaseDev:
         if x.extract_all_hrefs:
             soup = BeautifulSoup(response.text, "html.parser")
             return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
+        if x.use_proxy_mode:
+            proxies = {
+                "https": f"scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
+            }
+            return requests.get(
+                x.url,
+                proxies=proxies,
+                verify=False
+            )
         return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
