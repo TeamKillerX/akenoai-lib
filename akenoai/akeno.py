@@ -159,7 +159,7 @@ class BaseDev:
             return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
         if x.use_proxy_mode:
             proxies = {
-                "https": x.proxy_url.format(x.api_key, x.port)
+                "https": x.proxy_url.format(api_key=x.api_key, port=x.port)
             }
             frspon = requests.post(
                 x.url,
