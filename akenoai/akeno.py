@@ -46,7 +46,7 @@ class MakeRequest(BaseModel):
     remove_author: Optional[bool] = False
     add_field: Optional[bool] = False
     is_upload: Optional[bool] = False
-    is_dumps: Optional[bool] = False
+    load_dumps: Optional[bool] = False
     json_indent: Optional[int] = 4
 
 class MakeFetch(BaseModel):
@@ -215,7 +215,7 @@ class BaseDev:
                         response = await response.json()
                         del response[params.pop("del_author", "")]
                         return response
-                    if u.is_dumps:
+                    if u.load_dumps:
                         return rjson.dumps(await response.json(), indent=u.json_indent)
                     return await response.json()
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
@@ -245,6 +245,8 @@ class GenImageEndpoint:
             remove_author=kwargs.pop("remove_author", False),
             add_field=kwargs.pop("add_field", False),
             is_upload=kwargs.pop("is_upload", False),
+            load_dumps=kwargs.pop("load_dumps", False),
+            json_indent=kwargs.pop("json_indent", 4)
         )
         _response_image = await self.parent._make_request(request_params, **kwargs)
         return _response_image if self.super_fast else None
@@ -269,6 +271,8 @@ class GenericEndpoint:
             remove_author=kwargs.pop("remove_author", False),
             add_field=kwargs.pop("add_field", False),
             is_upload=kwargs.pop("is_upload", False),
+            load_dumps=kwargs.pop("load_dumps", False),
+            json_indent=kwargs.pop("json_indent", 4)
         )
         response = await self.parent._make_request(request_params, **kwargs) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
