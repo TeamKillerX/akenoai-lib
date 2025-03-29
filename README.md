@@ -66,7 +66,7 @@ response = base._make_request_with_scraper(
 
 print(response)
 ```
-### How to learn python
+### How to learn Python
 - Collaborative learning
 - Usage Examples:
 ```py
