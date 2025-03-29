@@ -158,7 +158,7 @@ class BaseDev:
             return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
         if x.use_proxy_mode:
             proxies = {
-                "https": f"https://scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
+                "http": f"http://scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
             }
             frspon = requests.post(
                 x.url,
