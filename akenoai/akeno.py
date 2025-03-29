@@ -213,7 +213,9 @@ class BaseDev:
                     if u.image_read:
                         return await response.read()
                     if u.remove_author:
-                        del json_data[params.pop("del_author", "")]
+                        key_to_remove = params.pop("del_author", None)
+                        if key_to_remove is not None and key_to_remove in json_data:
+                            del json_data[key_to_remove]
                         return json_data
                     if u.serialize_response:
                         return rjson.dumps(json_data, indent=u.json_indent)
