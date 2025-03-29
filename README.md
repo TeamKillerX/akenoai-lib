@@ -34,19 +34,33 @@
 - `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
 
 ### ScraperProxy
-```py
-from akenoai import ScraperProxy, BaseDev
-from bs4 import BeautifulSoup
+## Additional Parameters Documentation
+### use_post
+Specifies whether the scraper should use HTTP POST for making requests instead of GET.
+Possible values:
+- True: Sends a POST request when contacting the target URL.
+- False: Sends a GET request.
+Default: False (will use GET by default).
 
-scp_two = ScraperProxy(
-    url=""
-    api_url="https://api.scraperapi.com",
-    api_key="<api-key-here>", # or set SCRAPER_KEY as an environment variable (default)
-    extract_data=False,
-    use_post=False,
-    extract_all_hrefs=False,
+**Example Usage:**
+```py
+scp = ScraperProxy(
+    url="https://ttsave.app/download",
+    api_key="your-api-key",
+    use_post=True,
     response_mode="default"
 )
+```
+### extract_all_hrefs
+Determines if the scraper should extract all `href` attributes from the target web page.
+Possible values:
+- True: Extracts all hyperlinks (href values) present in the HTML.
+- False: Extracts only the primary data defined.
+Default: False.
+
+**Example Usage:**
+```py
+from akenoai import ScraperProxy, BaseDev
 
 scp = ScraperProxy(
     url="https://ttsave.app/download",
@@ -66,6 +80,7 @@ response = base._make_request_with_scraper(
 
 print(response)
 ```
+
 ### How to learn Python
 - Collaborative learning
 - Usage Examples:
