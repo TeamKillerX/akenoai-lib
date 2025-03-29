@@ -70,6 +70,7 @@ class ScraperProxy(BaseModel):
     api_url: str = "https://api.scraperapi.com"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     extract_data: Optional[bool] = False
+    use_post: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
@@ -138,7 +139,7 @@ class BaseDev:
             return "Required api key"
         params = {"api_key": x.api_key, "url": x.url}
         request_kwargs = {"data": data} if x.extract_data else {"json": data}
-        response = requests.post(x.api_url, params=params, **request_kwargs)
+        response = requests.post(x.api_url, params=params, **request_kwargs) if x.use_post else requests.get(x.api_url, params=params)
         if x.response_mode == ResponseMode.TEXT:
             return response.text
         elif x.response_mode == ResponseMode.JSON:
