@@ -41,17 +41,6 @@ Possible values:
 - True: Sends a POST request when contacting the target URL.
 - False: Sends a GET request.
 Default: False (will use GET by default).
-
-**Example Usage:**
-```py
-scp = ScraperProxy(
-    url="https://ttsave.app/download",
-    api_key="your-api-key",
-    use_post=True,
-    extract_all_hrefs=False,
-    response_mode="default"
-)
-```
 ### extract_all_hrefs
 Determines if the scraper should extract all `href` attributes from the target web page.
 Possible values:
