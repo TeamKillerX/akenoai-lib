@@ -72,6 +72,7 @@ class ScraperProxy(BaseModel):
     port: Optional[int] = 8001
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
+    use_post_proxy: Optional[bool] = False
     verify_ssl: Optional[Union[bool, str]] = True
     extract_data: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
@@ -159,7 +160,12 @@ class BaseDev:
             proxies = {
                 "https": f"scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
             }
-            frspon = requests.get(
+            frspon = requests.post(
+                x.url,
+                proxies=proxies,
+                json=data.pop("json_proxy", None),
+                verify=x.verify_ssl
+            ) if x.use_post_proxy else requests.get(
                 x.url,
                 proxies=proxies,
                 verify=x.verify_ssl
