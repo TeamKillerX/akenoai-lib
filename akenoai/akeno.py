@@ -70,6 +70,7 @@ class ScraperProxy(BaseModel):
     api_url: str = "https://api.scraperapi.com"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     port: Optional[int] = 8001
+    proxy_url = Optional[str] = "http://scraperapi:{api_key}@proxy-server.scraperapi.com:{port}"
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
     use_post_proxy: Optional[bool] = False
@@ -158,7 +159,7 @@ class BaseDev:
             return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
         if x.use_proxy_mode:
             proxies = {
-                "http": f"http://scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
+                "https": x.proxy_url.format(x.api_key, x.port)
             }
             frspon = requests.post(
                 x.url,
