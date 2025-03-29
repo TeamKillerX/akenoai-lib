@@ -46,7 +46,7 @@ class MakeRequest(BaseModel):
     remove_author: Optional[bool] = False
     add_field: Optional[bool] = False
     is_upload: Optional[bool] = False
-    load_dumps: Optional[bool] = False
+    serialize_response: Optional[bool] = False
     json_indent: Optional[int] = 4
 
 class MakeFetch(BaseModel):
@@ -209,15 +209,15 @@ class BaseDev:
                 if u.add_field:
                     form_data = await self._make_upload_file_this(upload_file=u.upload_file, is_upload=u.is_upload)
                 async with request(url, headers=headers, params=params, json=params.pop("body_data", None), data=form_data) as response:
+                    json_data = await response.json()
                     if u.image_read:
                         return await response.read()
                     if u.remove_author:
-                        response = await response.json()
-                        del response[params.pop("del_author", "")]
-                        return response
-                    if u.load_dumps:
-                        return rjson.dumps(await response.json(), indent=u.json_indent)
-                    return await response.json()
+                        del json_data[params.pop("del_author", "")]
+                        return json_data
+                    if u.serialize_response:
+                        return rjson.dumps(json_data, indent=u.json_indent)
+                    return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
@@ -245,7 +245,7 @@ class GenImageEndpoint:
             remove_author=kwargs.pop("remove_author", False),
             add_field=kwargs.pop("add_field", False),
             is_upload=kwargs.pop("is_upload", False),
-            load_dumps=kwargs.pop("load_dumps", False),
+            serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
         _response_image = await self.parent._make_request(request_params, **kwargs)
@@ -271,7 +271,7 @@ class GenericEndpoint:
             remove_author=kwargs.pop("remove_author", False),
             add_field=kwargs.pop("add_field", False),
             is_upload=kwargs.pop("is_upload", False),
-            load_dumps=kwargs.pop("load_dumps", False),
+            serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
         response = await self.parent._make_request(request_params, **kwargs) or {}
