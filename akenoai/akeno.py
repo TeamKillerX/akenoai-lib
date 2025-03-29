@@ -68,7 +68,7 @@ class ResponseMode(Enum):
 class ScraperProxy(BaseModel):
     url: str
     api_url: str = "https://api.scraperapi.com"
-    proxy_url = Optional[str] = "http://scraperapi:{api_key}@proxy-server.scraperapi.com:{port}"
+    proxy_url: Optional[str] = "http://scraperapi:{api_key}@proxy-server.scraperapi.com:{port}"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     port: Optional[int] = 8001
     use_proxy_mode: Optional[bool] = False
