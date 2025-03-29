@@ -33,8 +33,8 @@
 - Create a requirements.txt file in the project root containing the following dependency to ensure you can install the GitHub version:
 - `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
 
-### ScraperProxy
-## Additional Parameters Documentation
+## ScraperProxy
+### Additional Parameters Documentation
 ### use_post
 Specifies whether the scraper should use HTTP POST for making requests instead of GET.
 Possible values:
@@ -48,6 +48,7 @@ scp = ScraperProxy(
     url="https://ttsave.app/download",
     api_key="your-api-key",
     use_post=True,
+    extract_all_hrefs=False,
     response_mode="default"
 )
 ```
