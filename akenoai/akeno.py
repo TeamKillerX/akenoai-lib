@@ -157,11 +157,15 @@ class BaseDev:
             proxies = {
                 "https": f"scraperapi:{x.api_key}@proxy-server.scraperapi.com:{x.port}"
             }
-            return requests.get(
+            frspon = requests.get(
                 x.url,
                 proxies=proxies,
                 verify=False
             )
+            if data.pop("extract_all_hrefs_only_proxy", False):
+                soup = BeautifulSoup(frspon.text, "html.parser")
+                return [a['href'] for a in soup.find_all('a', href=True)]
+            return frspon
         return response
 
     async def _make_upload_file_this(self, upload_file=None, is_upload=False):
