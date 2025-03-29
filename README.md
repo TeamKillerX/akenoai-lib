@@ -42,13 +42,15 @@ scp_two = ScraperProxy(
     url=""
     api_url="https://api.scraperapi.com",
     api_key="<api-key-here>", # or set SCRAPER_KEY as an environment variable (default)
-    is_data=False,
+    extract_data=False
+    extract_all_hrefs=False
     response_mode="default"
 )
 
 scp = ScraperProxy(
     url="https://ttsave.app/download",
     api_key="your-api-key",
+    extract_all_hrefs=True
     response_mode="default"
 )
 
@@ -60,10 +62,7 @@ response = base._make_request_with_scraper(
     language_id="2"
 )
 
-soup = BeautifulSoup(response.text, "html.parser")
-results = [a['href'] for a in soup.find_all('a', href=True)]
-
-print(results)
+print(response)
 ```
 ### How to learn python
 - Collaborative learning
