@@ -26,7 +26,7 @@ import re
 from base64 import b64decode as m
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import *
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
@@ -72,9 +72,10 @@ class ScraperProxy(BaseModel):
     port: Optional[int] = 8001
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
-    ca_cert: Optional[bool] = True
+    verify_ssl: Optional[Union[bool, str]] = True
     extract_data: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
+    extract_all_hrefs_only_proxy: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
 class BaseDev:
@@ -161,9 +162,9 @@ class BaseDev:
             frspon = requests.get(
                 x.url,
                 proxies=proxies,
-                verify=x.ca_cert
+                verify=x.verify_ssl
             )
-            if x.extract_all_hrefs:
+            if x.extract_all_hrefs_only_proxy:
                 soup = BeautifulSoup(frspon.text, "html.parser")
                 return [a['href'] for a in soup.find_all('a', href=True)]
             return frspon
