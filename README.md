@@ -55,7 +55,7 @@ from akenoai import ScraperProxy, BaseDev
 
 scp = ScraperProxy(
     url="https://ttsave.app/download",
-    api_url="https://api.scraperapi.com"
+    api_url="https://api.scraperapi.com",
     api_key="your-api-key",
     extract_data=False,
     use_post=True,
