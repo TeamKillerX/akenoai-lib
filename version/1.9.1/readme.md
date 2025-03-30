@@ -14,6 +14,6 @@ response = await BaseDev("https://faster.maiysacollection.com/v2")._make_request
     ),
     JSONResponse()
 )
-return print(response)
+print(response)
 ```
-Since `_make_request()` is missing a required positional argument `_json`, you need to use `JSONResponse()` if necessary. If you import `from akenoai import *`, you might encounter errors. Instead, use `from akenoai.types import *` to avoid issues.
+**Note:** Since `_make_request()` is missing a required positional argument `_json`, you need to use `JSONResponse()` if necessary. If you import `from akenoai import *`, you might encounter errors. Instead, use `from akenoai.types import *` to avoid issues.
