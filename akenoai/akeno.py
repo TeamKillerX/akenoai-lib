@@ -27,8 +27,8 @@ from base64 import b64decode as m
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import *
-import aiofiles
 
+import aiofiles
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
