@@ -19,6 +19,7 @@ results = await BaseDev("https://faster.maiysacollection.com/v2/fast")._make_req
 response_get = BaseDev(None).obj(results) or {}
 print(response_get.response)
 ```
+---
 - ScraperProxy
 ```py
 from akenoai import ScraperProxy, BaseDev
@@ -38,6 +39,22 @@ response = BaseDev(None)._make_request_with_scraper(
     query="https://www.tiktok.com/@penjasnipam/video/7473392499655068946?is_from_webapp=1&sender_device=pc&web_id=7476152122733725202",
     language_id="2"
 )
-
 print(response)
+```
+---
+- Downloader
+```py
+from akenoai import *
+
+js = AkenoXJs(DifferentAPIDefault()).connect()
+
+dl_response = await js.downloader.create(
+    "instagram-v4",
+    api_key="<your-api-free>",
+    params_data={
+        "url": "https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ"
+    },
+    is_obj=True
+)
+print(dl_response)
 ```
