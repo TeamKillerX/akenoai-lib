@@ -27,6 +27,7 @@ from base64 import b64decode as m
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import *
+import aiofiles
 
 import aiohttp  # type: ignore
 import requests  # type: ignore
@@ -38,7 +39,7 @@ import akenoai.logger as fast
 
 LOGS = logging.getLogger(__name__)
 
-class UploadToFile(BaseModel):
+class FormDataBuilder(BaseModel):
     file_data: aiohttp.FormData = Field(default_factory=aiohttp.FormData)
 
     def append(self, name: str, value: bytes, filename: str = None, content_type: str = None):
@@ -70,9 +71,9 @@ class DifferentAPIDefault(BaseModel):
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    only_text_response: Optional[bool] = False
     image_read: Optional[bool] = False
     remove_author: Optional[bool] = False
+    return_text_response: Optional[bool] = False
     serialize_response: Optional[bool] = False
     json_indent: Optional[int] = 4
 
@@ -239,8 +240,8 @@ class BaseDev:
                         return json_data
                     if u.serialize_response:
                         return rjson.dumps(json_data, indent=u.json_indent)
-                    if u.only_text_response:
-                        return await response.text()
+                    if u.return_text_response:
+                        return await response.text() if u.return_text_response else None
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
