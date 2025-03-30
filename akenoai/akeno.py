@@ -33,14 +33,15 @@ import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from pydantic import BaseModel, Field  # type: ignore
+from pydantic import BaseModel  # type: ignore
 
 import akenoai.logger as fast
 
 LOGS = logging.getLogger(__name__)
 
-class FormDataBuilder(BaseModel):
-    file_data: aiohttp.FormData = Field(default_factory=aiohttp.FormData)
+class FormDataBuilder:
+    def __init__(self):
+        self.file_data = aiohttp.FormData()
 
     def append(self, name: str, value: bytes, filename: str = None, content_type: str = None):
         self.file_data.add_field(name, value, filename=filename, content_type=content_type)
