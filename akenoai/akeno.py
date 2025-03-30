@@ -25,7 +25,6 @@ import os
 import re
 from base64 import b64decode as m
 from dataclasses import dataclass, field
-from akenoai.types import *
 from typing import *
 
 import aiofiles
@@ -33,9 +32,10 @@ import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from pydantic import BaseModel # type: ignore
+from pydantic import BaseModel  # type: ignore
 
 import akenoai.logger as fast
+from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
 

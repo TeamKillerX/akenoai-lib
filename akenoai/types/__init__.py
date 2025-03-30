@@ -1,8 +1,10 @@
 import os
+from dataclasses import field
 from enum import Enum
+
 import aiohttp  # type: ignore
 from pydantic import BaseModel, ConfigDict  # type: ignore
-from dataclasses import field
+
 
 class JSONResponse(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
