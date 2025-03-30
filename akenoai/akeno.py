@@ -59,6 +59,7 @@ class UploadToFile(BaseModel):
 class JSONResponse(BaseModel):
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
+    use_form_data=None
 
 class DifferentAPIDefault(BaseModel):
     is_err: Optional[bool] = field(default=False)
@@ -69,11 +70,8 @@ class DifferentAPIDefault(BaseModel):
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    upload_file: Optional[str] = None
     image_read: Optional[bool] = False
     remove_author: Optional[bool] = False
-    add_field: Optional[bool] = False
-    is_upload: Optional[bool] = False
     serialize_response: Optional[bool] = False
     json_indent: Optional[int] = 4
 
@@ -205,16 +203,6 @@ class BaseDev:
             return frspon
         return response
 
-    async def _make_upload_file_this(self, upload_file=None, is_upload=False):
-        form_data = aiohttp.FormData()
-        form_data.add_field(
-            'file',
-            open(upload_file, 'rb'),
-            filename=os.path.basename(upload_file),
-            content_type='application/octet-stream'
-        )
-        return form_data if is_upload else None
-
     async def _make_request(self, u: MakeRequest, _json: JSONResponse, **params):
         """
         Parameters:
@@ -233,10 +221,7 @@ class BaseDev:
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, u.method)
-                form_data = None
-                if u.add_field:
-                    form_data = await self._make_upload_file_this(upload_file=u.upload_file, is_upload=u.is_upload)
-                async with request(url, headers=headers, params=_json.use_params, json=_json.use_json, data=form_data) as response:
+                async with request(url, headers=headers, params=_json.use_params, json=_json.use_json, data=x.use_form_data) as response:
                     json_data = await response.json()
                     if u.image_read:
                         return await response.read()
@@ -270,11 +255,8 @@ class GenImageEndpoint:
         request_params = MakeRequest(
             method="get",
             endpoint=f"{self.endpoint}/{ctx}",
-            upload_file=kwargs.pop("upload_file", None),
             image_read=kwargs.pop("image_read", False),
             remove_author=kwargs.pop("remove_author", False),
-            add_field=kwargs.pop("add_field", False),
-            is_upload=kwargs.pop("is_upload", False),
             serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
@@ -302,11 +284,8 @@ class GenericEndpoint:
         request_params = MakeRequest(
             method=_check_method,
             endpoint=f"{self.endpoint}/{ctx}",
-            upload_file=kwargs.pop("upload_file", None),
             image_read=kwargs.pop("image_read", False),
             remove_author=kwargs.pop("remove_author", False),
-            add_field=kwargs.pop("add_field", False),
-            is_upload=kwargs.pop("is_upload", False),
             serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
