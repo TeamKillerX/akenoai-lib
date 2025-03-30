@@ -51,8 +51,8 @@ results = await BaseDev("https://faster.maiysacollection.com/v2/fast")._make_req
             model="qwen-plus",
         )
     ),
-    api_key="<your-api-key-optional>", # if you can remove api_key empty
-    headers_extra={"User-Agent": "Mozilla/5.0"} # also optional
+    api_key="<your-api-key-optional>", # Optional: remove if not needed
+    headers_extra={"User-Agent": "Mozilla/5.0"} # Optional: remove if not needed
 )
 response_get = BaseDev(None).obj(results) or {}
 print(response_get.response)
