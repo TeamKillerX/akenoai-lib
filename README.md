@@ -57,7 +57,7 @@ results = await BaseDev("https://faster.maiysacollection.com/v2/fast")._make_req
 response_get = BaseDev(None).obj(results) or {}
 print(response_get.response)
 ```
-- If you can read this without getting a headache, congrats You're in extreme mode
+- If you can read this without getting a headache, congrats, You're in Extreme Mode. This indicates that advanced debugging features and additional details are enabled for expert users.
 
 ---
 
