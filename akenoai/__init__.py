@@ -19,6 +19,7 @@ __all__ = [
     "MakeFetch",
     "JSONResponse",
     "ScraperProxy",
+    "DifferentAPIDefault",
     "BaseDev",
     "fetch",
     "to_buffer",

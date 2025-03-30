@@ -404,7 +404,7 @@ class RandyDev(BaseDev):
 
 @dataclass
 class AkenoXJs:
-   dev: DifferentAPIDefault
+    dev: DifferentAPIDefault
     """
     Parameters:
         is_err (bool): for ErAPI
