@@ -61,7 +61,7 @@ class FormDataBuilder:
 class JSONResponse(BaseModel):
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
-    use_form_data: Optional[Union[dict, None]] = None
+    use_form_data: Optional[dict] = None
 
 class DifferentAPIDefault(BaseModel):
     is_err: Optional[bool] = field(default=False)
