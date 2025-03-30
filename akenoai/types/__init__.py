@@ -1,9 +1,9 @@
 import os
 from dataclasses import field
 from enum import Enum
+from typing import *
 
 import aiohttp  # type: ignore
-from typing import *
 from pydantic import BaseModel, ConfigDict  # type: ignore
 
 
@@ -30,7 +30,7 @@ class MakeRequest(BaseModel):
     endpoint: str
     options: RequestOptions = RequestOptions()
     json_indent: int = 4
-    
+
 class MakeFetch(BaseModel):
     url: str
     post: Optional[bool] = False
@@ -51,7 +51,7 @@ class ProxyLogin(BaseModel):
     proxy_url: Optional[str] = "http://scraperapi:{api_key}@proxy-server.scraperapi.com:{port}"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     port: Optional[int] = 8001
-    
+
 class ProxyOptions(BaseModel):
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
