@@ -81,9 +81,7 @@ scp = ScraperProxy(
     response_mode="default"
 )
 
-base = BaseDev(None)
-
-response = base._make_request_with_scraper(
+response = BaseDev(None)._make_request_with_scraper(
     scp,
     query="https://www.tiktok.com/@penjasnipam/video/7473392499655068946?is_from_webapp=1&sender_device=pc&web_id=7476152122733725202",
     language_id="2"
