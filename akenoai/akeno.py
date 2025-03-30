@@ -119,9 +119,9 @@ class BaseDev:
         return url, headers
 
     def _make_request_with_scraper(self, x: ScraperProxy, **data):
-        if not x.api_key:
+        if not x.login.api_key:
             return "Required api key"
-        params = {"api_key": x.api_key, "url": x.url}
+        params = {"api_key": x.login.api_key, "url": x.url}
         request_kwargs = {"data": data} if x.proxy_options.extract_data else {"json": data}
         response = requests.post(x.api_url, params=params, **request_kwargs) if x.proxy_options.use_post else requests.get(x.api_url, params=params)
         if x.response_mode == ResponseMode.TEXT:
