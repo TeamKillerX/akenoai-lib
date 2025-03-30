@@ -13,20 +13,23 @@ class JSONResponse(BaseModel):
     use_form_data: Optional[aiohttp.FormData] = None
 
 class DifferentAPIDefault(BaseModel):
-    is_err: Optional[bool] = field(default=False)
-    is_itzpire: Optional[bool] = field(default=False)
-    is_akenox_fast: Optional[bool] = field(default=False)
+    is_err: bool = False
+    is_itzpire: bool = False
+    is_akenox_fast: bool = False
     is_masya: bool = False
+
+class RequestOptions(BaseModel):
+    image_read: bool = False
+    remove_author: bool = False
+    return_text_response: bool = False
+    serialize_response: bool = False
 
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
-    image_read: Optional[bool] = False
-    remove_author: Optional[bool] = False
-    return_text_response: Optional[bool] = False
-    serialize_response: Optional[bool] = False
-    json_indent: Optional[int] = 4
-
+    options: RequestOptions = RequestOptions()
+    json_indent: int = 4
+    
 class MakeFetch(BaseModel):
     url: str
     post: Optional[bool] = False
@@ -61,6 +64,7 @@ class ScraperProxy(BaseModel):
 __all__ = [
     "JSONResponse",
     "DifferentAPIDefault",
+    "RequestOptions",
     "MakeRequest",
     "MakeFetch",
     "ResponseMode",
