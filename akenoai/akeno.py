@@ -70,6 +70,7 @@ class DifferentAPIDefault(BaseModel):
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
+    only_text_response: Optional[bool] = False
     image_read: Optional[bool] = False
     remove_author: Optional[bool] = False
     serialize_response: Optional[bool] = False
@@ -221,7 +222,13 @@ class BaseDev:
         try:
             async with aiohttp.ClientSession() as session:
                 request = getattr(session, u.method)
-                async with request(url, headers=headers, params=_json.use_params, json=_json.use_json, data=x.use_form_data) as response:
+                async with request(
+                    url,
+                    headers=headers,
+                    params=_json.use_params,
+                    json=_json.use_json,
+                    data=x.use_form_data
+                ) as response:
                     json_data = await response.json()
                     if u.image_read:
                         return await response.read()
@@ -232,6 +239,8 @@ class BaseDev:
                         return json_data
                     if u.serialize_response:
                         return rjson.dumps(json_data, indent=u.json_indent)
+                    if u.only_text_response:
+                        return await response.text()
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
