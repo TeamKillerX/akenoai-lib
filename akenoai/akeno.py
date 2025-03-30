@@ -260,15 +260,14 @@ class GenImageEndpoint:
             serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
-        _response_image = await self.parent._make_request(
+        return await self.parent._make_request(
             request_params,
             JSONResponse(
                 use_json=kwargs.pop("body_data", None),
                 use_params=kwargs.pop("params_data", None)
             ),
             **kwargs
-        )
-        return _response_image if self.super_fast else None
+        ) if self.super_fast else None
 
 @dataclass
 class GenericEndpoint:
