@@ -181,17 +181,17 @@ class BaseDev:
                     data=_json.use_form_data
                 ) as response:
                     json_data = await response.json()
-                    if u.image_read:
+                    if u.options.image_read:
                         return await response.read()
-                    if u.remove_author:
+                    if u.options.remove_author:
                         key_to_remove = params.pop("del_author", None)
                         if key_to_remove is not None and key_to_remove in json_data:
                             del json_data[key_to_remove]
                         return json_data
-                    if u.serialize_response:
+                    if u.options.serialize_response:
                         return rjson.dumps(json_data, indent=u.json_indent)
-                    if u.return_text_response:
-                        return await response.text() if u.return_text_response else None
+                    if u.options.return_text_response:
+                        return await response.text() if u.options.return_text_response else None
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
@@ -215,9 +215,11 @@ class GenImageEndpoint:
         request_params = MakeRequest(
             method="get",
             endpoint=f"{self.endpoint}/{ctx}",
-            image_read=kwargs.pop("image_read", False),
-            remove_author=kwargs.pop("remove_author", False),
-            serialize_response=kwargs.pop("serialize_response", False),
+            options=RequestOptions(
+                image_read=kwargs.pop("image_read", False),
+                remove_author=kwargs.pop("remove_author", False),
+                serialize_response=kwargs.pop("serialize_response", False)
+            ),
             json_indent=kwargs.pop("json_indent", 4)
         )
         return await self.parent._make_request(
@@ -244,9 +246,11 @@ class GenericEndpoint:
         request_params = MakeRequest(
             method=_check_method,
             endpoint=f"{self.endpoint}/{ctx}",
-            image_read=kwargs.pop("image_read", False),
-            remove_author=kwargs.pop("remove_author", False),
-            serialize_response=kwargs.pop("serialize_response", False),
+            options=RequestOptions(
+                image_read=kwargs.pop("image_read", False),
+                remove_author=kwargs.pop("remove_author", False),
+                serialize_response=kwargs.pop("serialize_response", False)
+            ),
             json_indent=kwargs.pop("json_indent", 4)
         )
         response = await self.parent._make_request(
