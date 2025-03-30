@@ -122,8 +122,8 @@ class BaseDev:
         if not x.api_key:
             return "Required api key"
         params = {"api_key": x.api_key, "url": x.url}
-        request_kwargs = {"data": data} if x.extract_data else {"json": data}
-        response = requests.post(x.api_url, params=params, **request_kwargs) if x.use_post else requests.get(x.api_url, params=params)
+        request_kwargs = {"data": data} if x.proxy_options.extract_data else {"json": data}
+        response = requests.post(x.api_url, params=params, **request_kwargs) if x.proxy_options.use_post else requests.get(x.api_url, params=params)
         if x.response_mode == ResponseMode.TEXT:
             return response.text
         elif x.response_mode == ResponseMode.JSON:
@@ -132,24 +132,24 @@ class BaseDev:
             except ValueError as e:
                 logging.debug("Failed to parse JSON response: %s", e)
                 return response.text
-        if x.extract_all_hrefs:
+        if x.proxy_options.extract_all_hrefs:
             soup = BeautifulSoup(response.text, "html.parser")
-            return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
-        if x.use_proxy_mode:
+            return [a['href'] for a in soup.find_all('a', href=True)] if x.proxy_options.extract_all_hrefs else []
+        if x.proxy_options.use_proxy_mode:
             proxies = {
-                "https": x.proxy_url.format(api_key=x.api_key, port=x.port)
+                "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
             }
             frspon = requests.post(
                 x.url,
                 proxies=proxies,
                 json=data.pop("json_proxy", None),
-                verify=x.verify_ssl
-            ) if x.use_post_proxy else requests.get(
+                verify=x.proxy_options.verify_ssl
+            ) if x.proxy_options.use_post_proxy else requests.get(
                 x.url,
                 proxies=proxies,
-                verify=x.verify_ssl
+                verify=x.proxy_options.verify_ssl
             )
-            if x.extract_all_hrefs_only_proxy:
+            if x.proxy_options.extract_all_hrefs_only_proxy:
                 soup = BeautifulSoup(frspon.text, "html.parser")
                 return [a['href'] for a in soup.find_all('a', href=True)]
             return frspon
