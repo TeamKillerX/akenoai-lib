@@ -42,6 +42,12 @@ class JSONResponse(BaseModel):
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
 
+class DifferentAPIDefault(BaseModel):
+    is_err: Optional[bool] = field(default=False)
+    is_itzpire: Optional[bool] = field(default=False)
+    is_akenox_fast: Optional[bool] = field(default=False)
+    is_masya: bool = False
+
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
@@ -398,10 +404,7 @@ class RandyDev(BaseDev):
 
 @dataclass
 class AkenoXJs:
-    is_err: Optional[bool] = field(default=False)
-    is_itzpire: Optional[bool] = field(default=False)
-    is_akenox_fast: Optional[bool] = field(default=False)
-    is_masya: bool = False
+   dev: DifferentAPIDefault
     """
     Parameters:
         is_err (bool): for ErAPI
@@ -414,12 +417,12 @@ class AkenoXJs:
             "itzpire": ItzPire(),
             "err": ErAPI(),
             "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(self.is_masya)
+            "default": RandyDev(self.dev.is_masya)
         }
         self.flags = {
-            "itzpire": self.is_itzpire,
-            "err": self.is_err,
-            "akenox_fast": self.is_akenox_fast
+            "itzpire": self.dev.is_itzpire,
+            "err": self.dev.is_err,
+            "akenox_fast": self.dev.is_akenox_fast
         }
 
     def connect(self):
