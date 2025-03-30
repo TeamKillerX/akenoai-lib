@@ -192,6 +192,10 @@ dl_response = await js.downloader.create(
 )
 print(dl_response)
 ```
+- if using `request_params`:
+```py
+params_data=request_params(url="https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ")
+```
 - <b>No longer using object params</b> Now, you can pass a `dictionary` or use `request_params()` for object access in `params_data` instead of `**params`.
 
 ---
