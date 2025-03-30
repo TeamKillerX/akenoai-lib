@@ -119,11 +119,11 @@ class BaseDev:
         return url, headers
 
     def _make_request_with_scraper(self, x: ScraperProxy, **data):
-        if not x.api_key:
+        if not x.login.api_key:
             return "Required api key"
-        params = {"api_key": x.api_key, "url": x.url}
-        request_kwargs = {"data": data} if x.extract_data else {"json": data}
-        response = requests.post(x.api_url, params=params, **request_kwargs) if x.use_post else requests.get(x.api_url, params=params)
+        params = {"api_key": x.login.api_key, "url": x.url}
+        request_kwargs = {"data": data} if x.proxy_options.extract_data else {"json": data}
+        response = requests.post(x.api_url, params=params, **request_kwargs) if x.proxy_options.use_post else requests.get(x.api_url, params=params)
         if x.response_mode == ResponseMode.TEXT:
             return response.text
         elif x.response_mode == ResponseMode.JSON:
@@ -132,24 +132,24 @@ class BaseDev:
             except ValueError as e:
                 logging.debug("Failed to parse JSON response: %s", e)
                 return response.text
-        if x.extract_all_hrefs:
+        if x.proxy_options.extract_all_hrefs:
             soup = BeautifulSoup(response.text, "html.parser")
-            return [a['href'] for a in soup.find_all('a', href=True)] if x.extract_all_hrefs else []
-        if x.use_proxy_mode:
+            return [a['href'] for a in soup.find_all('a', href=True)] if x.proxy_options.extract_all_hrefs else []
+        if x.proxy_options.use_proxy_mode:
             proxies = {
-                "https": x.proxy_url.format(api_key=x.api_key, port=x.port)
+                "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
             }
             frspon = requests.post(
                 x.url,
                 proxies=proxies,
                 json=data.pop("json_proxy", None),
-                verify=x.verify_ssl
-            ) if x.use_post_proxy else requests.get(
+                verify=x.proxy_options.verify_ssl
+            ) if x.proxy_options.use_post_proxy else requests.get(
                 x.url,
                 proxies=proxies,
-                verify=x.verify_ssl
+                verify=x.proxy_options.verify_ssl
             )
-            if x.extract_all_hrefs_only_proxy:
+            if x.proxy_options.extract_all_hrefs_only_proxy:
                 soup = BeautifulSoup(frspon.text, "html.parser")
                 return [a['href'] for a in soup.find_all('a', href=True)]
             return frspon
@@ -181,17 +181,17 @@ class BaseDev:
                     data=_json.use_form_data
                 ) as response:
                     json_data = await response.json()
-                    if u.image_read:
+                    if u.options.image_read:
                         return await response.read()
-                    if u.remove_author:
+                    if u.options.remove_author:
                         key_to_remove = params.pop("del_author", None)
                         if key_to_remove is not None and key_to_remove in json_data:
                             del json_data[key_to_remove]
                         return json_data
-                    if u.serialize_response:
+                    if u.options.serialize_response:
                         return rjson.dumps(json_data, indent=u.json_indent)
-                    if u.return_text_response:
-                        return await response.text() if u.return_text_response else None
+                    if u.options.return_text_response:
+                        return await response.text() if u.options.return_text_response else None
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
@@ -215,9 +215,11 @@ class GenImageEndpoint:
         request_params = MakeRequest(
             method="get",
             endpoint=f"{self.endpoint}/{ctx}",
-            image_read=kwargs.pop("image_read", False),
-            remove_author=kwargs.pop("remove_author", False),
-            serialize_response=kwargs.pop("serialize_response", False),
+            options=RequestOptions(
+                image_read=kwargs.pop("image_read", False),
+                remove_author=kwargs.pop("remove_author", False),
+                serialize_response=kwargs.pop("serialize_response", False)
+            ),
             json_indent=kwargs.pop("json_indent", 4)
         )
         return await self.parent._make_request(
@@ -244,9 +246,11 @@ class GenericEndpoint:
         request_params = MakeRequest(
             method=_check_method,
             endpoint=f"{self.endpoint}/{ctx}",
-            image_read=kwargs.pop("image_read", False),
-            remove_author=kwargs.pop("remove_author", False),
-            serialize_response=kwargs.pop("serialize_response", False),
+            options=RequestOptions(
+                image_read=kwargs.pop("image_read", False),
+                remove_author=kwargs.pop("remove_author", False),
+                serialize_response=kwargs.pop("serialize_response", False)
+            ),
             json_indent=kwargs.pop("json_indent", 4)
         )
         response = await self.parent._make_request(
