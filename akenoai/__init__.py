@@ -17,6 +17,7 @@ __all__ = [
     "AkenoXDev",
     "MakeRequest",
     "MakeFetch",
+    "JSONResponse",
     "ScraperProxy",
     "BaseDev",
     "fetch",
