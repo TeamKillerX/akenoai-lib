@@ -3,6 +3,7 @@ from dataclasses import field
 from enum import Enum
 
 import aiohttp  # type: ignore
+from typing import *
 from pydantic import BaseModel, ConfigDict  # type: ignore
 
 
@@ -46,12 +47,12 @@ class ResponseMode(Enum):
     TEXT = "text"
     JSON = "json"
 
-class ScraperProxy(BaseModel):
-    url: str
-    api_url: str = "https://api.scraperapi.com"
+class ProxyLogin(BaseModel):
     proxy_url: Optional[str] = "http://scraperapi:{api_key}@proxy-server.scraperapi.com:{port}"
     api_key: Optional[str] = os.environ.get('SCRAPER_KEY')
     port: Optional[int] = 8001
+    
+class ProxyOptions(BaseModel):
     use_proxy_mode: Optional[bool] = False
     use_post: Optional[bool] = False
     use_post_proxy: Optional[bool] = False
@@ -59,6 +60,12 @@ class ScraperProxy(BaseModel):
     extract_data: Optional[bool] = False
     extract_all_hrefs: Optional[bool] = False
     extract_all_hrefs_only_proxy: Optional[bool] = False
+
+class ScraperProxy(BaseModel):
+    url: str
+    api_url: str = "https://api.scraperapi.com"
+    login: ProxyLogin = ProxyLogin()
+    proxy_options: ProxyOptions = ProxyOptions()
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
 __all__ = [
@@ -68,5 +75,7 @@ __all__ = [
     "MakeRequest",
     "MakeFetch",
     "ResponseMode",
+    "ProxyLogin",
+    "ProxyOptions",
     "ScraperProxy",
 ]
