@@ -38,6 +38,24 @@ import akenoai.logger as fast
 
 LOGS = logging.getLogger(__name__)
 
+class UploadToFile(BaseModel):
+    file_data: aiohttp.FormData = Field(default_factory=aiohttp.FormData)
+
+    def append(self, name: str, value: bytes, filename: str = None, content_type: str = None):
+        self.file_data.add_field(name, value, filename=filename, content_type=content_type)
+
+    async def aiofiles_catbox(self, path: str):
+        self.append("reqtype", b"fileupload")
+        async with aiofiles.open(path, mode="rb") as file:
+            file_data = await file.read()
+            self.append(
+                "fileToUpload",
+                file_data,
+                filename=path.split("/")[-1],
+                content_type="application/octet-stream"
+            )
+        return self.file_data
+
 class JSONResponse(BaseModel):
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
