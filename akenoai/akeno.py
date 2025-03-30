@@ -38,6 +38,10 @@ import akenoai.logger as fast
 
 LOGS = logging.getLogger(__name__)
 
+class JSONResponse(BaseModel):
+    use_json: Optional[dict] = None
+    use_params: Optional[dict] = None
+
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
@@ -187,7 +191,7 @@ class BaseDev:
         )
         return form_data if is_upload else None
 
-    async def _make_request(self, u: MakeRequest, **params):
+    async def _make_request(self, u: MakeRequest, _json: JSONResponse, **params):
         """
         Parameters:
             method (str): HTTP method to use.
@@ -208,7 +212,7 @@ class BaseDev:
                 form_data = None
                 if u.add_field:
                     form_data = await self._make_upload_file_this(upload_file=u.upload_file, is_upload=u.is_upload)
-                async with request(url, headers=headers, params=params, json=params.pop("body_data", None), data=form_data) as response:
+                async with request(url, headers=headers, params=_json.use_params, json=_json.use_json, data=form_data) as response:
                     json_data = await response.json()
                     if u.image_read:
                         return await response.read()
@@ -250,7 +254,14 @@ class GenImageEndpoint:
             serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
-        _response_image = await self.parent._make_request(request_params, **kwargs)
+        _response_image = await self.parent._make_request(
+            request_params,
+            JSONResponse(
+                use_json=kwargs.pop("body_data", None),
+                use_params=kwargs.pop("params_data", None)
+            ),
+            **kwargs
+        )
         return _response_image if self.super_fast else None
 
 @dataclass
@@ -276,7 +287,14 @@ class GenericEndpoint:
             serialize_response=kwargs.pop("serialize_response", False),
             json_indent=kwargs.pop("json_indent", 4)
         )
-        response = await self.parent._make_request(request_params, **kwargs) or {}
+        response = await self.parent._make_request(
+            request_params,
+            JSONResponse(
+                use_json=kwargs.pop("body_data", None),
+                use_params=kwargs.pop("params_data", None)
+            ),
+            **kwargs
+        ) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
         return _response_parent if self.super_fast else None
 
