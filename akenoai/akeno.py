@@ -33,7 +33,7 @@ import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from pydantic import BaseModel, ConfigDict # type: ignore
+from pydantic import BaseModel, ConfigDict  # type: ignore
 
 import akenoai.logger as fast
 
