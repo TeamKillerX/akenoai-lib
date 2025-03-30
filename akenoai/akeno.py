@@ -33,7 +33,7 @@ import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from pydantic import BaseModel  # type: ignore
+from pydantic import BaseModel, ConfigDict # type: ignore
 
 import akenoai.logger as fast
 
@@ -46,7 +46,7 @@ class FormDataBuilder:
     def append(self, name: str, value: bytes, filename: str = None, content_type: str = None):
         self.file_data.add_field(name, value, filename=filename, content_type=content_type)
 
-    async def aiofiles_catbox(self, path: str):
+    async def aiofiles_catbox(self, path: str) -> aiohttp.FormData:
         self.append("reqtype", b"fileupload")
         async with aiofiles.open(path, mode="rb") as file:
             file_data = await file.read()
@@ -59,9 +59,10 @@ class FormDataBuilder:
         return self.file_data
 
 class JSONResponse(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
-    use_form_data: Optional[dict] = None
+    use_form_data: Optional[aiohttp.FormData] = None
 
 class DifferentAPIDefault(BaseModel):
     is_err: Optional[bool] = field(default=False)
