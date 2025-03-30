@@ -155,7 +155,7 @@ Your API key may have expired due to reaching its validity period. But don't wor
 
 Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserbot) on telegram, you can create a new account and get <b>API Key V2 free for 1 month.</b> 🚀
 
-📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem! 🚀
+📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem. 🚀
 
 ### Code examples
 > [!TIP]
