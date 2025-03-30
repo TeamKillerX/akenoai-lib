@@ -55,3 +55,12 @@ class ScraperProxy(BaseModel):
     extract_all_hrefs: Optional[bool] = False
     extract_all_hrefs_only_proxy: Optional[bool] = False
     response_mode: ResponseMode = ResponseMode.DEFAULT
+
+__all__ = [
+    "JSONResponse",
+    "DifferentAPIDefault",
+    "MakeRequest",
+    "MakeFetch",
+    "ResponseMode",
+    "ScraperProxy",
+]
