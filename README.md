@@ -33,6 +33,34 @@
 - Create a requirements.txt file in the project root containing the following dependency to ensure you can install the GitHub version:
 - `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
 
+# Raw Requests Control
+- [x] Extreme Mode
+
+You can also use this syntax in <b>raw extreme mode</b> too much for Python!
+```py
+from akenoai import *
+
+results = await BaseDev("https://faster.maiysacollection.com/v2/fast")._make_request(
+    MakeRequest(
+        method="post",
+        endpoint="chat/completion"
+    ),
+    JSONResponse(
+        use_json=request_params(
+            prompt="what is python?",
+            model="qwen-plus",
+        )
+    ),
+    api_key="this Authorization optional",
+    headers_extra={"User-Agent": "Mozilla/5.0"}
+)
+response_get = BaseDev(None).obj(results) or {}
+print(response_get.response)
+```
+- If you can read this without getting a headache, congrats, You're in Extreme Mode. This indicates that advanced debugging features and additional details are enabled for expert users.
+
+---
+
 # ScraperProxy
 
 ## Additional Parameters Documentation
@@ -81,9 +109,7 @@ scp = ScraperProxy(
     response_mode="default"
 )
 
-base = BaseDev(None)
-
-response = base._make_request_with_scraper(
+response = BaseDev(None)._make_request_with_scraper(
     scp,
     query="https://www.tiktok.com/@penjasnipam/video/7473392499655068946?is_from_webapp=1&sender_device=pc&web_id=7476152122733725202",
     language_id="2"
@@ -91,6 +117,9 @@ response = base._make_request_with_scraper(
 
 print(response)
 ```
+
+---
+
 ### How to learn Python
 - Collaborative learning
 - Usage Examples:
