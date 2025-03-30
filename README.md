@@ -117,40 +117,8 @@ response = BaseDev(None)._make_request_with_scraper(
 
 print(response)
 ```
-
 ---
 
-### How to learn Python
-- Collaborative learning
-- Usage Examples:
-```py
-class ExampleYourName(BaseDevWithEndpoints):
-    def __init__(self, public_url: str = "https://your-endpoint.com"):
-        endpoints = {
-            "chat": "ai",
-        }
-        super().__init__(public_url, endpoints)
-
-```
-- Please fork the repository and submit a pull request
-- Your Own API
-- `https://your-api-endpoint/api/v1`
-- An API key is required here.
-```
-dl/{model}
-user/{model}
-ai/{model}
-```
-You can use `AkenoXJs()` passing
-```py
-js = AkenoXJs(is_your_name=True).connect()
-js.chat.create(...)
-```
-AkenoXJs automatically configures the connection, so there's no need to manually initialize it using OldAkenoXToJs and its randydev method.
-```py
-js = OldAkenoXToJs(public_url="https://your-api-endpoint/api/v1")
-js.randydev("api/endpoint", api_key="", custom_dev_fast=True)
-```
 ### FastAPI Demo
 - Use `main.py`
 - Try running `python3 main.py`
@@ -190,39 +158,44 @@ Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserb
 📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem! 🚀
 
 ### Code examples
--> [!TIP]
--> Tip Usage Example:
+> [!TIP]
+Tip Usage Example:
 
 - Use Access API key V2 Premium
 ```py
-from akenoai import AkenoXJs
+from akenoai import *
 
-js = AkenoXJs().connect()
+js = AkenoXJs(DifferentAPIDefault()).connect()
 
 response = await js.chat.create(
     "qwen/qwen1.5-1.8b-chat",
     api_key="<your-api-key-premium>",
-    is_obj=True,
-    query="Hello, how are you?"
+    params_data={"query": "Hello, how are you?"},
+    is_obj=True
 )
 
 print(response)
 ```
 - 📥 Example Downloader:
 ```py
-from akenoai import AkenoXJs
+from akenoai import *
 
-js = AkenoXJs().connect()
+js = AkenoXJs(DifferentAPIDefault()).connect()
 
-download_response = await js.downloader.create(
+dl_response = await js.downloader.create(
     "instagram-v4",
-    api_key="<your-api-key-free>",
-    is_obj=False,
-    url="https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ=="
+    api_key="<your-api-free>",
+    params_data={
+        "url": "https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ"
+    },
+    is_obj=True
 )
-
-print(download_response)
+print(dl_response)
 ```
+- <b>No longer using object params</b> Now, you can pass a `dictionary` or use `request_params()` for object access in `params_data` instead of `**params`.
+
+---
+
 ### 🌐 Streamlit + AkenoX API
 - installation: `pip3 install akenoai[streamlit]`
 - You can use `streamlit run app.py`
