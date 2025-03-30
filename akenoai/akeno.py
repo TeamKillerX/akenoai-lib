@@ -230,7 +230,7 @@ class BaseDev:
                     headers=headers,
                     params=_json.use_params,
                     json=_json.use_json,
-                    data=x.use_form_data
+                    data=_json.use_form_data
                 ) as response:
                     json_data = await response.json()
                     if u.image_read:
