@@ -59,7 +59,7 @@ class FormDataBuilder:
             )
         return self.file_data
 
-def configure_openapi(app, _sw: EditCustomOpenai, custom_openapi=get_openapi):
+def configure_openapi(app, _sw: EditCustomOpenAPI, custom_openapi=get_openapi):
     if not app:
         raise ValueError("Required app")
     if app.openapi_schema:
@@ -213,6 +213,10 @@ class BaseDev:
         except Exception as e:
             LOGS.exception("An error occurred")
             return None
+
+class _ok(BaseDev):
+    async def invoke(self):
+        return self
 
 @dataclass
 class GenImageEndpoint:

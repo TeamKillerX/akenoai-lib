@@ -71,7 +71,7 @@ class ScraperProxy(BaseModel):
 class HeaderOptions(BaseModel):
     headers_update: Optional[dict] = None
 
-class EditCustomOpenai(BaseModel):
+class EditCustomOpenAPI(BaseModel):
     logo_url: Optional[str] = None
     title: Optional[str] = "AkenoX Demo API"
     version: Optional[str] = "1.0.0"
@@ -89,5 +89,5 @@ __all__ = [
     "ProxyOptions",
     "ScraperProxy",
     "HeaderOptions",
-    "EditCustomOpenai",
+    "EditCustomOpenAPI",
 ]
