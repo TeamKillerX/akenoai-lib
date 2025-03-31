@@ -100,7 +100,7 @@ class BaseDev:
         self,
         endpoint: str,
         api_key: str = None,
-        headers_extra: dict = None,
+        header: HeadersDefault
     ):
         """Prepare request URL and headers."""
         if not api_key:
@@ -114,8 +114,8 @@ class BaseDev:
             "x-api-key": api_key,
             "Authorization": f"Bearer {api_key}"
         }
-        if headers_extra:
-            headers.update(headers_extra)
+        if header.headers_update:
+            headers.update(header.headers_update)
         return url, headers
 
     def _make_request_with_scraper(self, x: ScraperProxy, **data):
@@ -155,7 +155,13 @@ class BaseDev:
             return frspon
         return response
 
-    async def _make_request(self, u: MakeRequest, _json: JSONResponse, **params):
+    async def _make_request(
+        self,
+        u: MakeRequest,
+        _json: JSONResponse,
+        header: HeadersDefault,
+        **params
+    ):
         """
         Parameters:
             method (str): HTTP method to use.
@@ -168,7 +174,7 @@ class BaseDev:
         url, headers = self._prepare_request(
             u.endpoint,
             params.pop("api_key", None),
-            params.pop("headers_extra", None),
+            header
         )
         try:
             async with aiohttp.ClientSession() as session:
@@ -228,6 +234,7 @@ class GenImageEndpoint:
                 use_json=kwargs.pop("body_data", None),
                 use_params=kwargs.pop("params_data", None)
             ),
+            HeadersDefault(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) if self.super_fast else None
 
@@ -259,6 +266,7 @@ class GenericEndpoint:
                 use_json=kwargs.pop("body_data", None),
                 use_params=kwargs.pop("params_data", None)
             ),
+            HeadersDefault(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
