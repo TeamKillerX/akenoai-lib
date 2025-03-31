@@ -31,8 +31,8 @@ import aiofiles
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
-from fastapi.openapi.utils import get_openapi  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
+from fastapi.openapi.utils import get_openapi  # type: ignore
 from pydantic import BaseModel  # type: ignore
 
 import akenoai.logger as fast
