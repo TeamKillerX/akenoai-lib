@@ -100,7 +100,7 @@ class BaseDev:
         self,
         endpoint: str,
         api_key: str = None,
-        header: HeadersDefault
+        header: HeaderOptions
     ):
         """Prepare request URL and headers."""
         if not api_key:
@@ -159,18 +159,9 @@ class BaseDev:
         self,
         u: MakeRequest,
         _json: JSONResponse,
-        header: HeadersDefault,
+        header: HeaderOptions,
         **params
     ):
-        """
-        Parameters:
-            method (str): HTTP method to use.
-            endpoint (str): API endpoint.
-            image_read (bool): If True, expects the response to be an image.
-                The method will verify that the response's Content-Type begins with 'image/'
-                and then return the raw bytes from the response.
-            **params: Additional parameters to be sent with the request.
-        """
         url, headers = self._prepare_request(
             u.endpoint,
             params.pop("api_key", None),
@@ -234,7 +225,7 @@ class GenImageEndpoint:
                 use_json=kwargs.pop("body_data", None),
                 use_params=kwargs.pop("params_data", None)
             ),
-            HeadersDefault(headers_update=kwargs.pop("headers_extra", None)),
+            HeaderOptions(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) if self.super_fast else None
 
@@ -266,7 +257,7 @@ class GenericEndpoint:
                 use_json=kwargs.pop("body_data", None),
                 use_params=kwargs.pop("params_data", None)
             ),
-            HeadersDefault(headers_update=kwargs.pop("headers_extra", None)),
+            HeaderOptions(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
