@@ -1,4 +1,4 @@
-# akenoai-lib
+# AkenoAI-Lib
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/TeamKillerX/akenoai-lib)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green)](https://github.com/TeamKillerX/akenoai-lib/graphs/commit-activity)
 [![GitHub Forks](https://img.shields.io/github/forks/TeamKillerX/akenoai-lib?&logo=github)](https://github.com/TeamKillerX/akenoai-lib)
@@ -9,461 +9,76 @@
 [![Socket Badge](https://socket.dev/api/badge/pypi/package/akenoai/1.7.2?artifact_id=tar-gz)](https://socket.dev/pypi/package/akenoai/overview/1.7.2/tar-gz)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/TeamKillerX/akenoai-lib/main.svg)](https://results.pre-commit.ci/latest/github/TeamKillerX/akenoai-lib/main)
 
-### 🚨 Important Notice:
-> [!IMPORTANT]
-> Read Before Using!
->
-> 📜 Read the Code of Conduct:
-> 🔗 [`CODE_OF_CONDUCT`](https://github.com/TeamKillerX/akenoai-lib/blob/main/CODE_OF_CONDUCT.md)
+AkenoAI-Lib provides a powerful and flexible way to make raw requests with full control, leveraging `aiohttp` for speed and efficiency. The library is designed to optimize API interactions with a clean and intuitive syntax.
+
+## Features
+
+- **Raw Request Control**: Make precise HTTP requests with complete customization.
+- **Async-Powered**: Utilizes `aiohttp` for non-blocking requests and enhanced performance.
+- **Flexible Request Handling**: Supports JSON, form-data, and query parameters seamlessly.
+- **Enhanced Response Processing**: Options for JSON serialization, text responses, and custom formatting.
+
+## Installation
+
+```bash
+pip install akenoai[fast]
 ```
-- ⚠️ Public copy-pasting without permission violates the rules!
-- 🚨 This may result in a GitHub copyright report.
-- ⚠️ Your developer account could be blacklisted.
-- ❌ You may lose access to your GitHub username permanently.
 
-- 📢 Respect open-source rules & contribute responsibly! 🚀
+## Quick Start
+
+```python
+from akenoai import BaseDev
+from akenoai.types import MakeRequest, RequestOptions, JSONResponse
+
+async def fetch_data():
+    response = await BaseDev("https://api.example.com")._make_request(
+        MakeRequest(
+            method="get",
+            endpoint="data/list",
+            options=RequestOptions(
+                serialize_response=True
+            )
+        ),
+        JSONResponse()
+    )
+    return response
 ```
 
-### installation
-🔹 <b>Recommended Installation:</b>
+## Usage
 
-✅ Install via [`PYPI`](https://pypi.org/project/akenoai) for the latest updates. e.g.: `pip3 install akenoai[fast]`
+### Making a GET Request
 
-✅ Install via github
-- Create a requirements.txt file in the project root containing the following dependency to ensure you can install the GitHub version:
-- `git+https://github.com/TeamKillerX/akenoai-lib.git#egg=akenoai[fast]`
+```python
+response = await BaseDev("https://example.com")._make_request(
+    MakeRequest(
+        method="get",
+        endpoint="api/resource",
+    ),
+    JSONResponse()
+)
+print(response)
+```
 
-# Raw Requests Control
-- [x] Extreme Mode
+### Sending a POST Request with JSON Data
 
-You can also use this syntax in <b>raw extreme mode</b> too much for Python!
-```py
-from akenoai import *
-
-results = await BaseDev("https://faster.maiysacollection.com/v2/fast")._make_request(
+```python
+response = await BaseDev("https://example.com")._make_request(
     MakeRequest(
         method="post",
-        endpoint="chat/completion"
+        endpoint="api/create",
+        options=RequestOptions(return_text_response=True)
     ),
-    JSONResponse(
-        use_json=request_params(
-            prompt="what is python?",
-            model="qwen-plus",
-        )
-    ),
-    api_key="<your-api-key-optional>", # Optional: remove if not needed
-    headers_extra={"User-Agent": "Mozilla/5.0"} # Optional: remove if not needed
+    JSONResponse(use_json={"key": "value"})
 )
-response_get = BaseDev(None).obj(results) or {}
-print(response_get.response)
-```
-- If you can read this without getting a headache, congrats, You're in Extreme Mode. This indicates that advanced debugging features and additional details are enabled for expert users.
-
----
-
-# ScraperProxy
-
-## Additional Parameters Documentation
-
-### api_url
-Specifies the base API URL for the scraper to send requests.
-Possible values:
-- A valid URL string pointing to the scraper API.
-Default: None (must be provided explicitly).
-
-Note: If no api_url is provided, the scraper will raise an exception (e.g., ValueError) during initialization.
-
-### extract_data
-Defines whether the scraper should extract structured data from the response.
-Possible values:
-- True: Extracts structured data (JSON or relevant parsed output).
-- False: Returns the raw HTML content.
-Default: False.
-
-### use_post
-Specifies whether the scraper should use HTTP POST for making requests instead of GET.
-Possible values:
-- True: Sends a POST request when contacting the target URL.
-- False: Sends a GET request.
-Default: False (will use GET by default).
-
-### extract_all_hrefs
-Determines if the scraper should extract all `href` attributes from the target web page.
-Possible values:
-- True: Extracts all hyperlinks (href values) present in the HTML.
-- False: Extracts only the primary data defined.
-Default: False.
-
-## Example Usage
-
-```py
-from akenoai import ScraperProxy, BaseDev
-
-scp = ScraperProxy(
-    url="https://ttsave.app/download",
-    api_url="https://api.scraperapi.com",
-    api_key="your-api-key",
-    extract_data=False,
-    use_post=True,
-    extract_all_hrefs=True,
-    response_mode="default"
-)
-
-response = BaseDev(None)._make_request_with_scraper(
-    scp,
-    query="https://www.tiktok.com/@penjasnipam/video/7473392499655068946?is_from_webapp=1&sender_device=pc&web_id=7476152122733725202",
-    language_id="2"
-)
-
 print(response)
 ```
----
 
-### FastAPI Demo
-- Use `main.py`
-- Try running `python3 main.py`
-```py
-from akenoai.runner import run_fast
+## Error Handling
+If you encounter `TypeError: _make_request() missing 1 required positional argument: '_json'`, ensure you're using `JSONResponse()` when needed.
 
-# run_fast initializes a FastAPI server with example routes and configurations.
+## Notes
+- When using `from akenoai import *`, you may run into errors. Instead, explicitly import required modules: `from akenoai.types import *`.
 
-run_fast()
-```
-### ✨ New AI Models
-1. `akenox/moderator`
-2. `akenox/mia-khalifah`
-3. `akenox/nocodefou`
-4. `akenox/al-sholawat`
-5. `akenox/lirik-end`
-6. `akenox/quotes-sad`
-7. `akenox/quotes-lucu`
-8. `akenox/lu-sunda`
-9. `akenox/lu-melayu`
-10. `akenox/curl-command-code`
-11. `akenox/python-to-js-api`
-12. `akenox/js-to-python-api`
-- Why is your API key expired?
-
-Your API key may have expired due to reaching its validity period. But don't worry, you can get a new one!
-
-💰 <b>Pricing:</b>
-- API Key V2: <b>25K/month</b>
-- Promo: 85K ( ~125K~ ) for 1 year (AI access included)
-- API Key V1: <b>Free & unlimited (for downloader only)</b>
-
-💭 Can a new account get a free API Key V2?
-
-Yes! If your previous API key expired from [`@aknuserbot`](https://t.me/aknuserbot) on telegram, you can create a new account and get <b>API Key V2 free for 1 month.</b> 🚀
-
-📩 Need help? Contact [`@xpushz`](https://t.me/xpushz) no problem. 🚀
-
-### Code examples
-> [!TIP]
-Tip Usage Example:
-
-- Use Access API key V2 Premium
-```py
-from akenoai import *
-
-js = AkenoXJs(DifferentAPIDefault()).connect()
-
-response = await js.chat.create(
-    "qwen/qwen1.5-1.8b-chat",
-    api_key="<your-api-key-premium>",
-    params_data={"query": "Hello, how are you?"},
-    is_obj=True
-)
-
-print(response)
-```
-- 📥 Example Downloader:
-```py
-from akenoai import *
-
-js = AkenoXJs(DifferentAPIDefault()).connect()
-
-dl_response = await js.downloader.create(
-    "instagram-v4",
-    api_key="<your-api-free>",
-    params_data={
-        "url": "https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ"
-    },
-    is_obj=True
-)
-print(dl_response)
-```
-- if using `request_params`:
-```py
-params_data=request_params(url="https://www.instagram.com/reel/DA0p2NoyN_O/?igsh=MWJvejMxZmZ5ZHd3YQ")
-```
-- <b>No longer using object params</b> Now, you can pass a `dictionary` or use `request_params()` for object access in `params_data` instead of `**params`.
-
----
-
-### 🌐 Streamlit + AkenoX API
-- installation: `pip3 install akenoai[streamlit]`
-- You can use `streamlit run app.py`
-- `akenoai[fast]` → <b> no import Pyrogram error:</b> *There is no current event loop* (<b>Stuck in Streamlit</b>)
-
-- Full Example usage:
-
-  Note: The import path changed from `akenoai import AkenoXToJs` to `akenoai.streamlit import StreamlitToJs` to clearly separate the streamlit integration functionality from the core API. The previous import path is now deprecated.
-```py
-import requests
-import json
-import time
-from akenoai.streamlit import StreamlitToJs as js
-
-class GithubUsername:
-    def __init__(self, username):
-        self.username = username
-
-    def get_github_data(self):
-        req = requests.get(f"https://api.github.com/users/{self.username}").json()
-        try:
-            return req
-        except Exception as e:
-            base_msg = f"**Error!** \n\n**Traceback:** \n `{e}` \n\n`Make sure that you've sent the command with the correct username!`"
-            return base_msg
-
-js_st = js.stl()
-js_st.title("Welcome to akenoai-lib APP")
-js_st.write("Developed by RandyDev")
-js_st.write("GitHub User Information")
-
-with js_st.form("github"):
-    username = js_st.text_input("Enter GitHub username:")
-    submit_checkbox = js_st.checkbox("Allow users", value=False)
-    submitted = js_st.form_submit_button("Submit")
-    if submitted and submit_checkbox:
-        js_st.spinner("Fetching GitHub data...")
-        github_data = GithubUsername(username).get_github_data()
-        if isinstance(github_data, dict):
-            js_st.json(github_data)
-        else:
-            js_st.error(github_data)
-
-js_st.title("Examples JSON by AkenoX API")
-
-with js_st.form("json"):
-    submitted = js_st.form_submit_button("Submit")
-    if submitted:
-        js_st.spinner("Loading......")
-        try:
-            js_st.json(
-                js.no_async_randydev("json/all", is_obj=False)
-            )
-        except Exception as e:
-            js_st.error(str(e))
-
-js_st.title("ChatGPT AI")
-
-with js_st.form("openai"):
-    text = js_st.text_area('Enter text:', 'How to JavaScript code?')
-    submitted = js_st.form_submit_button('Submit')
-    placeholder = js_st.empty()
-    free_api_key_on = js_st.toggle("Free API Key")
-    if submitted:
-        try:
-            if free_api_key_on:
-                with placeholder, js_st.spinner("Processing......"):
-                    time.sleep(5)
-                js_st.write(
-                    js.no_async_randydev("ai/openai/gpt-old", is_obj=True, query=text).results
-                )
-                js_st.success("Join Channel Telegram : @RendyProjects")
-            else:
-                js_st.warning('Use button Free API Key', icon="⚠️")
-        except Exception as e:
-            js_st.error(str(e))
-
-js.waifu_random()
-js.hide_streamlit_watermark(unsafe_allow_html=True)
-```
-> [!WARNING]
->
->⚠️ Breaking Change ⚠️
-
-> Note: The import path has changed!
->
-> To better separate Streamlit integration from the core API, the import path has been updated:
-
-> ❌ <b>Deprecated:</b>
-> `from akenoai import AkenoXJs`
->
-> ✅ Use this <b>instead:</b>
-> `from akenoai.streamlit import StreamlitToJs`
->
-> Make sure to update your imports to avoid issues. 🚀
-
-- [X] If using API `[fast]` for <b>full-stack</b>, move to `akenoai.clients`:
-```py
-from akenoai.clients import create_pyrogram # Use [fast]
-```
-
-### 🛠️ Custom OpenAI
-```py
-from akenoai import OldAkenoXToJs
-
-js = OldAkenoXToJs()
-
-fast_app = js.get_app()
-
-js.custom_openapi(
-    app=fast_app,
-    logo_url="https://github-production-user-asset-6210df.s3.amazonaws.com/90479255/289277800-f26513f7-cdf4-44ee-9a08-f6b27e6b99f7.jpg",
-    title="AkenoX Beta AI API",
-    version="1.0.0",
-    summary="Use It Only For Personal Projects",
-    description="Free API By akenoai-lib",
-    routes=fast_app.routes,
-)
-```
-### 🥷 Full-Stack Examples
-- [X] Powerful & Super Fast Performance
-- [X] Recommended RAM: 8GB / 16GB
-- [X] Supports `bot_token` & `session_string`
-- [X] Custom Web Frontend with HTML & CSS
-```py
-import logging
-from akenoai import OldAkenoXToJs
-from akenoai.runner import run_fast
-from akenoai.clients import create_pyrogram
-
-js = OldAkenoXToJs()
-
-logger = logging.getLogger(__name__)
-LOGS = logging.getLogger("[akenox]")
-logger.setLevel(logging.DEBUG)
-
-from akenoai.models import BaseModel
-
-class Items(BaseModel):
-    message: str
-
-fast_app = js.get_app()
-js.add_cors_middleware()
-
-assistant = create_pyrogram(
-    name="fastapi-bot",
-    api_id=1234,
-    api_hash="asdfghkl",
-    bot_token="1235:asdfh"
-)
-
-user_client = create_pyrogram(
-    name="fastapi-user",
-    api_id=1234,
-    api_hash="asdfghkl",
-    session_string="session"
-)
-
-@fast_app.on_event("startup")
-async def startup_event():
-    bot = await assistant.start()
-    user = await user_client.start()
-    LOGS.info(f"Started UserBot & Assistant: {user.me.first_name} || {bot.me.first_name}")
-
-@fast_app.get("/api/cohere")
-async def cohere(query: str):
-    return await js.randydev(
-        "ai/cohere/command-plus",
-        api_key="<your_api_key>",
-        custom_dev_fast=True,
-        query=query,
-        chatHistory=[],
-        system_prompt="You are a helpful AI assistant designed to provide clear and concise responses."
-    )
-
-@fast_app.get("/item")
-async def example_test(item: Items):
-    return {"message": item.message}
-
-@fast_app.get("/test")
-async def example_json():
-    async with js.fasthttp().ClientSession() as session:
-        async with session.get("https://jsonplaceholder.typicode.com/todos/1") as response:
-            title = js.dict_to_obj(await response.json()).title
-    return {"message": title}
-
-@fast_app.get("/api/tg/send_message")
-async def send_message(text: str, chat_id: str):
-    response_json = await client.send_message(chat_id, text)
-    return {"message_id": response_json.id}
-
-js.custom_openapi(
-    app=fast_app,
-    logo_url="https://github-production-user-asset-6210df.s3.amazonaws.com/90479255/289277800-f26513f7-cdf4-44ee-9a08-f6b27e6b99f7.jpg",
-    title="AkenoX Beta AI API",
-    version="1.0.0",
-    summary="Use It Only For Personal Project",
-    description="Free API By akenoai-lib",
-    routes=fast_app.routes,
-)
-
-run_fast(build=fast_app)
-```
-
-### 🔹 <b>Method Definition:</b>
-
-- [X] Parameters:
-- `endpoint:` The API endpoint to call.
-- `api_key:` (Optional) API key for authentication.
-- `is_obj:` Boolean flag indicating whether the response should be returned as a Python object (True) or in the default format (False).
-- `**params:` Allows passing additional parameters as a dictionary, which will be sent as JSON.
-
-### 🔹 <b>User Creation Date:</b>
-
-This feature retrieves the date when the user's account was initially created. It provides a reliable audit trail and allows users or administrators to verify the account's age, which can be important for purposes such as eligibility verification, security audits, or account management.
-
-```py
-import os
-from akenoai import OldAkenoXToJs
-
-js = OldAkenoXToJs()
-
-response = await js.randydev(
-    "user/creation-date",
-    custom_dev_fast=True,
-    user_id=client.me.id
-)
-return response
-```
-### 🔑 API Key
-> [!NOTE]
-> How to Get an API Key for AkenoX API?
->
-> Different V1 Free and V2 Access Premium
->
-> You can set up your API key using environment variables:
-```env
-AKENOX_KEY=akeno_xxxxxx
-```
-- To get an API key, [`@aknuserbot`](https://t.me/aknuserbot)
-
-- 🚀 Thank you to our 2.7 million users per request!
-
-### ⚠️ Problem Double Fix:
-🛠️ **Double Fix for Connection Issues**
-- ❌ **Cannot connect to host**
-- 🚫 **IP address blocked issue**
-- 🌐 **Different DNS settings**
-
-```py
-from akenoai import OldAkenoXToJs
-
-js = OldAkenoXToJs()
-
-proxy_url = "http://PROXY.YOUR-SERVER.COM:8080"
-
-return await js.randydev(
-    "ai/openai/gpt-old",
-    api_key="akeno_xxxxxxx",
-    proxy_url=proxy_url,  # Use proxy if needed
-    post=False,
-    custom_dev_fast=True
-)
-```
 ### 📊 Developed by:
 - [`AkenoX API`](https://t.me/xpushz) - Full stack Developer Backend
 - [`ErrAPI`](https://t.me/Chakszzz) - Backend And Frontend Web
@@ -474,44 +89,8 @@ return await js.randydev(
 - [`FastAPI`](https://github.com/fastapi/fastapi)
 - Thank you all developers 😊
 
-# Contributing
-If you find a bug or have a feature request, please open an issue on our GitHub repository.
+## Contributing
+Feel free to open issues and contribute to the development of AkenoAI-Lib!
 
-We welcome contributions from the community. If you'd like to contribute, please fork the repository and submit a pull request.
-
-# License
-[![License](https://www.gnu.org/graphics/agplv3-155x51.png)](LICENSE)
-TeamKillerX is licensed under [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.en.html) v3 or later.
-
-<h4 align="center">Copyright (C) 2019 - 2025 The AkenoAI <a href="https://github.com/TeamKillerX">TeamKillerX</a>
-<a href="https://t.me/xtdevs">@xtdevs</a>
-</h4>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Project [akenoai-lib](https://github.com/TeamKillerX/) is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
+## License
+This project is licensed under the MIT License.
