@@ -9,14 +9,14 @@
 [![Socket Badge](https://socket.dev/api/badge/pypi/package/akenoai/1.7.2?artifact_id=tar-gz)](https://socket.dev/pypi/package/akenoai/overview/1.7.2/tar-gz)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/TeamKillerX/akenoai-lib/main.svg)](https://results.pre-commit.ci/latest/github/TeamKillerX/akenoai-lib/main)
 
-**AkenoAI-Lib** is a high-performance library for making raw HTTP requests, powered by `aiohttp`. It provides a simple yet powerful syntax for handling API requests efficiently, ensuring speed and flexibility.  
+**AkenoAI-Lib** is a high-performance library for making raw HTTP requests, powered by `aiohttp`. It provides a simple yet powerful syntax for handling API requests efficiently, ensuring speed and flexibility.
 
-### Features:  
-- **Asynchronous Requests** – Fully utilizes `aiohttp` for non-blocking HTTP calls.  
-- **Optimized Performance** – Designed for speed and low-latency API interactions.  
-- **Flexible Request Handling** – Supports JSON, form-data, and custom headers.  
-- **Built-in Response Serialization** – Easily parse and structure API responses.  
-- **Lightweight & Scalable** – Minimal dependencies with a focus on performance.  
+### Features:
+- **Asynchronous Requests** – Fully utilizes `aiohttp` for non-blocking HTTP calls.
+- **Optimized Performance** – Designed for speed and low-latency API interactions.
+- **Flexible Request Handling** – Supports JSON, form-data, and custom headers.
+- **Built-in Response Serialization** – Easily parse and structure API responses.
+- **Lightweight & Scalable** – Minimal dependencies with a focus on performance.
 
 ## Installation
 
