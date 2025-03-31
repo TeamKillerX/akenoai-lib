@@ -163,9 +163,9 @@ class BaseDev:
         **params
     ):
         url, headers = self._prepare_request(
-            u.endpoint,
-            header,
-            params.pop("api_key", None)
+            endpoint=u.endpoint,
+            header=header,
+            api_key=params.pop("api_key", None)
         )
         try:
             async with aiohttp.ClientSession() as session:
