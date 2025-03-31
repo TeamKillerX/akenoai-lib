@@ -31,6 +31,7 @@ import aiofiles
 import aiohttp  # type: ignore
 import requests  # type: ignore
 from box import Box  # type: ignore
+from fastapi.openapi.utils import get_openapi  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 from pydantic import BaseModel  # type: ignore
 
@@ -57,6 +58,25 @@ class FormDataBuilder:
                 content_type="application/octet-stream"
             )
         return self.file_data
+
+class SwaggerDev:
+    def __init__(self, app):
+        self.custom_openai = get_openapi
+
+    def use(self, _sw: EditCustomOpenai):
+        if not self.app:
+            raise ValueError("Required app")
+        if self.app.openapi_schema:
+            return self.app.openapi_schema
+        openapi_schema = self.custom_openai(
+            title=_sw.title,
+            version=_sw.version,
+            summary=_sw.summary,
+            description=_sw.description
+        )
+        openapi_schema["info"]["x-logo"] = {"url": _sw.logo_url}
+        self.app.openapi_schema = openapi_schema
+        return self.app.openapi_schema
 
 class BaseDev:
     def __init__(self, public_url: str):
