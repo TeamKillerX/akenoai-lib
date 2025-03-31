@@ -115,7 +115,7 @@ class BaseDev:
             "Authorization": f"Bearer {api_key}"
         }
         if header.headers_update:
-            headers.update(header.headers_update)
+            headers |= header.headers_update
         return url, headers
 
     def _make_request_with_scraper(self, x: ScraperProxy, **data):
