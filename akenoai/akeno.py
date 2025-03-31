@@ -61,6 +61,7 @@ class FormDataBuilder:
 
 class SwaggerDev:
     def __init__(self, app):
+        self.app = app
         self.custom_openai = get_openapi
 
     def use(self, _sw: EditCustomOpenai):
