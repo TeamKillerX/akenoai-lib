@@ -99,8 +99,8 @@ class BaseDev:
     def _prepare_request(
         self,
         endpoint: str,
-        api_key: str = None,
-        header: HeaderOptions
+        header: HeaderOptions,
+        api_key: str = None
     ):
         """Prepare request URL and headers."""
         if not api_key:
@@ -164,8 +164,8 @@ class BaseDev:
     ):
         url, headers = self._prepare_request(
             u.endpoint,
-            params.pop("api_key", None),
-            header
+            header,
+            params.pop("api_key", None)
         )
         try:
             async with aiohttp.ClientSession() as session:
