@@ -68,6 +68,9 @@ class ScraperProxy(BaseModel):
     proxy_options: ProxyOptions = ProxyOptions()
     response_mode: ResponseMode = ResponseMode.DEFAULT
 
+class HeadersDefault(BaseModel):
+    headers_update: Optional[dict] = None
+
 __all__ = [
     "JSONResponse",
     "DifferentAPIDefault",
@@ -78,4 +81,5 @@ __all__ = [
     "ProxyLogin",
     "ProxyOptions",
     "ScraperProxy",
+    "HeadersDefault",
 ]
