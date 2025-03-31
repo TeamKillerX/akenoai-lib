@@ -214,6 +214,10 @@ class BaseDev:
             LOGS.exception("An error occurred")
             return None
 
+class _ok(BaseDev):
+    async def invoke(self):
+        return self
+
 @dataclass
 class GenImageEndpoint:
     parent: BaseDev
