@@ -59,25 +59,20 @@ class FormDataBuilder:
             )
         return self.file_data
 
-class SwaggerDev:
-    def __init__(self, app):
-        self.app = app
-        self.custom_openai = get_openapi
-
-    def use(self, _sw: EditCustomOpenai):
-        if not self.app:
-            raise ValueError("Required app")
-        if self.app.openapi_schema:
-            return self.app.openapi_schema
-        openapi_schema = self.custom_openai(
-            title=_sw.title,
-            version=_sw.version,
-            summary=_sw.summary,
-            description=_sw.description
-        )
-        openapi_schema["info"]["x-logo"] = {"url": _sw.logo_url}
-        self.app.openapi_schema = openapi_schema
-        return self.app.openapi_schema
+def configure_openapi(app, _sw: EditCustomOpenai, custom_openapi=get_openapi):
+    if not app:
+        raise ValueError("Required app")
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = custom_openapi(
+        title=_sw.title,
+        version=_sw.version,
+        summary=_sw.summary,
+        description=_sw.description,
+    )
+    openapi_schema["info"]["x-logo"] = {"url": _sw.logo_url}
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
 
 class BaseDev:
     def __init__(self, public_url: str):
