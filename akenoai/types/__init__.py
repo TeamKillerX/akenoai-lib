@@ -71,6 +71,13 @@ class ScraperProxy(BaseModel):
 class HeaderOptions(BaseModel):
     headers_update: Optional[dict] = None
 
+class EditCustomOpenai(BaseModel):
+    logo_url: Optional[str] = "https://github-production-user-asset-6210df.s3.amazonaws.com/90479255/289277800-f26513f7-cdf4-44ee-9a08-f6b27e6b99f7.jpg"
+    title: Optional[str] = "AkenoX Demo API"
+    version: Optional[str] = "1.0.0",
+    summary: Optional[str] = "Use It Only For Personal Projects",
+    description: Optional[str] = "Free API By akenoai-lib",
+
 __all__ = [
     "JSONResponse",
     "DifferentAPIDefault",
@@ -82,4 +89,5 @@ __all__ = [
     "ProxyOptions",
     "ScraperProxy",
     "HeaderOptions",
+    "EditCustomOpenai",
 ]
