@@ -78,7 +78,7 @@ If you encounter `TypeError: _make_request() missing 1 required positional argum
 
 ## Notes
 - When using `from akenoai import *`, you may run into errors. Instead, explicitly import required modules: `from akenoai.types import *`.
-
+---
 ### 📊 Developed by:
 - [`AkenoX API`](https://t.me/xpushz) - Full stack Developer Backend
 - [`ErrAPI`](https://t.me/Chakszzz) - Backend And Frontend Web
@@ -88,7 +88,7 @@ If you encounter `TypeError: _make_request() missing 1 required positional argum
 - [`Kurigram`](https://github.com/KurimuzonAkuma/pyrogram)
 - [`FastAPI`](https://github.com/fastapi/fastapi)
 - Thank you all developers 😊
-
+---
 ## Contributing
 Feel free to open issues and contribute to the development of AkenoAI-Lib!
 
