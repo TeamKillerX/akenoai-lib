@@ -17,6 +17,7 @@ __all__ = [
     "AkenoXDev",
     "FormDataBuilder",
     "BaseDev",
+    "SwaggerDev",
     "fetch",
     "to_buffer",
     "OldAkenoXToJs",
