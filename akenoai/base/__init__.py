@@ -9,8 +9,8 @@ from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 
 import akenoai.logger as fast
-from akenoai.types import *
 from akenoai.errors import IncorrectInputError
+from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
 
@@ -26,14 +26,14 @@ class BaseDev:
 
     def _handle_text_response(self, response):
         return response.text
-        
+
     def _handle_json_response(self, response):
         try:
             return response.json()
         except ValueError as e:
             logging.debug("Failed to parse JSON response: %s", e)
             return response.text
-        
+
     def _handle_proxy_request(self, x, data):
         proxies = {
             "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
@@ -121,7 +121,7 @@ class BaseDev:
         if x.response_mode == ResponseMode.TEXT:
             return self._handle_text_response(response)
         elif x.response_mode == ResponseMode.JSON:
-            return self._handle_json_response(response)  
+            return self._handle_json_response(response)
         if x.proxy_options.extract_all_hrefs:
             return self._extract_all_hrefs(response.text)
         if x.proxy_options.use_proxy_mode:
