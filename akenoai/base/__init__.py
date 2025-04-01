@@ -64,11 +64,10 @@ class BaseDev:
             api_key = "demo"
         url =  f"{self.public_url}/{endpoint}"
         headers = {
-            "x-api-key": api_key,
-            "Authorization": f"Bearer {api_key}"
+            "x-api-key": api_key
         }
-        if header.headers_update:
-            headers |= header.headers_update
+        if header.custom_headers:
+            headers |= header.custom_headers
         return url, headers
 
     def _make_request_with_scraper(self, x: ScraperProxy, **data):
@@ -111,13 +110,11 @@ class BaseDev:
     async def _make_request(
         self,
         u: MakeRequest,
-        _json: JSONResponse = JSONResponse(),
-        header: HeaderOptions = HeaderOptions(),
         **params
     ):
         url, headers = self._prepare_request(
             endpoint=u.endpoint,
-            header=header,
+            header=u.options.headers,
             api_key=params.pop("api_key", None)
         )
         try:
@@ -126,9 +123,9 @@ class BaseDev:
                 async with request(
                     url,
                     headers=headers,
-                    params=_json.use_params,
-                    json=_json.use_json,
-                    data=_json.use_form_data
+                    params=u.options.json_response.use_params,
+                    json=u.options.json_response.use_json,
+                    data=u.options.json_response.use_form_data
                 ) as response:
                     json_data = await response.json()
                     if u.options.image_read:
@@ -139,7 +136,7 @@ class BaseDev:
                             del json_data[key_to_remove]
                         return json_data
                     if u.options.serialize_response:
-                        return rjson.dumps(json_data, indent=u.json_indent)
+                        return rjson.dumps(json_data, indent=u.options.json_response.indent)
                     if u.options.return_text_response:
                         return await response.text() if u.options.return_text_response else None
                     return json_data
