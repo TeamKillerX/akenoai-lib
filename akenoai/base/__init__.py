@@ -52,7 +52,7 @@ class BaseDev:
                 if x.proxy_options.use_post_proxy else
                 requests.get(x.url, proxies=proxies, verify=x.proxy_options.verify_ssl))
         return self._extract_all_hrefs(resp.text) if x.proxy_options.extract_all_hrefs_only_proxy else resp
-    
+
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
         target_link = clean_link.split("/c/") if "/c/" in clean_link else clean_link.split("/")
