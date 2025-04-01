@@ -9,14 +9,51 @@ from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 
 import akenoai.logger as fast
+from akenoai.errors import IncorrectInputError
 from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
+
 
 class BaseDev:
     def __init__(self, public_url: str):
         self.public_url = public_url
         self.obj = Box
+
+    def _extract_all_hrefs(self, html_text):
+        soup = BeautifulSoup(html_text, "html.parser")
+        return [a['href'] for a in soup.find_all('a', href=True)]
+
+    def _handle_text_response(self, response):
+        return response.text
+
+    def _handle_json_response(self, response):
+        try:
+            return response.json()
+        except ValueError as e:
+            logging.debug("Failed to parse JSON response: %s", e)
+            return response.text
+
+    def _handle_proxy_request(self, x, data):
+        proxies = {
+            "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
+        }
+        if x.proxy_options.use_post_proxy:
+            resp = requests.post(
+                x.url,
+                proxies=proxies,
+                json=data.pop("json_proxy", None),
+                verify=x.proxy_options.verify_ssl
+            )
+        else:
+            resp = requests.get(
+                x.url,
+                proxies=proxies,
+                verify=x.proxy_options.verify_ssl
+            )
+        if x.proxy_options.extract_all_hrefs_only_proxy:
+            return self._extract_all_hrefs(resp.text)
+        return resp
 
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
@@ -77,36 +114,18 @@ class BaseDev:
             return "Required api key"
         params = {"api_key": x.login.api_key, "url": x.url}
         request_kwargs = {"data": data} if x.proxy_options.extract_data else {"json": data}
-        response = requests.post(x.api_url, params=params, **request_kwargs) if x.proxy_options.use_post else requests.get(x.api_url, params=params)
+        response = (requests.post(x.api_url, params=params, **request_kwargs)
+                    if x.proxy_options.use_post else
+                    requests.get(x.api_url, params=params))
+
         if x.response_mode == ResponseMode.TEXT:
-            return response.text
+            return self._handle_text_response(response)
         elif x.response_mode == ResponseMode.JSON:
-            try:
-                return response.json()
-            except ValueError as e:
-                logging.debug("Failed to parse JSON response: %s", e)
-                return response.text
+            return self._handle_json_response(response)
         if x.proxy_options.extract_all_hrefs:
-            soup = BeautifulSoup(response.text, "html.parser")
-            return [a['href'] for a in soup.find_all('a', href=True)] if x.proxy_options.extract_all_hrefs else []
+            return self._extract_all_hrefs(response.text)
         if x.proxy_options.use_proxy_mode:
-            proxies = {
-                "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
-            }
-            frspon = requests.post(
-                x.url,
-                proxies=proxies,
-                json=data.pop("json_proxy", None),
-                verify=x.proxy_options.verify_ssl
-            ) if x.proxy_options.use_post_proxy else requests.get(
-                x.url,
-                proxies=proxies,
-                verify=x.proxy_options.verify_ssl
-            )
-            if x.proxy_options.extract_all_hrefs_only_proxy:
-                soup = BeautifulSoup(frspon.text, "html.parser")
-                return [a['href'] for a in soup.find_all('a', href=True)]
-            return frspon
+            return self._handle_proxy_request(x, data)
         return response
 
     async def _make_request(
@@ -143,9 +162,9 @@ class BaseDev:
                         return await response.text() if u.options.return_text_response else None
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
-            raise Exception("GET OR POST INVALID: check problem, invalid JSON") from e
+            raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON") from e
         except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
-            raise Exception("Cannot connect to host") from e
+            raise IncorrectInputError("Cannot connect to host") from e
         except Exception as e:
             LOGS.exception("An error occurred")
             return None
