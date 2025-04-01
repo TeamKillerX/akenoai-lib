@@ -144,18 +144,19 @@ class BaseDev:
                     json=u.options.json_response.use_json,
                     data=u.options.json_response.use_form_data
                 ) as response:
-                    json_data = await response.json()
+                    json_data = response
                     if u.options.image_read:
-                        return await response.read()
+                        return await json_data.read()
                     if u.options.remove_author:
+                        vjson = await json_data.json()
                         key_to_remove = params.pop("del_author", None)
-                        if key_to_remove is not None and key_to_remove in json_data:
-                            del json_data[key_to_remove]
-                        return json_data
+                        if key_to_remove is not None and key_to_remove in vjson:
+                            del vjson[key_to_remove]
+                        return vjson
                     if u.options.serialize_response:
-                        return rjson.dumps(json_data, indent=u.options.json_response.indent)
+                        return rjson.dumps(await json_data.json(), indent=u.options.json_response.indent)
                     if u.options.return_text_response:
-                        return await response.text() if u.options.return_text_response else None
+                        return await json_data.text() if u.options.return_text_response else None
                     return json_data
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON") from e
