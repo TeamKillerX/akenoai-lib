@@ -161,10 +161,10 @@ class BaseDev:
                     if u.options.return_text_response:
                         return await response.text() if u.options.return_text_response else None
                     return json_data
-        except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError):
-            raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON")
-        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError):
-            raise IncorrectInputError("Cannot connect to host")
+        except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
+            raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON") from e
+        except (aiohttp.ClientConnectorError, aiohttp.client_exceptions.ClientConnectorSSLError) as e:
+            raise IncorrectInputError("Cannot connect to host") from e
         except Exception as e:
             LOGS.exception("An error occurred")
             return None
