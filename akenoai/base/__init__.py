@@ -24,6 +24,16 @@ class BaseDev:
         soup = BeautifulSoup(html_text, "html.parser")
         return [a['href'] for a in soup.find_all('a', href=True)]
 
+    def _handle_response(self, response, mode):
+        if mode == ResponseMode.TEXT:
+            return response.text
+        elif mode == ResponseMode.JSON:
+            try:
+                return response.json()
+            except ValueError as e:
+                logging.debug("Failed to parse JSON response: %s", e)
+                return response.text
+
     def _handle_text_response(self, response):
         return response.text
 
@@ -34,26 +44,14 @@ class BaseDev:
             logging.debug("Failed to parse JSON response: %s", e)
             return response.text
 
-    def _handle_proxy_request(self, x, data):
+    def _handle_proxy(self, x, data):
         proxies = {
             "https": x.login.proxy_url.format(api_key=x.login.api_key, port=x.login.port)
         }
-        if x.proxy_options.use_post_proxy:
-            resp = requests.post(
-                x.url,
-                proxies=proxies,
-                json=data.pop("json_proxy", None),
-                verify=x.proxy_options.verify_ssl
-            )
-        else:
-            resp = requests.get(
-                x.url,
-                proxies=proxies,
-                verify=x.proxy_options.verify_ssl
-            )
-        if x.proxy_options.extract_all_hrefs_only_proxy:
-            return self._extract_all_hrefs(resp.text)
-        return resp
+        resp = (requests.post(x.url, proxies=proxies, json=data.pop("json_proxy", None), verify=x.proxy_options.verify_ssl)
+                if x.proxy_options.use_post_proxy else
+                requests.get(x.url, proxies=proxies, verify=x.proxy_options.verify_ssl))
+        return self._extract_all_hrefs(resp.text) if x.proxy_options.extract_all_hrefs_only_proxy else resp
 
     def _get_random_from_channel(self, link: str = None):
         clean_link = link.split("?")[0]
@@ -118,14 +116,12 @@ class BaseDev:
                     if x.proxy_options.use_post else
                     requests.get(x.api_url, params=params))
 
-        if x.response_mode == ResponseMode.TEXT:
-            return self._handle_text_response(response)
-        elif x.response_mode == ResponseMode.JSON:
-            return self._handle_json_response(response)
+        if x.response_mode in {ResponseMode.TEXT, ResponseMode.JSON}:
+            return self._handle_response(response, x.response_mode)
         if x.proxy_options.extract_all_hrefs:
             return self._extract_all_hrefs(response.text)
         if x.proxy_options.use_proxy_mode:
-            return self._handle_proxy_request(x, data)
+            return self._handle_proxy(x, data)
         return response
 
     async def _make_request(
