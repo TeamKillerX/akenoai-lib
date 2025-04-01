@@ -92,17 +92,17 @@ class GenImageEndpoint:
             options=RequestOptions(
                 image_read=kwargs.pop("image_read", False),
                 remove_author=kwargs.pop("remove_author", False),
-                serialize_response=kwargs.pop("serialize_response", False)
-            ),
-            json_indent=kwargs.pop("json_indent", 4)
+                serialize_response=kwargs.pop("serialize_response", False),
+                json_response=JSONResponse(
+                    use_json=kwargs.pop("body_data", None),
+                    use_params=kwargs.pop("params_data", None),
+                    indent=kwargs.pop("json_indent", 2)
+                ),
+                headers=HeaderOptions(custom_headers=kwargs.pop("headers_extra", None)),
+            )
         )
         return await self.parent._make_request(
             request_params,
-            JSONResponse(
-                use_json=kwargs.pop("body_data", None),
-                use_params=kwargs.pop("params_data", None)
-            ),
-            HeaderOptions(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) if self.super_fast else None
 
@@ -124,17 +124,17 @@ class GenericEndpoint:
             options=RequestOptions(
                 image_read=kwargs.pop("image_read", False),
                 remove_author=kwargs.pop("remove_author", False),
-                serialize_response=kwargs.pop("serialize_response", False)
-            ),
-            json_indent=kwargs.pop("json_indent", 4)
+                serialize_response=kwargs.pop("serialize_response", False),
+                json_response=JSONResponse(
+                    use_json=kwargs.pop("body_data", None),
+                    use_params=kwargs.pop("params_data", None),
+                    indent=kwargs.pop("json_indent", 2)
+                ),
+                headers=HeaderOptions(custom_headers=kwargs.pop("headers_extra", None)),
+            )
         )
         response = await self.parent._make_request(
             request_params,
-            JSONResponse(
-                use_json=kwargs.pop("body_data", None),
-                use_params=kwargs.pop("params_data", None)
-            ),
-            HeaderOptions(headers_update=kwargs.pop("headers_extra", None)),
             **kwargs
         ) or {}
         _response_parent = self.parent.obj(response) if is_obj else response
