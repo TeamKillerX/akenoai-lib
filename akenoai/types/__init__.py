@@ -6,11 +6,14 @@ from typing import *
 import aiohttp  # type: ignore
 from pydantic import BaseModel, ConfigDict  # type: ignore
 
+class HeaderOptions(BaseModel):
+    custom_headers: Optional[dict] = None
 
 class JSONResponse(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     use_json: Optional[dict] = None
     use_params: Optional[dict] = None
+    indent: Optional[int] = 2
     use_form_data: Optional[aiohttp.FormData] = None
 
 class DifferentAPIDefault(BaseModel):
@@ -24,12 +27,13 @@ class RequestOptions(BaseModel):
     remove_author: Optional[bool] = False
     return_text_response: Optional[bool] = False
     serialize_response: Optional[bool] = False
+    json_response: JSONResponse = JSONResponse()
+    headers: HeaderOptions = HeaderOptions()
 
 class MakeRequest(BaseModel):
     method: str
     endpoint: str
     options: RequestOptions = RequestOptions()
-    json_indent: int = 4
 
 class MakeFetch(BaseModel):
     url: str
@@ -67,9 +71,6 @@ class ScraperProxy(BaseModel):
     login: ProxyLogin = ProxyLogin()
     proxy_options: ProxyOptions = ProxyOptions()
     response_mode: ResponseMode = ResponseMode.DEFAULT
-
-class HeaderOptions(BaseModel):
-    headers_update: Optional[dict] = None
 
 class EditCustomOpenAPI(BaseModel):
     logo_url: Optional[str] = None
