@@ -36,8 +36,8 @@ from fastapi.openapi.utils import get_openapi  # type: ignore
 from pydantic import BaseModel  # type: ignore
 
 import akenoai.logger as fast
-from akenoai.types import *
 from akenoai.base import *
+from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
 

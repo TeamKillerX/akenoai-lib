@@ -1,13 +1,15 @@
-import os
-import logging
-import requests
-import aiohttp
 import json as rjson
+import logging
+import os
 from typing import *
-from akenoai.types import *
-from bs4 import BeautifulSoup  # type: ignore
+
+import aiohttp
+import requests
 from box import Box  # type: ignore
+from bs4 import BeautifulSoup  # type: ignore
+
 import akenoai.logger as fast
+from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
 

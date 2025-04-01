@@ -6,6 +6,7 @@ from typing import *
 import aiohttp  # type: ignore
 from pydantic import BaseModel, ConfigDict  # type: ignore
 
+
 class HeaderOptions(BaseModel):
     custom_headers: Optional[dict] = None
 
