@@ -174,8 +174,8 @@ class BaseDev:
     async def _make_request(
         self,
         u: MakeRequest,
-        _json: JSONResponse,
-        header: HeaderOptions,
+        _json: JSONResponse = JSONResponse(),
+        header: HeaderOptions = HeaderOptions(),
         **params
     ):
         url, headers = self._prepare_request(
