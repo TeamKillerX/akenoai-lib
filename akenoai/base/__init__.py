@@ -14,7 +14,6 @@ from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
 
-
 class BaseDev:
     def __init__(self, public_url: str):
         self.public_url = public_url
@@ -157,6 +156,8 @@ class BaseDev:
                         return rjson.dumps(await json_data.json(), indent=u.options.json_response.indent)
                     if u.options.return_text_response:
                         return await json_data.text() if u.options.return_text_response else None
+                    if u.options.tools.obj_flag:
+                        return self.obj(await json_data.json()) or {} if u.options.tools.obj_flag else None
                     return await json_data.json()
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON") from e
