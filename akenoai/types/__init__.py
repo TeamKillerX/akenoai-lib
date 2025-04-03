@@ -23,6 +23,9 @@ class DifferentAPIDefault(BaseModel):
     is_itzpire: Optional[bool] = False
     is_akenox_fast: Optional[bool] = False
 
+class LibraryTool(BaseModel):
+    obj_flag: Optional[bool] = False
+
 class RequestOptions(BaseModel):
     image_read: Optional[bool] = False
     remove_author: Optional[bool] = False
@@ -30,6 +33,7 @@ class RequestOptions(BaseModel):
     serialize_response: Optional[bool] = False
     json_response: JSONResponse = JSONResponse()
     headers: HeaderOptions = HeaderOptions()
+    tools: LibraryTool = LibraryTool()
 
 class MakeRequest(BaseModel):
     method: str
