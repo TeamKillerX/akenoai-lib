@@ -151,8 +151,15 @@ class BaseDev:
                         key_to_remove = params.pop("del_author", None)
                         if key_to_remove is not None and key_to_remove in vjson:
                             del vjson[key_to_remove]
+                        if u.options.tools.obj_flag:
+                            return self.obj(vjson) or {}
                         return vjson
                     if u.options.serialize_response:
+                        if u.options.tools.obj_flag:
+                            return rjson.dumps(
+                                self.obj(await json_data.json()) or {},
+                                indent=u.options.json_response.indent
+                            )
                         return rjson.dumps(await json_data.json(), indent=u.options.json_response.indent)
                     if u.options.return_text_response:
                         return await json_data.text() if u.options.return_text_response else None
