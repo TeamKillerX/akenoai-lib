@@ -20,7 +20,7 @@
 - **Optional:** `JSONResponse, HeaderOptions`
 
 > [!IMPORTANT]
-> **AkenoAI-Lib**: (Closed for updates)  
+> **AkenoAI-Lib**: (Closed for updates)
 There won’t be new updates, but if the **raw method** is stable, there’s no need to panic about updates causing errors.
 
 ## Installation
