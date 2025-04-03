@@ -17,6 +17,11 @@
 - **Flexible Request Handling** – Supports JSON, form-data, and custom headers.
 - **Built-in Response Serialization** – Easily parse and structure API responses.
 - **Lightweight & Scalable** – Minimal dependencies with a focus on performance.
+- **Optional:** `JSONResponse, HeaderOptions`
+
+> [!IMPORTANT]
+> **AkenoAI-Lib**: (Closed for updates)
+There won’t be new updates, but if the **raw method** is stable, there’s no need to panic about updates causing errors.
 
 ## Installation
 
@@ -27,7 +32,7 @@ pip install akenoai[fast]
 ## Quick Start
 
 ```python
-from akenoai import BaseDev
+from akenoai.base import BaseDev
 from akenoai.types import MakeRequest, RequestOptions, JSONResponse
 
 async def fetch_data():
@@ -35,11 +40,8 @@ async def fetch_data():
         MakeRequest(
             method="get",
             endpoint="data/list",
-            options=RequestOptions(
-                serialize_response=True
-            )
-        ),
-        JSONResponse()
+            options=RequestOptions(serialize_response=True)
+        )
     )
     return response
 ```
@@ -53,8 +55,8 @@ response = await BaseDev("https://example.com")._make_request(
     MakeRequest(
         method="get",
         endpoint="api/resource",
-    ),
-    JSONResponse()
+        json_response=JSONResponse()
+    )
 )
 print(response)
 ```
@@ -66,15 +68,12 @@ response = await BaseDev("https://example.com")._make_request(
     MakeRequest(
         method="post",
         endpoint="api/create",
-        options=RequestOptions(return_text_response=True)
-    ),
-    JSONResponse(use_json={"key": "value"})
+        options=RequestOptions(),
+        json_response=JSONResponse(use_json={"key": "value"})
+    )
 )
 print(response)
 ```
-
-## Error Handling
-If you encounter `TypeError: _make_request() missing 1 required positional argument: '_json'`, ensure you're using `JSONResponse()` when needed.
 
 ## Notes
 - When using `from akenoai import *`, you may run into errors. Instead, explicitly import required modules: `from akenoai.types import *`.
