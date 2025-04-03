@@ -12,7 +12,7 @@ response = await BaseDev(
         options=RequestOptions(
             serialize_response=True,
             json_response=JSONResponse(indent=4),
-            headers=HeaderOptions(custom_headers={"Authorization": "Bearer YOUR_TOKEN"})
+            headers=HeaderOptions(custom_headers={"Authorization": "Bearer <YOUR_TOKEN>"})
         )
     )
 )
