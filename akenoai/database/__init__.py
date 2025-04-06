@@ -16,7 +16,7 @@ class Database:
     async def connect(self):
         try:
             await self.client.admin.command("ping")
-            LOGS.info(f"Database Connection Established!")
+            LOGS.info("Database Connection Established!")
         except Exception as e:
             LOGS.info(f"DatabaseErr: {e} ")
             quit(1)
