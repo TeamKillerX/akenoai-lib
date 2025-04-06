@@ -9,7 +9,7 @@ from akenoai.logger import LOGS
 
 class Database:
     def __init__(self, initdev: MongoInitConfig) -> None:
-        self.client: AgnosticClient = motor_asyncio.AsyncIOMotorClient(initdev.uri)
+        self.client: AgnosticClient = motor_asyncio.AsyncIOMotorClient(initdev.url)
         self.db = self.client[initdev.name]
         self.backup_chatbot = self.db["chat_history"]
 
