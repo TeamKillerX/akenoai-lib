@@ -1,15 +1,18 @@
 import datetime
 import time
+
 from motor import motor_asyncio
+
 from akenoai.database.types import *
 from akenoai.logger import LOGS
+
 
 class Database:
     def __init__(self, initdev: MongoInitConfig) -> None:
         self.client: AgnosticClient = motor_asyncio.AsyncIOMotorClient(initdev.uri)
         self.db = self.client[initdev.name]
         self.backup_chatbot = self.db["chat_history"]
-    
+
     async def connect(self):
         try:
             await self.client.admin.command("ping")

@@ -1,5 +1,7 @@
 from typing import *
-from pydantic import BaseModel # type: ignore
+
+from pydantic import BaseModel  # type: ignore
+
 
 class MongoInitConfig(BaseModel):
     name: str
