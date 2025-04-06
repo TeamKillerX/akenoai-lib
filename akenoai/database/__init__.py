@@ -18,8 +18,8 @@ class Database:
             await self.client.admin.command("ping")
             LOGS.info("Database Connection Established!")
         except Exception as e:
-            LOGS.info(f"DatabaseErr: {e} ")
-            quit(1)
+            LOGS.error(f"DatabaseErr: {e}")
+            raise
 
     async def _close_(self):
         await self.client.close()
