@@ -42,7 +42,7 @@ class Database:
         )
 
     async def del_chatbot_from_db(self, u: WhereFind):
-        result = await self.none_chatbot_from_db(u.user_id)
+        result = await self.none_chatbot_from_db(u)
         if result.modified_count > 0:
             return "Chat history cleared successfully."
         else:
