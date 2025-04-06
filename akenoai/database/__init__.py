@@ -21,26 +21,28 @@ class Database:
     async def _close_(self):
         await self.client.close()
 
-    async def update_chatbot_from_db(self, user_id, chatbot_chat):
+    async def update_chatbot_from_db(self, u: WhereFind, chatbot_chat):
         await self.backup_chatbot.update_one(
-            {"user_id": user_id},
+            {"user_id": u.user_id},
             {"$set": {"chatbot_chat": chatbot_chat}},
             upsert=True
         )
 
-    async def get_chatbot_from_db(self, user_id):
-        user_data = await self.backup_chatbot.find_one({"user_id": user_id})
+    async def get_chatbot_from_db(self, u: WhereFind):
+        user_data = await self.backup_chatbot.find_one({"user_id": u.user_id})
         return user_data.get("chatbot_chat", []) if user_data else []
 
-    async def none_chatbot_from_db(self, user_id):
+    async def none_chatbot_from_db(self, u: WhereFind):
         return await self.backup_chatbot.update_one(
-            {"user_id": user_id},
+            {"user_id": u.user_id},
             {"$unset": {"chatbot_chat": None}}
         )
 
-    async def del_chatbot_from_db(self, user_id):
-        result = await self.none_chatbot_from_db(user_id)
+    async def del_chatbot_from_db(self, u: WhereFind):
+        result = await self.none_chatbot_from_db(u.user_id)
         if result.modified_count > 0:
             return "Chat history cleared successfully."
         else:
             return "No chat history found to clear."
+
+__all__ = ["Database"]
