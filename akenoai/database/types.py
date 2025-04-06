@@ -7,3 +7,8 @@ class MongoInitConfig(BaseModel):
 
 class WhereFind(BaseModel):
     user_id: Optional[int] = 0
+
+__all__ = [
+    "MongoInitConfig",
+    "WhereFind"
+]
