@@ -104,4 +104,5 @@ __all__ = [
     "ScraperProxy",
     "HeaderOptions",
     "EditCustomOpenAPI",
+    "PyrogramConfig",
 ]
