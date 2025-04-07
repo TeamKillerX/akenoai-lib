@@ -31,3 +31,5 @@ class AkenoAIClient(Client):
     async def stop(self):
         await super().stop()
         LOGS.warning("stopped, Bye!")
+
+__all__ = ["AkenoAIClient"]
