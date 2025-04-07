@@ -13,9 +13,9 @@ class HeaderOptions(BaseModel):
 class PyrogramConfig(BaseModel):
     name: str
     app_version: Optional[str] = "AkenoAI Latest"
-    api_id: Optional[int] = None
-    api_hash: Optional[str] = None
-    bot_token: Optional[str] = None
+    api_id: Optional[int] = os.environ.get('API_ID')
+    api_hash: Optional[str] = os.environ.get('API_HASH')
+    bot_token: Optional[str] = os.environ.get('BOT_TOKEN')
     plugins: Optional[str] = None
 
 class JSONResponse(BaseModel):
