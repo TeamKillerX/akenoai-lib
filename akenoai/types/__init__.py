@@ -10,6 +10,14 @@ from pydantic import BaseModel, ConfigDict  # type: ignore
 class HeaderOptions(BaseModel):
     custom_headers: Optional[dict] = None
 
+class PyrogramConfig(BaseModel):
+    name: str
+    app_version: Optional[str] = "AkenoAI Latest"
+    api_id: Optional[int] = None
+    api_hash: Optional[str] = None
+    bot_token: Optional[str] = None
+    plugins: Optional[str] = None
+
 class JSONResponse(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     use_json: Optional[dict] = None
