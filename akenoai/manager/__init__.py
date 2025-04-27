@@ -7,6 +7,7 @@ from pyrogram.errors import AuthKeyInvalid, UserDeactivated
 
 import akenoai.logger as fast
 
+
 class CreateTaskManagerClient:
     def __init__(self):
         pass
