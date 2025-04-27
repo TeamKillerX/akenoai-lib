@@ -12,7 +12,7 @@ class CreateTaskManagerClient:
     def __init__(self):
         pass
 
-    async def check_session_user_health(client: Client, user_id: int, callback_func: callable, interval: int = 300) -> None:
+    async def check_session_user_health(self, client: Client, user_id: int, callback_func: callable, interval: int = 300) -> None:
         while True:
             try:
                 await asyncio.wait_for(client.get_me(), timeout=10)
