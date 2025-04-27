@@ -7,17 +7,11 @@ from pyrogram.errors import AuthKeyInvalid, UserDeactivated
 
 import akenoai.logger as fast
 
-
 class CreateTaskManagerClient:
     def __init__(self):
         pass
 
-    async def check_session_user_health(
-        client: Client,
-        user_id: int,
-        interval: int = 300,
-        callback_func: None
-    ) -> None:
+    async def check_session_user_health(client: Client, user_id: int, callback_func: callable, interval: int = 300) -> None:
         while True:
             try:
                 await asyncio.wait_for(client.get_me(), timeout=10)
@@ -41,7 +35,7 @@ class CreateTaskManagerClient:
 
     async def connection_watchdog(self, client: Client):
         while True:
-            if not await self.check_connection(client):
+            if not await self._check_connection(client):
                 await fast.warning("Reconnecting...")
                 await client.disconnect()
                 await client.connect()
