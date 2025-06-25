@@ -1,13 +1,14 @@
 # AkenoAI-Lib
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/TeamKillerX/akenoai-lib)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-Yes-green)](https://github.com/TeamKillerX/akenoai-lib/graphs/commit-activity)
-[![GitHub Forks](https://img.shields.io/github/forks/TeamKillerX/akenoai-lib?&logo=github)](https://github.com/TeamKillerX/akenoai-lib)
 [![License](https://img.shields.io/badge/License-GPL-pink)](https://github.com/TeamKillerX/akenoai-lib/blob/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://makeapullrequest.com)
 [![akenoai - Version](https://img.shields.io/pypi/v/akenoai?style=round)](https://pypi.org/project/akenoai)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/akenoai?label=DOWNLOADS&style=round)](https://pypi.org/project/akenoai)
-[![Socket Badge](https://socket.dev/api/badge/pypi/package/akenoai/1.7.2?artifact_id=tar-gz)](https://socket.dev/pypi/package/akenoai/overview/1.7.2/tar-gz)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/TeamKillerX/akenoai-lib/main.svg)](https://results.pre-commit.ci/latest/github/TeamKillerX/akenoai-lib/main)
+
+<div align="center">
+    <a href="https://pepy.tech/project/akenoai"><img src="https://static.pepy.tech/badge/akenoai" alt="Downloads"></a>
+</div>
 
 **AkenoAI-Lib** is a high-performance library for making raw HTTP requests, powered by `aiohttp`. It provides a simple yet powerful syntax for handling API requests efficiently, ensuring speed and flexibility.
 
