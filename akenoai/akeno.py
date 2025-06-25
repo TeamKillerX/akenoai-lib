@@ -192,7 +192,7 @@ class RandyDev(BaseDev):
         self.story_in_tg = self.LinkExtraWithStory(self)
 
     def update_public_url(self):
-        self.public_url = "https://faster.maiysacollection.com/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
+        self.public_url = "https://ryzenth.randydev.my.id/v2" if self.is_bypass_control else "https://randydev-ryu-js.hf.space/api/v1"
 
     def set_bypass_control(self, value: bool):
         self.is_bypass_control = value
