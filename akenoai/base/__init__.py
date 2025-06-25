@@ -1,6 +1,7 @@
 import json as rjson
 import logging
 import os
+import platform
 from typing import *
 
 import aiohttp
@@ -100,6 +101,7 @@ class BaseDev:
             api_key = "demo"
         url =  f"{self.public_url}/{endpoint}"
         headers = {
+            "User-Agent": f"Ryzenth/Python-{platform.python_version()}",
             "x-api-key": api_key
         }
         if header.custom_headers:
