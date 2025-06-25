@@ -1,4 +1,4 @@
-__version__ = "1.9.6"
+__version__ = "2.0.0"
 __author__ = "AkenoX Team"
 __license__ = "MIT"
 __title__ = "akenoai"

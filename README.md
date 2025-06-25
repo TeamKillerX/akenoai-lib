@@ -76,21 +76,26 @@ response = await BaseDev("https://example.com")._make_request(
 print(response)
 ```
 
-## Notes
-- When using `from akenoai import *`, you may run into errors. Instead, explicitly import required modules: `from akenoai.types import *`.
 ---
-### 📊 Developed by:
+## 📊 Developed by:
 - [`AkenoX API`](https://t.me/xpushz) - Full stack Developer Backend
 - [`ErrAPI`](https://t.me/Chakszzz) - Backend And Frontend Web
 - [`itzpire API`](https://itzpire.com) - Backend And Frontend Web
 
-### ❤️ Special Thanks To
+## ❤️ Special Thanks To
 - [`Kurigram`](https://github.com/KurimuzonAkuma/pyrogram)
 - [`FastAPI`](https://github.com/fastapi/fastapi)
 - Thank you all developers 😊
 ---
 ## Contributing
 Feel free to open issues and contribute to the development of AkenoAI-Lib!
+
+## Donation
+* Your donation helps us continue our work!
+
+To send payments via DANA, use the following Bank Jago account number:
+
+Bank Jago: `100201327349`
 
 ## License
 This project is licensed under the MIT License.
