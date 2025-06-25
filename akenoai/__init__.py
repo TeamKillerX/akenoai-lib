@@ -4,11 +4,9 @@ from . import *
 from .__version__ import __version__
 from .akeno import *
 from .api_random import *
-from .custom import OldAkenoXToJs
 from .logger import *
 from .openai import *
 from .reqs import *
-from .xnxx import *
 
 __all__ = [
     "__version__",
@@ -20,7 +18,6 @@ __all__ = [
     "configure_openapi",
     "fetch",
     "to_buffer",
-    "OldAkenoXToJs",
     "AsyicXSearcher",
     "OpenAI",
     "extract_urls",
