@@ -10,7 +10,7 @@ from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 
 import akenoai.logger as fast
-from akenoai.errors import IncorrectInputError
+from akenoai.errors import ForbiddenError, IncorrectInputError, InternalError
 from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
@@ -86,6 +86,14 @@ class BaseDev:
                 translation = await response.json()
                 return "".join([item[0] for item in translation[0]])
 
+    async def _status_resp_error(self, resp):
+        if resp.status == 403:
+            raise ForbiddenError("Access Forbidden: You may be blocked or banned.")
+        if resp.status == 401:
+            raise ForbiddenError("Access Forbidden: Required API key or invalid params.")
+        if resp.status == 500:
+            raise InternalError("Error requests status code 500")
+
     def _prepare_request(
         self,
         endpoint: str,
@@ -146,9 +154,13 @@ class BaseDev:
                     data=u.options.json_response.use_form_data
                 ) as response:
                     json_data = response
+
                     if u.options.image_read:
+                        await self._status_resp_error(json_data)
                         return await json_data.read()
+
                     if u.options.remove_author:
+                        await self._status_resp_error(json_data)
                         vjson = await json_data.json()
                         key_to_remove = params.pop("del_author", None)
                         if key_to_remove is not None and key_to_remove in vjson:
@@ -156,17 +168,25 @@ class BaseDev:
                         if u.options.tools.obj_flag:
                             return self.obj(vjson) or {}
                         return vjson
+
                     if u.options.serialize_response:
                         if u.options.tools.obj_flag:
+                            await self._status_resp_error(json_data)
                             return rjson.dumps(
                                 self.obj(await json_data.json()) or {},
                                 indent=u.options.json_response.indent
                             )
+                        await self._status_resp_error(json_data)
                         return rjson.dumps(await json_data.json(), indent=u.options.json_response.indent)
+
                     if u.options.return_text_response:
+                        await self._status_resp_error(json_data)
                         return await json_data.text() if u.options.return_text_response else None
+
                     if u.options.tools.obj_flag:
+                        await self._status_resp_error(json_data)
                         return self.obj(await json_data.json()) or {} if u.options.tools.obj_flag else None
+
                     return await json_data.json()
         except (aiohttp.client_exceptions.ContentTypeError, rjson.decoder.JSONDecodeError) as e:
             raise IncorrectInputError("GET OR POST INVALID: check problem, invalid JSON") from e

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Credits @xpushz on telegram
-# Copyright 2020-2025 (c) Randy W @xtdevs, @xtsea on telegram
+# Copyright 2019-2025 (c) Randy W @xtdevs, @xtsea on telegram
 #
 # from : https://github.com/TeamKillerX
 # Channel : @RendyProjects
@@ -40,25 +40,6 @@ from akenoai.base import *
 from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
-
-class FormDataBuilder:
-    def __init__(self):
-        self.file_data = aiohttp.FormData()
-
-    def append(self, name: str, value: bytes, filename: str = None, content_type: str = None):
-        self.file_data.add_field(name, value, filename=filename, content_type=content_type)
-
-    async def aiofiles_catbox(self, path: str) -> aiohttp.FormData:
-        self.append("reqtype", b"fileupload")
-        async with aiofiles.open(path, mode="rb") as file:
-            file_data = await file.read()
-            self.append(
-                "fileToUpload",
-                file_data,
-                filename=path.split("/")[-1],
-                content_type="application/octet-stream"
-            )
-        return self.file_data
 
 def configure_openapi(app, _sw: EditCustomOpenAPI, custom_openapi=get_openapi):
     if not app:
@@ -147,7 +128,7 @@ class BaseDevWithEndpoints(BaseDev):
             setattr(self, attr, GenericEndpoint(self, endpoint, super_fast=True))
 
 class AkenoXDevFaster(BaseDevWithEndpoints):
-    def __init__(self, public_url: str = "https://faster.maiysacollection.com/v2"):
+    def __init__(self, public_url: str = "https://ryzenth.randydev.my.id/v2"):
         endpoints = {
             "fast": "fast"
         }
@@ -243,22 +224,22 @@ class AkenoXJs:
     dev: DifferentAPIDefault
     """
     Parameters:
-        is_err (bool): for ErAPI
-        is_itzpire (bool): for itzpire API
-        is_akenox_fast (bool): for AkenoX hono API Faster
+        use_err (bool): for ErAPI
+        use_itzpire (bool): for itzpire API
+        use_ryzenth (bool): for AkenoX hono API Faster
         default (bool): If False, default using AkenoX API or Masya API (is_masya=True)
     """
     def __post_init__(self):
         self.endpoints = {
             "itzpire": ItzPire(),
             "err": ErAPI(),
-            "akenox_fast": AkenoXDevFaster(),
-            "default": RandyDev(self.dev.is_masya)
+            "ryzenth": AkenoXDevFaster(),
+            "default": RandyDev(self.dev.use_masya)
         }
         self.flags = {
-            "itzpire": self.dev.is_itzpire,
-            "err": self.dev.is_err,
-            "akenox_fast": self.dev.is_akenox_fast
+            "itzpire": self.dev.use_itzpire,
+            "err": self.dev.use_err,
+            "ryzenth": self.dev.use_ryzenth
         }
 
     def connect(self):
@@ -266,8 +247,8 @@ class AkenoXJs:
             return self.endpoints["itzpire"]
         if self.flags["err"]:
             return self.endpoints["err"]
-        if self.flags["akenox_fast"]:
-            return self.endpoints["akenox_fast"]
+        if self.flags["ryzenth"]:
+            return self.endpoints["ryzenth"]
         return self.endpoints["default"]
 
 class AkenoXDev:
