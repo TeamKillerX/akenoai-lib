@@ -10,7 +10,7 @@ from box import Box  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 
 import akenoai.logger as fast
-from akenoai.errors import IncorrectInputError, InternalError, ForbiddenError
+from akenoai.errors import ForbiddenError, IncorrectInputError, InternalError
 from akenoai.types import *
 
 LOGS = logging.getLogger(__name__)
@@ -195,5 +195,5 @@ class BaseDev:
         except Exception as e:
             LOGS.exception("An error occurred")
             return None
-      
+
 __all__ = ["BaseDev"]
