@@ -26,10 +26,10 @@ class JSONResponse(BaseModel):
     use_form_data: Optional[aiohttp.FormData] = None
 
 class DifferentAPIDefault(BaseModel):
-    is_masya: bool= False
-    is_err: Optional[bool] = False
-    is_itzpire: Optional[bool] = False
-    is_akenox_fast: Optional[bool] = False
+    use_masya: Optional[bool] = False
+    use_err: Optional[bool] = False
+    use_itzpire: Optional[bool] = False
+    use_ryzenth: Optional[bool] = False
 
 class LibraryTool(BaseModel):
     obj_flag: Optional[bool] = False
