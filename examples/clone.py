@@ -20,8 +20,8 @@ import os
 from asyncio import *
 from random import *
 
-from pyrogram import Client as ren
 from pyrogram import *
+from pyrogram import Client as ren
 from pyrogram.errors import RPCError
 from pyrogram.types import *
 
